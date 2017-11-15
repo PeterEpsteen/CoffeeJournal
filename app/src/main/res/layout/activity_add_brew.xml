@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.peter.coffeejournal.AddBrew">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Recipe name:"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="24dp"
+        android:layout_marginLeft="16dp"
+        android:id="@+id/recipe_name_tv"
+        />
+
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/recipe_name_tv"
+        android:id="@+id/recipe_name_edit"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginBottom="8dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Brew Method:"
+        app:layout_constraintTop_toBottomOf="@id/recipe_name_edit"
+        android:layout_marginLeft="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+    <Spinner
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:id="@+id/brew_method_spinner"
+        app:layout_constraintTop_toBottomOf="@id/recipe_name_edit"
+        android:tag="Title"
+        android:layout_marginRight="16dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Coffee to water ratio:"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/brew_method_spinner"
+        android:layout_marginTop="24dp"
+        android:layout_marginLeft="16dp"
+        android:id="@+id/ratio_tv"
+         />
+
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@+id/ratio_tv"
+        android:id="@+id/ratio_edit"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBaseline_toBaselineOf="@id/ratio_tv"
+        android:layout_marginRight="16dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bloom time:"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ratio_tv"
+        android:layout_marginTop="24dp"
+        android:layout_marginLeft="16dp"
+        android:id="@+id/bloom_time_tv"
+        android:textSize="16sp"
+        />
+
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@+id/bloom_time_tv"
+        app:layout_constraintBaseline_toBaselineOf="@+id/bloom_time_tv"
+        android:id="@+id/bloom_time_edit"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="8dp"
+        android:textSize="16dp"/>
+
+<!-- TODO: MAKE THIS BETTER, find design closer to finished product and start with that -->
+
+</android.support.constraint.ConstraintLayout>
