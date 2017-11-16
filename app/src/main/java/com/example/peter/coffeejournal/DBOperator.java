@@ -41,11 +41,11 @@ public class DBOperator extends SQLiteOpenHelper {
 
 
 
-    private static final String CREATE_BREW_TABLE = "create table " + BREW_TABLE_NAME + " ( " + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + NAME + " TEXT, " + BREW_METHOD + " TEXT, " +
+    private static final String CREATE_BREW_TABLE = "create table if not exists " + BREW_TABLE_NAME + " ( " + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + NAME + " TEXT, " + BREW_METHOD + " TEXT, " +
             RATIO + " REAL, " + NOTES + " TEXT, " + GRIND + " TEXT, " + BLOOM_TIME + " INTEGER, " + BREW_TIME + " INTEGER, " + TEMP + " INTEGER)";
-    private static final String CREATE_ROAST_TABLE = "create table " + ROAST_TABLE_NAME + " ( " + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + NAME + " TEXT, " + DATE + " TEXT)";
-    private static final String CREATE_BEANS_TABLE = "create table " + BEANS_TABLE_NAME + " ( " + NAME + " TEXT PRIMARY KEY, " + ID + " INTEGER, " + AMOUNT + " REAL, " + MEASUREMENT + " TEXT)";
-    private static final String CREATE_ROAST_STEPS_TABLE = "create table " + ROAST_STEPS_TABLE_NAME + " ( " + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + STEP_NUMBER + " " +
+    private static final String CREATE_ROAST_TABLE = "create table if not exists " + ROAST_TABLE_NAME + " ( " + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + NAME + " TEXT, " + DATE + " TEXT)";
+    private static final String CREATE_BEANS_TABLE = "create table if not exists " + BEANS_TABLE_NAME + " ( " + NAME + " TEXT PRIMARY KEY, " + ID + " INTEGER, " + AMOUNT + " REAL, " + MEASUREMENT + " TEXT)";
+    private static final String CREATE_ROAST_STEPS_TABLE = "create table if not exists " + ROAST_STEPS_TABLE_NAME + " ( " + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + STEP_NUMBER + " " +
             "INTEGER, " + ROAST_ID + " INTEGER, " + TEMP + " INTEGER, " + NOTES + " TEXT)";
 
 
@@ -137,9 +137,20 @@ public class DBOperator extends SQLiteOpenHelper {
 
     /*TODO : make adding data functional*/
 
-    public boolean addData(String data) {
+    public long insert(BrewRecipe br) {
         SQLiteDatabase db = this.getWritableDatabase();
-        return false;
+        ContentValues cv = new ContentValues();
+        cv.put(NAME, br.getName());
+        cv.put(BREW_METHOD, br.getBrewMethod());
+        cv.put(RATIO, br.getRatio());
+        cv.put(NOTES, br.getNotes());
+        cv.put(GRIND, br.getGrind());
+        cv.put(BLOOM_TIME, br.getBloomTime());
+        cv.put(BREW_TIME, br.getBrewTime());
+        cv.put(TEMP, "200");  //NOT SURE
+        return db.insert(BREW_TABLE_NAME, null, cv);
+
+
     }
 
     public ArrayList<BrewRecipe> getBrewRecipes() {

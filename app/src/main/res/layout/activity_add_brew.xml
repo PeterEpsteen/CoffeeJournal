@@ -85,6 +85,88 @@
         android:layout_marginLeft="8dp"
         android:textSize="16dp"/>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Grind Setting/Style:"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bloom_time_tv"
+        android:layout_marginTop="24dp"
+        android:layout_marginLeft="16dp"
+        android:id="@+id/grind_tv"
+        android:textSize="16sp"
+        />
+
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@+id/grind_tv"
+        app:layout_constraintBaseline_toBaselineOf="@+id/grind_tv"
+        android:id="@+id/grind_edit"
+        android:text="IE Course, Fine 1-10"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="8dp"
+        android:textSize="16dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Brew time (after bloom):"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/grind_tv"
+        android:layout_marginTop="24dp"
+        android:layout_marginLeft="16dp"
+        android:id="@+id/brew_time_tv"
+        android:textSize="16sp"
+        />
+
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@+id/brew_time_tv"
+        app:layout_constraintBaseline_toBaselineOf="@+id/brew_time_tv"
+        android:id="@+id/brew_time_edit"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="8dp"
+        android:textSize="16dp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Additional Notes or Steps (optional):"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/brew_time_tv"
+        android:layout_marginTop="24dp"
+        android:layout_marginLeft="16dp"
+        android:id="@+id/notes_tv"
+        android:textSize="16sp"
+        />
+
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/notes_tv"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:id="@+id/notes_edit"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="8dp"
+        android:textSize="16dp"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/add_brew_button"
+        android:text="Add Brew!"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:textSize="20dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/colorBackground"
+        android:padding="16dp"
+        />
+
 <!-- TODO: MAKE THIS BETTER, find design closer to finished product and start with that -->
 
 </android.support.constraint.ConstraintLayout>
