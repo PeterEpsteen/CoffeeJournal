@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements BrewFragment.OnFr
     private FloatingActionButton addButton;
 
     DBOperator mDBOperator;
-
+//TESTING
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
