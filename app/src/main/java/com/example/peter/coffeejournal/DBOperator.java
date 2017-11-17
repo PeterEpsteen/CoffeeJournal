@@ -153,6 +153,13 @@ public class DBOperator extends SQLiteOpenHelper {
 
     }
 
+    //Might want to handle duplicate names in the future
+
+    public boolean deleteBrew(String primaryKey) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(BREW_TABLE_NAME, NAME + " = '" + primaryKey + "'", null) > 0;
+    }
+
     public ArrayList<BrewRecipe> getBrewRecipes() {
         SQLiteDatabase db = this.getReadableDatabase();
         ArrayList<BrewRecipe> recipes = new ArrayList<BrewRecipe>();

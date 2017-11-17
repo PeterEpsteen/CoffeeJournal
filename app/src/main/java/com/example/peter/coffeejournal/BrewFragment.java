@@ -7,20 +7,28 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnCreateContextMenuListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
 
-public class BrewFragment extends Fragment {
+public class BrewFragment extends Fragment implements AdapterView.OnItemLongClickListener {
 
 
     private OnFragmentInteractionListener mListener;
@@ -61,9 +69,38 @@ public class BrewFragment extends Fragment {
         brewRecipeArrayList = mDBOperator.getBrewRecipes();
         ba = new BrewAdapter(rootView.getContext(), brewRecipeArrayList);
         gv.setAdapter(ba);
+        registerForContextMenu(gv);
         return rootView;
 
 
+
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getActivity().getMenuInflater();
+        inflater.inflate(R.menu.context_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        TextView tv =  info.targetView.findViewById(R.id.brew_title_text_view);
+        String brewName = tv.getText().toString();
+        switch (item.getItemId()) {
+            case R.id.menu_edit:
+                return true;
+            case R.id.menu_delete:
+                Log.i("Info", "You would be deleting this brew: " + brewName);
+                mDBOperator.deleteBrew(brewName);
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.detach(this).attach(this).commit();
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+
+        }
     }
 
 
@@ -90,6 +127,11 @@ public class BrewFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        return false;
     }
 
     /**

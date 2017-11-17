@@ -88,3 +88,14 @@ public class MainActivity extends AppCompatActivity implements BrewFragment.OnFr
 
     }
 }
+
+/** Just did:
+        Can add, delete brews
+    TODO:
+        Set up recipe page
+
+    Bugs:
+        Moka pot image doesnt load
+
+
+**/
