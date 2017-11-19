@@ -23,7 +23,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".AddBrew" />
-        <activity android:name=".AddRoast"></activity>
+        <activity android:name=".AddRoast" />
+        <activity android:name=".BrewRecipeActivity"
+            android:parentActivityName=".MainActivity"
+            android:label="Test"></activity>
     </application>
 
 </manifest>

@@ -28,7 +28,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 
-public class BrewFragment extends Fragment implements AdapterView.OnItemLongClickListener {
+public class BrewFragment extends Fragment implements AdapterView.OnItemLongClickListener, AdapterView.OnItemClickListener {
 
 
     private OnFragmentInteractionListener mListener;
@@ -69,6 +69,7 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemLongClic
         brewRecipeArrayList = mDBOperator.getBrewRecipes();
         ba = new BrewAdapter(rootView.getContext(), brewRecipeArrayList);
         gv.setAdapter(ba);
+        gv.setOnItemClickListener(this);
         registerForContextMenu(gv);
         return rootView;
 
@@ -132,6 +133,15 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemLongClic
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
         return false;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        TextView tv = (TextView) view.findViewById(R.id.brew_title_text_view);
+        String brewName = tv.getText().toString();
+        Intent myIntent = new Intent(view.getContext(), BrewRecipeActivity.class);
+        myIntent.putExtra("Brew Name", brewName);
+        startActivity(myIntent);
     }
 
     /**

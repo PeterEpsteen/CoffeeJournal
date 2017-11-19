@@ -185,5 +185,15 @@ public class DBOperator extends SQLiteOpenHelper {
         return recipes;
     }
 
+    public BrewRecipe getBrewRecipe(String name) {
+        BrewRecipe br = new BrewRecipe();
+        ArrayList<BrewRecipe> brArray = getBrewRecipes();
+        for (BrewRecipe recipe: brArray) {
+            if (recipe.getName().equalsIgnoreCase(name))
+                br = recipe;
+        }
+        return br;
+    }
+
 
 }
