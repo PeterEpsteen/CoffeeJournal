@@ -24,9 +24,11 @@
         </activity>
         <activity android:name=".AddBrew" />
         <activity android:name=".AddRoast" />
-        <activity android:name=".BrewRecipeActivity"
-            android:parentActivityName=".MainActivity"
-            android:label="Test"></activity>
+        <activity
+            android:name=".BrewRecipeActivity"
+            android:label="Test"
+            android:parentActivityName=".MainActivity" />
+        <activity android:name=".RoastActivity"></activity>
     </application>
 
 </manifest>

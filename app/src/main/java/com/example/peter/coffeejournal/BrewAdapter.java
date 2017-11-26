@@ -47,9 +47,10 @@ public class BrewAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if (convertView == null)
+        if (convertView == null) {
             // if it's not recycled, initialize some attributes
-            convertView = inflater.inflate(R.layout.brew_grid_item, parent, false);
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.brew_grid_item, parent, false);
+        }
 
         TextView brewNameTv = (TextView) convertView.findViewById(R.id.brew_title_text_view);
         TextView brewMethodTv = (TextView) convertView.findViewById(R.id.brew_method_text_view);

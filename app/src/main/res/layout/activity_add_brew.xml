@@ -53,30 +53,70 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Coffee to water ratio:"
+        android:text="Amount of Coffee:"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/brew_method_spinner"
         android:layout_marginTop="24dp"
         android:layout_marginLeft="16dp"
-        android:id="@+id/ratio_tv"
+        android:id="@+id/coffee_units_text_view"
          />
 
     <EditText
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toRightOf="@+id/ratio_tv"
-        android:id="@+id/ratio_edit"
+        app:layout_constraintLeft_toRightOf="@+id/coffee_units_text_view"
+        android:id="@+id/coffee_amount_edit"
         android:singleLine="true"
         android:inputType="number"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBaseline_toBaselineOf="@id/ratio_tv"
+        app:layout_constraintRight_toLeftOf="@id/water_units_text_view"
+        app:layout_constraintBaseline_toBaselineOf="@id/coffee_units_text_view"
         android:layout_marginRight="16dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Amount of Water:"
+        android:id="@+id/water_units_text_view"
+        app:layout_constraintLeft_toRightOf="@id/coffee_amount_edit"
+        app:layout_constraintRight_toLeftOf="@id/water_amount_edit"
+        app:layout_constraintBaseline_toBaselineOf="@id/coffee_amount_edit"/>
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/water_amount_edit"
+        android:singleLine="true"
+        android:inputType="number"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/water_units_text_view"
+        app:layout_constraintBaseline_toBaselineOf="@id/water_units_text_view"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Metric?"
+        android:layout_margin="16dp"
+        android:id="@+id/metric_tv"
+        app:layout_constraintTop_toBottomOf="@id/water_amount_edit"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/metric_edit"
+        />
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@id/metric_tv"
+        app:layout_constraintBaseline_toBaselineOf="@id/metric_tv"
+        app:layout_constraintRight_toRightOf="parent"
+        android:id="@+id/metric_edit"
+        android:singleLine="true"
+        android:inputType="number"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Bloom time:"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ratio_tv"
+        app:layout_constraintTop_toBottomOf="@id/metric_tv"
         android:layout_marginTop="24dp"
         android:layout_marginLeft="16dp"
         android:id="@+id/bloom_time_tv"

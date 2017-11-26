@@ -1,16 +1,24 @@
 package com.example.peter.coffeejournal;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.android.gms.plus.PlusOneButton;
 
-public class RoastFragment extends Fragment {
+import java.util.ArrayList;
+import java.util.List;
+
+public class RoastFragment extends Fragment implements AdapterView.OnItemClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -21,6 +29,10 @@ public class RoastFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private PlusOneButton mPlusOneButton;
+    ListView lv;
+    RoastAdapter roastAdapter;
+    DBOperator dbOperator;
+    ArrayList<Roast> roastArrayList;
 
     private OnFragmentInteractionListener mListener;
 
@@ -60,6 +72,13 @@ public class RoastFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.roast_fragment, container, false);
+        lv = (ListView) view.findViewById(R.id.roast_list_view);
+        dbOperator = new DBOperator(this.getContext());
+        roastArrayList = dbOperator.getRoasts();
+        roastAdapter = new RoastAdapter(view.getContext(), roastArrayList);
+        lv.setAdapter(roastAdapter);
+        lv.setOnItemClickListener(this);
+        Log.i("Brew", roastArrayList.toString());
 
         //Find the +1 button
 
@@ -95,6 +114,18 @@ public class RoastFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        TextView tv = view.findViewById(R.id.roast_name_text_view);
+        String roastName = tv.getText().toString();
+        TextView tv1 = view.findViewById(R.id.date_added_text_view);
+        String date = tv1.getText().toString();
+        Intent myIntent = new Intent(view.getContext(), RoastActivity.class);
+        myIntent.putExtra("Name", roastName);
+        myIntent.putExtra("Date", date);
+        startActivity(myIntent);
     }
 
     /**

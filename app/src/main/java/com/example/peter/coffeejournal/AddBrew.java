@@ -17,8 +17,9 @@ public class AddBrew extends AppCompatActivity implements View.OnClickListener {
 
     BrewRecipe br;
     String name, brewMethod, grind, notes;
-    int ratio, brewTime, bloomTime, icon;
+    int ratio, brewTime, bloomTime, metric,icon;
     DBOperator db;
+    double waterUnits, coffeeUnits;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,14 +65,18 @@ public class AddBrew extends AppCompatActivity implements View.OnClickListener {
         grind = grindEdit.getText().toString();
         EditText notesEdit = (EditText) findViewById(R.id.notes_edit);
         notes = notesEdit.getText().toString();
-        EditText ratioEdit = (EditText) findViewById(R.id.ratio_edit);
-        ratio =Integer.parseInt(ratioEdit.getText().toString());
+        EditText metricEdit = (EditText) findViewById(R.id.metric_edit);
+        metric =Integer.parseInt(metricEdit.getText().toString());
+        EditText coffeeEdit = (EditText) findViewById(R.id.coffee_amount_edit);
+        coffeeUnits =Double.parseDouble(coffeeEdit.getText().toString());
+        EditText waterEdit = (EditText) findViewById(R.id.water_amount_edit);
+        waterUnits =Double.parseDouble(waterEdit.getText().toString());
         EditText brewTimeEdit = (EditText) findViewById(R.id.brew_time_edit);
         brewTime =Integer.parseInt(brewTimeEdit.getText().toString());
         EditText bloomTimeEdit = (EditText) findViewById(R.id.bloom_time_edit);
         bloomTime = Integer.parseInt(bloomTimeEdit.getText().toString());
         //Create brewRecipe, open db and insert
-        br = new BrewRecipe(name, brewMethod, grind, notes, ratio, brewTime, bloomTime);
+        br = new BrewRecipe(name, brewMethod, grind, notes, coffeeUnits, waterUnits, metric, brewTime, bloomTime);
         db = new DBOperator(this);
         long rows = db.insert(br);
         if(rows != -1)

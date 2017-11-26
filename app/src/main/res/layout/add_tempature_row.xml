@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_weight="1"
+        android:textSize="14sp"
+        android:id="@+id/time_edit_text"
+        android:singleLine="true"
+        android:inputType="time"
+        android:hint="Time"/>
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:layout_weight="1"
+        android:textSize="14sp"
+        android:singleLine="true"
+        android:inputType="number"
+        android:id="@+id/temp_edit_text"
+        android:hint="Tempature"/>
+    <EditText
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:textSize="14sp"
+        android:inputType="textMultiLine"
+        android:id="@+id/comments_edit_text"
+        android:layout_height="56dp"
+        android:hint="Comments"/>
+
+</LinearLayout>
+

@@ -24,8 +24,15 @@
     <string name="pref_default_display_name">John Smith</string>
 
     <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
+    <string-array name="brew_strength_array">
+        <item>Regular</item>
+        <item>Light</item>
+        <item>Strong</item>
+
+    </string-array>
     <string-array name="brew_methods_array">
         <item>Pour Over</item>
+        <item>Aeropress</item>
         <item>French Press</item>
         <item>Chemex</item>
         <item>Espresso</item>

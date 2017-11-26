@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="16dp">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/TextAppearance.AppCompat.Title"
+        android:text="Tasting Notes:"/>
+    <TextView
+        android:layout_margin="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Notes will go here..."
+        android:id="@+id/tasting_notes_text_view"
+        style="@style/TextAppearance.AppCompat.Body1"/>
+
+</LinearLayout>

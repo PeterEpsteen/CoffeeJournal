@@ -1,6 +1,7 @@
 package com.example.peter.coffeejournal;
 
 import android.animation.ObjectAnimator;
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.CountDownTimer;
 import android.support.design.widget.TabLayout;
@@ -17,7 +18,7 @@ import android.widget.TextView;
 
 import java.text.DecimalFormat;
 
-public class BrewRecipeActivity extends AppCompatActivity {
+public class BrewRecipeActivity extends AppCompatActivity implements BrewRecipeFragment.SendBrew {
 
     private BrewRecipe br;
     DBOperator db;
@@ -70,5 +71,12 @@ public class BrewRecipeActivity extends AppCompatActivity {
         Intent intent = getIntent();
         finish();
         startActivity(intent);
+    }
+
+    @Override
+    public void sendBrewRecipe(BrewRecipe brew) {
+        String notes = brew.getNotes();
+        BrewNotesFragment bn = (BrewNotesFragment) getSupportFragmentManager().getFragments().get(1);
+        bn.setNotes(notes);
     }
 }

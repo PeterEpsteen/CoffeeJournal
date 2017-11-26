@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:layout_height="wrap_content" android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
         <TextView
@@ -139,26 +141,19 @@
             android:gravity="center"
             app:layout_constraintBottom_toTopOf="@id/timer_relative_layout"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/strength_recipe_textview"
+            app:layout_constraintRight_toLeftOf="@id/strength_spinner"
             android:padding="0dp"
 
             />
 
-        <TextView
+        <Spinner
             android:layout_width="0dp"
             app:layout_constraintHorizontal_weight="1"
             android:layout_height="wrap_content"
-            android:padding="0dp"
-            android:gravity="center"
-            android:singleLine="true"
-            android:text="Strength: Normal"
-            app:layout_constraintBaseline_toBaselineOf="@id/grind_recipe_textview"
-            android:id="@+id/strength_recipe_textview"
-            android:textSize="16sp"
-            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintLeft_toRightOf="@id/grind_recipe_textview"
-
-            />
+            app:layout_constraintBottom_toBottomOf="@id/grind_recipe_textview"
+            app:layout_constraintRight_toRightOf="parent"
+            android:id="@+id/strength_spinner"></Spinner>
 
 
         <RelativeLayout
@@ -223,3 +218,4 @@
 
     </android.support.constraint.ConstraintLayout>
 
+</ScrollView>

@@ -7,18 +7,21 @@ package com.example.peter.coffeejournal;
 public class BrewRecipe {
 
     String name, brewMethod, grind, notes;
-    int ratio, brewTime, bloomTime, icon;
+    int metric, brewTime, bloomTime, icon;
+    double coffeeUnits, waterUnits;
 
     public BrewRecipe(){
         return;
     }
 
-    public BrewRecipe(String name, String brewMethod, String grind, String notes, int ratio, int brewTime, int bloomTime) {
+    public BrewRecipe(String name, String brewMethod, String grind, String notes, double coffeeUnits, double waterUnits, int metric, int brewTime, int bloomTime) {
         this.name = name;
         this.brewMethod = brewMethod;
         this.grind = grind;
         this.notes = notes;
-        this.ratio = ratio;
+        this.metric = metric;
+        this.coffeeUnits = coffeeUnits;
+        this.waterUnits = waterUnits;
         this.brewTime = brewTime;
         this.bloomTime = bloomTime;
         this.icon = getIcon();
@@ -45,8 +48,15 @@ public class BrewRecipe {
         return notes;
     }
 
-    public int getRatio() {
-        return ratio;
+    public boolean isMetric() {return metric == 1;}
+
+    public double getCoffeeUnits() {return coffeeUnits;}
+
+    public double getWaterUnits() {return waterUnits;
+    }
+
+    public int getMetric() {
+        return metric;
     }
 
     public int getBrewTime() {
@@ -67,6 +77,9 @@ public class BrewRecipe {
                 break;
             case "Chemex":
                 icon = R.drawable.chemex;
+                break;
+            case "Aeropress":
+                icon = R.drawable.aeropress;
                 break;
             case "Espresso":
                 icon = R.drawable.espresso_icon;
@@ -107,8 +120,16 @@ public class BrewRecipe {
         this.notes = notes;
     }
 
-    public void setRatio(int ratio) {
-        this.ratio = ratio;
+    public void setCoffeeUnits(double coffeeUnits) {
+        this.coffeeUnits = coffeeUnits;
+    }
+
+    public void setMetric(int metric) {
+        this.metric = metric;
+    }
+
+    public void setWaterUnits(double waterUnits) {
+        this.waterUnits = waterUnits;
     }
 
     public void setIcon(int icon) {
