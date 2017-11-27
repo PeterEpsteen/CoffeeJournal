@@ -1,8 +1,10 @@
 package com.example.peter.coffeejournal;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -50,11 +53,24 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener 
         addButton.setOnClickListener(this);
     }
 
+    public boolean validateInput() {
+        Context context = getApplicationContext();
+        int duration = Toast.LENGTH_LONG;
+        if(TextUtils.isEmpty(roastNameEdit.getText())){
+            CharSequence text = "Please enter a roast name.";
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+            return false;
+        }
+        return true;
+    }
+
     @Override
     public void onClick(View v) {
         LayoutInflater inflater = getLayoutInflater();
         switch (v.getId()) {
             case (R.id.add_roast_button):
+                if(validateInput())
                 addRoast();
                 break;
             case (R.id.add_bean_row_button):
@@ -82,16 +98,26 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener 
         roastName = roastNameEdit.getText().toString();
         roast = new Roast(roastName, roastDate, 1, 0);
         //add all bean rows to roast
+
         for (LinearLayout row : beanRowLinearLayoutList) {
             Log.i("BeanRow", "Bean Row: " + row.toString());
             EditText beanNameEditText = row.findViewById(R.id.bean_name_edit_text);
-            String beanName = beanNameEditText.getText().toString();
             EditText beanWeightEditText = row.findViewById(R.id.bean_weight_edit_text);
-            int beanWeight = Integer.parseInt(beanWeightEditText.getText().toString());
-            if (!beanName.equals("")){
+            String beanName = beanNameEditText.getText().toString();
+            String beanWeightString = beanWeightEditText.getText().toString();
+
+            if (!beanName.equals("") && !beanWeightString.equals("")){
                 Log.i("Bean", "Adding bean name: " + beanName);
+                int beanWeight = Integer.parseInt(beanWeightString);
                 Bean newBean = new Bean(beanName, beanWeight);
                 roast.addToBeanList(newBean);
+            }
+            else {
+                Context context = getApplicationContext();
+                int duration = Toast.LENGTH_LONG;
+                    CharSequence text = "Please enter a valid bean row.";
+                    Toast toast = Toast.makeText(context, text, duration);
+                    toast.show();
             }
         }
 
@@ -100,11 +126,12 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener 
             EditText stepTimeEditText = row.findViewById(R.id.time_edit_text);
             String stepTime = stepTimeEditText.getText().toString();
             EditText stepTempEditText = row.findViewById(R.id.temp_edit_text);
-            int stepTemp = Integer.parseInt(stepTempEditText.getText().toString());
             EditText commentsEdit = row.findViewById(R.id.comments_edit_text);
             String comments = commentsEdit.getText().toString();
-            if (!stepTime.equals("")){
+            String tempString = stepTempEditText.getText().toString();
+            if (!stepTime.equals("") && !tempString.equals("")){
                 Log.i("Bean", "Adding step time: " + stepTime);
+                int stepTemp = Integer.parseInt(tempString);
                 RoastStep newStep = new RoastStep(stepTime, stepTemp, comments);
                 roast.addToStepList(newStep);
             }

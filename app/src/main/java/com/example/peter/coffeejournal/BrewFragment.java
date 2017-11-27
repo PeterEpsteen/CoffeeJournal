@@ -86,22 +86,25 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemLongClic
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-        TextView tv =  info.targetView.findViewById(R.id.brew_title_text_view);
-        String brewName = tv.getText().toString();
-        switch (item.getItemId()) {
-            case R.id.menu_edit:
-                return true;
-            case R.id.menu_delete:
-                Log.i("Info", "You would be deleting this brew: " + brewName);
-                mDBOperator.deleteBrew(brewName);
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.detach(this).attach(this).commit();
-                return true;
-            default:
-                return super.onContextItemSelected(item);
+        if (getUserVisibleHint()) {
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+            TextView tv = info.targetView.findViewById(R.id.brew_title_text_view);
+            String brewName = tv.getText().toString();
+            switch (item.getItemId()) {
+                case R.id.menu_edit:
+                    return true;
+                case R.id.menu_delete:
+                    Log.i("Info", "You would be deleting this brew: " + brewName);
+                    mDBOperator.deleteBrew(brewName);
+                    FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    ft.detach(this).attach(this).commit();
+                    return true;
+                default:
+                    return super.onContextItemSelected(item);
 
+            }
         }
+        return false;
     }
 
 

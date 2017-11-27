@@ -4,11 +4,6 @@
     android:layout_height="match_parent"
     android:layout_margin="16dp">
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/TextAppearance.AppCompat.Title"
-        android:text="Tasting Notes:"/>
-    <TextView
         android:layout_margin="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

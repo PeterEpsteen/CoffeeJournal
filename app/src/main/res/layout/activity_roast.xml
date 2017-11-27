@@ -6,7 +6,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:id="@+id/roast_container"
-        android:layout_margin="16dp">
+        android:layout_margin="16dp"
+        android:paddingBottom="32dp">
 
 
     </LinearLayout>

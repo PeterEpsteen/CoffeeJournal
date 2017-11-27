@@ -62,7 +62,7 @@ public class RoastActivity extends AppCompatActivity {
             TextView beanWeightTv = beanRow.findViewById(R.id.bean_weight_text_view);
             beanWeightTv.setText(Integer.toString(bean.getBeanWeight()));
             TextView countTv = beanRow.findViewById(R.id.bean_number_text_view);
-            countTv.setText(Integer.toString(count));
+            countTv.setText("");
             count++;
             beansCvContainer.addView(beanRow);
 
@@ -96,13 +96,15 @@ public class RoastActivity extends AppCompatActivity {
             TextView commentsTv = stepRow.findViewById(R.id.comments_text_view);
             commentsTv.setText(step.getComment());
             TextView countTv = stepRow.findViewById(R.id.step_number_text_view);
-            countTv.setText(Integer.toString(count));
+            countTv.setText("");
             count++;
             stepsCvContainer.addView(stepRow);
         }
         roastContainer.addView(stepsCv);
+        TextView notesTitleTv = (TextView) inflater.inflate(R.layout.generic_text_view, roastContainer, false);
+        notesTitleTv.setText("Tasting Notes");
+        roastContainer.addView(notesTitleTv);
         CardView notesCv = (CardView) inflater.inflate(R.layout.generic_card_view, roastContainer, false);
-
         LinearLayout tastingLayout = (LinearLayout) inflater.inflate(R.layout.roast_tasting_notes_linear_layout, roastContainer, false);
         TextView notesTv = tastingLayout.findViewById(R.id.tasting_notes_text_view);
         notesTv.setText(roast.getNotes());

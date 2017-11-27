@@ -5,8 +5,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -18,7 +22,7 @@ import com.google.android.gms.plus.PlusOneButton;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RoastFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class RoastFragment extends Fragment implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -78,6 +82,7 @@ public class RoastFragment extends Fragment implements AdapterView.OnItemClickLi
         roastAdapter = new RoastAdapter(view.getContext(), roastArrayList);
         lv.setAdapter(roastAdapter);
         lv.setOnItemClickListener(this);
+        registerForContextMenu(lv);
         Log.i("Brew", roastArrayList.toString());
 
         //Find the +1 button
@@ -126,6 +131,40 @@ public class RoastFragment extends Fragment implements AdapterView.OnItemClickLi
         myIntent.putExtra("Name", roastName);
         myIntent.putExtra("Date", date);
         startActivity(myIntent);
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getActivity().getMenuInflater();
+        inflater.inflate(R.menu.context_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        if (getUserVisibleHint()) {
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+            TextView tv = info.targetView.findViewById(R.id.roast_name_text_view);
+            String roastName = tv.getText().toString();
+            switch (item.getItemId()) {
+                case R.id.menu_edit:
+                    return true;
+                case R.id.menu_delete:
+                    Log.i("Roast", "Deleting roast: " + roastName);
+                    dbOperator.deleteRoast(roastName);
+                    FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    ft.detach(this).attach(this).commit();
+                    return true;
+                default:
+                    return super.onContextItemSelected(item);
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        return false;
     }
 
     /**

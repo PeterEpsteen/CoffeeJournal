@@ -332,4 +332,10 @@ public class DBOperator extends SQLiteOpenHelper {
     }
 
 
+    public boolean deleteRoast(String roastName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        boolean success = db.delete(ROAST_TABLE_NAME, NAME + " = '" + roastName + "'", null) > 0;
+        db.close();
+        return success;
+    }
 }
