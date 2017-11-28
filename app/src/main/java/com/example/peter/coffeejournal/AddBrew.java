@@ -3,6 +3,7 @@ package com.example.peter.coffeejournal;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -17,7 +18,7 @@ public class AddBrew extends AppCompatActivity implements View.OnClickListener {
 
     BrewRecipe br;
     String name, brewMethod, grind, notes;
-    int ratio, brewTime, bloomTime, metric,icon;
+    int ratio, brewTime, bloomTime, metric, icon;
     DBOperator db;
     double waterUnits, coffeeUnits;
 
@@ -65,16 +66,33 @@ public class AddBrew extends AppCompatActivity implements View.OnClickListener {
         grind = grindEdit.getText().toString();
         EditText notesEdit = (EditText) findViewById(R.id.notes_edit);
         notes = notesEdit.getText().toString();
-        EditText metricEdit = (EditText) findViewById(R.id.metric_edit);
-        metric =Integer.parseInt(metricEdit.getText().toString());
+        SwitchCompat metricEdit = (SwitchCompat) findViewById(R.id.metric_edit);
+        if(metricEdit.isChecked())
+            metric = 0;
+        else
+            metric = 1;
         EditText coffeeEdit = (EditText) findViewById(R.id.coffee_amount_edit);
         coffeeUnits =Double.parseDouble(coffeeEdit.getText().toString());
         EditText waterEdit = (EditText) findViewById(R.id.water_amount_edit);
         waterUnits =Double.parseDouble(waterEdit.getText().toString());
+
+        brewTime = 0;
         EditText brewTimeEdit = (EditText) findViewById(R.id.brew_time_edit);
-        brewTime =Integer.parseInt(brewTimeEdit.getText().toString());
+        String timeString = brewTimeEdit.getText().toString();
+        String[] array1 = timeString.split(":");
+        if (array1.length > 1) {
+            brewTime = Integer.parseInt(array1[0]) * 60 + Integer.parseInt(array1[1]);
+        }
+        else {
+            brewTime = Integer.parseInt(array1[0]);
+        }
+
+
+
         EditText bloomTimeEdit = (EditText) findViewById(R.id.bloom_time_edit);
         bloomTime = Integer.parseInt(bloomTimeEdit.getText().toString());
+
+
         //Create brewRecipe, open db and insert
         br = new BrewRecipe(name, brewMethod, grind, notes, coffeeUnits, waterUnits, metric, brewTime, bloomTime);
         db = new DBOperator(this);

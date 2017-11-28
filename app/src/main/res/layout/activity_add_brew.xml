@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -6,11 +10,13 @@
     android:layout_height="match_parent"
     tools:context="com.example.peter.coffeejournal.AddBrew">
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="2"
         android:layout_height="wrap_content"
         android:text="Recipe name:"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/recipe_name_edit"
         android:layout_marginTop="24dp"
         android:layout_marginLeft="16dp"
         android:id="@+id/recipe_name_tv"
@@ -18,19 +24,23 @@
 
     <EditText
         android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="3"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/recipe_name_tv"
         android:id="@+id/recipe_name_edit"
         android:singleLine="true"
+        app:layout_constraintBaseline_toBaselineOf="@id/recipe_name_tv"
         android:inputType="text"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/recipe_name_tv"
         android:layout_marginRight="16dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginBottom="8dp"/>
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="2"
         android:layout_height="wrap_content"
+        app:layout_constraintRight_toLeftOf="@id/brew_method_spinner"
+        android:layout_marginTop="24dp"
         android:text="Brew Method:"
         app:layout_constraintTop_toBottomOf="@id/recipe_name_edit"
         android:layout_marginLeft="16dp"
@@ -39,82 +49,113 @@
 
     <Spinner
         android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="3"
         app:layout_constraintLeft_toRightOf="@id/brew_method_text_view"
         app:layout_constraintRight_toRightOf="parent"
         android:id="@+id/brew_method_spinner"
-        app:layout_constraintTop_toBottomOf="@id/recipe_name_edit"
+        app:layout_constraintTop_toTopOf="@id/brew_method_text_view"
         android:tag="Title"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="2"
         android:layout_height="wrap_content"
         android:text="Amount of Coffee:"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/brew_method_spinner"
         android:layout_marginTop="24dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/coffee_amount_edit"
+        app:layout_constraintTop_toBottomOf="@id/brew_method_text_view"
         android:layout_marginLeft="16dp"
         android:id="@+id/coffee_units_text_view"
          />
 
     <EditText
         android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="3"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toRightOf="@+id/coffee_units_text_view"
         android:id="@+id/coffee_amount_edit"
         android:singleLine="true"
         android:inputType="number"
-        app:layout_constraintRight_toLeftOf="@id/water_units_text_view"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBaseline_toBaselineOf="@id/coffee_units_text_view"
         android:layout_marginRight="16dp"/>
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="2"
         android:layout_height="wrap_content"
         android:text="Amount of Water:"
         android:id="@+id/water_units_text_view"
-        app:layout_constraintLeft_toRightOf="@id/coffee_amount_edit"
+        android:layout_marginTop="24dp"
+        android:layout_marginLeft="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/coffee_amount_edit"
         app:layout_constraintRight_toLeftOf="@id/water_amount_edit"
-        app:layout_constraintBaseline_toBaselineOf="@id/coffee_amount_edit"/>
+        />
     <EditText
         android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="3"
         android:layout_height="wrap_content"
         android:id="@+id/water_amount_edit"
         android:singleLine="true"
         android:inputType="number"
-        android:layout_marginRight="8dp"
+        android:layout_marginRight="16dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toRightOf="@id/water_units_text_view"
         app:layout_constraintBaseline_toBaselineOf="@id/water_units_text_view"/>
 
     <TextView
         android:layout_width="wrap_content"
+        app:layout_constraintHorizontal_weight="2"
         android:layout_height="wrap_content"
-        android:text="Metric?"
+        android:text="Units"
         android:layout_margin="16dp"
         android:id="@+id/metric_tv"
         app:layout_constraintTop_toBottomOf="@id/water_amount_edit"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/metric_edit"
-        />
-    <EditText
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintLeft_toRightOf="@id/metric_tv"
-        app:layout_constraintBaseline_toBaselineOf="@id/metric_tv"
-        app:layout_constraintRight_toRightOf="parent"
-        android:id="@+id/metric_edit"
-        android:singleLine="true"
-        android:inputType="number"/>
+        app:layout_constraintLeft_toLeftOf="parent"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Grams"
+        android:id="@+id/grams_tv"
+        app:layout_constraintLeft_toLeftOf="@id/water_amount_edit"
+        app:layout_constraintBaseline_toBaselineOf="@id/metric_tv"/>
+
+    <android.support.v7.widget.SwitchCompat
+        android:layout_width="wrap_content"
+        android:padding="8dp"
+        app:switchMinWidth="56dp"
+        android:gravity="center_vertical"
+        android:layout_height="wrap_content"
+        android:textOn="1"
+        android:textOff="0"
+        app:showText="false"
+        app:switchTextAppearance="@style/TextAppearance.AppCompat.Button"
+        android:layout_marginRight="16dp"
+        app:layout_constraintLeft_toRightOf="@id/grams_tv"
+        app:layout_constraintBaseline_toBaselineOf="@id/metric_tv"
+        android:id="@+id/metric_edit" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ounces"
+        android:id="@+id/ounces_tv"
+        app:layout_constraintLeft_toRightOf="@id/metric_edit"
+        app:layout_constraintBaseline_toBaselineOf="@id/metric_edit"/>
+
+    <TextView
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="2"
+        android:layout_height="wrap_content"
         android:text="Bloom time:"
+        app:layout_constraintRight_toLeftOf="@id/bloom_time_edit"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/metric_tv"
         android:layout_marginTop="24dp"
@@ -125,21 +166,23 @@
 
     <EditText
         android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="3"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toRightOf="@+id/bloom_time_tv"
         app:layout_constraintBaseline_toBaselineOf="@+id/bloom_time_tv"
         android:id="@+id/bloom_time_edit"
         android:singleLine="true"
-        android:inputType="number"
+        android:inputType="time"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginRight="16dp"
-        android:layout_marginLeft="8dp"
         android:textSize="16dp"/>
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="2"
         android:layout_height="wrap_content"
-        android:text="Grind Setting/Style:"
+        android:text="Grind Setting:"
+        app:layout_constraintRight_toLeftOf="@id/grind_edit"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/bloom_time_tv"
         android:layout_marginTop="24dp"
@@ -150,6 +193,7 @@
 
     <EditText
         android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="3"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toRightOf="@+id/grind_tv"
         app:layout_constraintBaseline_toBaselineOf="@+id/grind_tv"
@@ -158,12 +202,13 @@
         android:inputType="text"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginRight="16dp"
-        android:layout_marginLeft="8dp"
         android:textSize="16dp"/>
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="2"
+        app:layout_constraintRight_toLeftOf="@id/brew_time_edit"
         android:layout_height="wrap_content"
-        android:text="Brew time (after bloom):"
+        android:text="Brew time"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/grind_tv"
         android:layout_marginTop="24dp"
@@ -174,6 +219,7 @@
 
     <EditText
         android:layout_width="0dp"
+        app:layout_constraintHorizontal_weight="3"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toRightOf="@+id/brew_time_tv"
         app:layout_constraintBaseline_toBaselineOf="@+id/brew_time_tv"
@@ -181,8 +227,7 @@
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginRight="16dp"
         android:singleLine="true"
-        android:inputType="number"
-        android:layout_marginLeft="8dp"
+        android:inputType="time"
         android:textSize="16dp"/>
     <TextView
         android:layout_width="wrap_content"
@@ -203,6 +248,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:id="@+id/notes_edit"
         app:layout_constraintRight_toRightOf="parent"
+        android:singleLine="true"
         android:layout_marginRight="16dp"
         android:layout_marginLeft="8dp"
         android:textSize="16dp"/>
@@ -212,15 +258,18 @@
         android:layout_height="wrap_content"
         android:id="@+id/add_brew_button"
         android:text="Add Brew!"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/notes_edit"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:textSize="20dp"
+        style="@style/TextAppearance.AppCompat.Button"
+        android:textColor="@color/common_google_signin_btn_text_dark"
         android:layout_marginBottom="16dp"
-        android:backgroundTint="@color/colorBackground"
+        android:backgroundTint="@color/colorAccent"
         android:padding="16dp"
         />
 
 <!-- TODO: MAKE THIS BETTER, find design closer to finished product and start with that -->
 
 </android.support.constraint.ConstraintLayout>
+
+</ScrollView>
