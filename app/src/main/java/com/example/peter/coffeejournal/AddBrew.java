@@ -80,8 +80,11 @@ public class AddBrew extends AppCompatActivity implements View.OnClickListener {
         EditText brewTimeEdit = (EditText) findViewById(R.id.brew_time_edit);
         String timeString = brewTimeEdit.getText().toString();
         String[] array1 = timeString.split(":");
-        if (array1.length > 1) {
+        if (array1.length > 1 && !array1[0].equals("")) {
             brewTime = Integer.parseInt(array1[0]) * 60 + Integer.parseInt(array1[1]);
+        }
+        else if(array1.length>1 && array1[0].equals("")){
+            bloomTime = Integer.parseInt(array1[1]);
         }
         else {
             brewTime = Integer.parseInt(array1[0]);
@@ -91,8 +94,11 @@ public class AddBrew extends AppCompatActivity implements View.OnClickListener {
         EditText bloomTimeEdit = (EditText) findViewById(R.id.bloom_time_edit);
         String bloomTimeString = bloomTimeEdit.getText().toString();
         String[] array2 = bloomTimeString.split(":");
-        if (array2.length > 1) {
+        if (array2.length > 1 && !array2[0].equals("")) {
             bloomTime = Integer.parseInt(array2[0]) * 60 + Integer.parseInt(array2[1]);
+        }
+        else if(array2.length>1 && array2[0].equals("")){
+            bloomTime = Integer.parseInt(array2[1]);
         }
         else {
             bloomTime = Integer.parseInt(array2[0]);

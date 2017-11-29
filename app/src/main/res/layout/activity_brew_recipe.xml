@@ -7,137 +7,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:clipToPadding="false"
     tools:context="com.example.peter.coffeejournal.MainActivity">
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="#D7CCC8">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="@dimen/appbar_padding_top"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-
-
-
-
-        <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            xmlns:app="http://schemas.android.com/apk/res-auto">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Water"
-            app:layout_constraintBottom_toTopOf="@id/water_weight_text_view"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintHorizontal_weight="1"
-            android:id="@+id/water_text_view"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@id/coffee_text_view"
-            android:gravity="center"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            style="@style/TextAppearance.AppCompat.Body1"
-            />
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Coffee"
-            app:layout_constraintHorizontal_weight="1"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBaseline_toBaselineOf="@id/water_text_view"
-            app:layout_constraintTop_toTopOf="parent"
-            android:id="@+id/coffee_text_view"
-            app:layout_constraintLeft_toRightOf="@id/water_text_view"
-            android:gravity="center"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp"
-            style="@style/TextAppearance.AppCompat.Body1"
-            />
-
-        <TextView
-            android:id="@+id/water_weight_text_view"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="500"
-            app:layout_constraintBottom_toBottomOf="@id/water_units_button"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:gravity="center"
-            app:layout_constraintRight_toLeftOf="@id/coffee_weight_text_view"
-            app:layout_constraintTop_toBottomOf="@id/water_text_view"
-            style="@style/TextAppearance.AppCompat.Display2"
-            android:textColor="@color/backgroundDefaultWhite"
-            />
-
-
-        <TextView
-            android:id="@+id/coffee_weight_text_view"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="80"
-            style="@style/TextAppearance.AppCompat.Display2"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/water_weight_text_view"
-            app:layout_constraintBaseline_toBaselineOf="@id/water_weight_text_view"
-            android:gravity="center"
-            android:textColor="@color/backgroundDefaultWhite"
-            />
-        </android.support.constraint.ConstraintLayout>
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/grind_recipe_textview"
-            app:layout_constraintLeft_toRightOf="parent"
-            app:layout_constraintRight_toLeftOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/start_button"
-            android:layout_gravity="center"
-            android:id="@+id/timer_relative_layout">
-
-            <ProgressBar
-                android:id="@+id/progressbarRL"
-                android:layout_width="148dip"
-                android:layout_height="148dip"
-
-                android:indeterminate="false"
-                android:progressDrawable="@drawable/circle"
-                android:background="@drawable/circle_shape"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:max="6000"
-                android:rotation="270"
-                android:progress="6000" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/step_tv"
-                android:layout_centerHorizontal="true"
-                android:layout_alignBaseline="@id/progressbarRL"
-                android:text="Bloom"
-                android:layout_marginTop="8dp"
-                style="@style/TextAppearance.AppCompat.Subhead"
-                />
-
-            <TextView
-                android:id="@+id/tvTimeCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:text="00:00"
-                style="@style/TextAppearance.AppCompat.Display1" />
-
-
-        </RelativeLayout>
-
-
-
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:elevation="4dp"
+        >
 
 
         <android.support.design.widget.TabLayout
@@ -161,12 +48,146 @@
         </android.support.design.widget.TabLayout>
 
     </android.support.design.widget.AppBarLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:elevation="2dp"
+            android:background="#EFEBE9"
+            android:padding="16dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Water"
+                    android:id="@+id/water_text_view"
+                    android:textAlignment="gravity"
+                    android:gravity="bottom"
+                    android:layout_gravity="center"
+                    style="@style/TextAppearance.AppCompat.Body1"
+                    />
+
+                <TextView
+                    android:id="@+id/water_weight_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="500"
+                    android:textAlignment="center"
+                    android:includeFontPadding="false"
+                    android:layout_gravity="center"
+                    style="@style/TextAppearance.AppCompat.Display1"
+                    android:textColor="@color/colorTextDark"
+                    android:textStyle="bold"
+                    />
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent">
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                app:layout_constraintTop_toBottomOf="@id/grind_recipe_textview"
+                app:layout_constraintLeft_toRightOf="parent"
+                app:layout_constraintRight_toLeftOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/start_button"
+                android:layout_gravity="center"
+                android:id="@+id/timer_relative_layout">
+
+                <ProgressBar
+                    android:id="@+id/progressbarRL"
+                    android:layout_width="124dip"
+                    android:layout_height="124dip"
+                    android:clipToPadding="false"
+                    android:indeterminate="false"
+                    android:progressDrawable="@drawable/circle"
+                    android:background="@drawable/circle_shape"
+                    style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+                    android:max="6000"
+                    android:rotation="270"
+                    android:progress="6000" />
+                <TextView
+                    android:id="@+id/tvTimeCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerInParent="true"
+                    android:paddingTop="8dp"
+                    android:textStyle="bold"
+                    android:text="00:00"
+                    style="@style/TextAppearance.AppCompat.Display1"
+                    android:textColor="@color/colorTextDark"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/step_tv"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="24dp"
+                    android:text="Bloom"
+                    style="@style/TextAppearance.AppCompat.Subhead"
+                    />
+
+
+
+
+            </RelativeLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Coffee"
+                    android:layout_gravity="center"
+                    android:id="@+id/coffee_text_view"
+                    app:layout_constraintLeft_toRightOf="@id/water_text_view"
+                    android:gravity="center"
+                    style="@style/TextAppearance.AppCompat.Body1"
+                    />
+
+                <TextView
+                    android:id="@+id/coffee_weight_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="80"
+                    android:includeFontPadding="false"
+                    style="@style/TextAppearance.AppCompat.Display1"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorTextDark"
+                    android:layout_gravity="center"
+
+                    />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
 
 
     <android.support.v4.view.ViewPager
         android:id="@+id/container2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingTop="8dp"
+        android:paddingRight="8dp"
+        android:paddingLeft="8dp"
+        android:paddingBottom="0dp"
+        android:clipToPadding="false"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
     </LinearLayout>
 

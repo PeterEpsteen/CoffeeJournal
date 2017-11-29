@@ -49,7 +49,6 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
     SendBrew mCallback;
 
 
-
     public BrewRecipeFragment() {
         // Required empty public constructor
     }
@@ -123,22 +122,20 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
         coffeeUnitsButton.setOnClickListener(this);
         waterUnitsButton.setOnClickListener(this);
         brewSeconds = br.getBrewTime();
-        if(bloomSeconds == 0) {
+        if (bloomSeconds == 0) {
             stepTv.setText("Brew");
         }
 
-        if(br.isMetric()) {
+        if (br.isMetric()) {
             coffeeUnitsButton.setText("Grams");
             waterUnitsButton.setText("Grams");
-        }
-
-        else {
+        } else {
             coffeeUnitsButton.setText("Ounces");
             waterUnitsButton.setText("Ounces");
         }
 
 
-        textTimer.setText(String.format("%02d", bloomSeconds/60) + ":" + String.format("%02d", bloomSeconds%60));
+        textTimer.setText(String.format("%02d", bloomSeconds / 60) + ":" + String.format("%02d", bloomSeconds % 60));
         barTimer = getActivity().findViewById(R.id.progressbarRL);
         startButton = rootView.findViewById(R.id.start_button);
         startButton.setOnClickListener(this);
@@ -154,7 +151,7 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
         return rootView;
     }
 
-    private void startBrewTimer(final int seconds){
+    private void startBrewTimer(final int seconds) {
         stepTv.setText("Brew");
         barTimer.setMax(seconds);
         countDownTimer = new CountDownTimer(seconds * 1000, 500) {
@@ -181,13 +178,10 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
     }
 
 
-
-
     private void startBloomTimer(final int seconds) {
-        if(seconds == 0) {
+        if (seconds == 0) {
             startBrewTimer(brewSeconds);
-        }
-        else {
+        } else {
             barTimer.setMax(seconds);
             countDownTimer = new CountDownTimer(seconds * 1000, 500) {
                 // 500 means, onTick function will be called at every 500 milliseconds
@@ -230,36 +224,30 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
                     ((BrewRecipeActivity) getActivity()).update();
                     break;
             }
-        }
-
-        else if (v == waterUnitsButton) {
+        } else if (v == waterUnitsButton) {
             if (waterUnitsButton.getText().toString().equalsIgnoreCase("Grams")) {
                 double oz = convertGramsToOz(Double.parseDouble(waterWeightTv.getText().toString()));
                 waterUnits = convertGramsToOz(waterUnits);
                 ogWaterUnits = convertGramsToOz(ogWaterUnits);
-                waterWeightTv.setText(String.format("%.1f", oz));
+                waterWeightTv.setText(String.format("%.2f", oz));
                 waterUnitsButton.setText("Ounces");
-            }
-            else {
+            } else {
                 double grams = convertOzToGrams(Double.parseDouble(waterWeightTv.getText().toString()));
                 waterWeightTv.setText(String.format("%.0f", grams));
                 waterUnits = convertOzToGrams(waterUnits);
                 ogWaterUnits = convertOzToGrams(ogWaterUnits);
                 waterUnitsButton.setText("Grams");
             }
-        }
-
-        else if (v == coffeeUnitsButton) {
+        } else if (v == coffeeUnitsButton) {
             if (coffeeUnitsButton.getText().toString().equalsIgnoreCase("Grams")) {
                 double oz = convertGramsToOz(Double.parseDouble(coffeeWeightTv.getText().toString()));
                 coffeeWeightTv.setText(String.format("%.2f", oz));
                 coffeeUnitsButton.setText("Ounces");
                 coffeeUnits = convertGramsToOz(coffeeUnits);
                 ogCoffeeUnits = convertGramsToOz(ogCoffeeUnits);
-            }
-            else {
+            } else {
                 double grams = convertOzToGrams(Double.parseDouble(coffeeWeightTv.getText().toString()));
-                coffeeWeightTv.setText(String.format("%.0f", grams));
+                coffeeWeightTv.setText(String.format("%.1f", grams));
                 coffeeUnitsButton.setText("Grams");
                 coffeeUnits = convertOzToGrams(coffeeUnits);
                 ogCoffeeUnits = convertOzToGrams(ogCoffeeUnits);
@@ -268,7 +256,7 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
     }
 
     public double convertGramsToOz(double grams) {
-        return 0.035274*grams;
+        return 0.035274 * grams;
     }
 
     public double convertOzToGrams(double oz) {
@@ -279,13 +267,21 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
-        double multiplier = seekBar.getProgress()/100.0;
+        double multiplier = seekBar.getProgress() / 100.0;
         double waterWeight = 0;
         double coffeeWeight = 0;
         waterWeight = waterUnits * multiplier;
         coffeeWeight = coffeeUnits * multiplier;
-        waterWeightTv.setText(String.format("%.2f", waterWeight));
-        coffeeWeightTv.setText(String.format("%.2f", coffeeWeight));
+        if (waterUnitsButton.getText().toString().equalsIgnoreCase("grams")) {
+            waterWeightTv.setText(String.format("%.0f", waterWeight));
+        } else {
+            waterWeightTv.setText(String.format("%.2f", waterWeight));
+        }
+        if (coffeeUnitsButton.getText().toString().equalsIgnoreCase("grams")) {
+            coffeeWeightTv.setText(String.format("%.1f", coffeeWeight));
+        } else {
+            coffeeWeightTv.setText(String.format("%.2f", coffeeWeight));
+        }
 
     }
 
@@ -302,7 +298,7 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String brewStrength = parent.getItemAtPosition(position).toString();
-        switch (brewStrength){
+        switch (brewStrength) {
             case "Regular":
                 coffeeUnits = ogCoffeeUnits;
                 break;
@@ -328,7 +324,7 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
 
     }
 
-    public interface SendBrew{
+    public interface SendBrew {
         public void sendBrewRecipe(BrewRecipe brew);
     }
 }

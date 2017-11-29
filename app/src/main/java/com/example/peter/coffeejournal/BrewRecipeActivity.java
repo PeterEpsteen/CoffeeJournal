@@ -43,6 +43,7 @@ public class BrewRecipeActivity extends AppCompatActivity implements BrewRecipeF
         name = getIntent().getExtras().getString("Brew Name");
         ActionBar ab = getSupportActionBar();
         ab.setTitle(name);
+        ab.setElevation(0);
         setContentView(R.layout.activity_brew_recipe);
         mSectionsPageAdapter = new SectionsPageAdapter(getSupportFragmentManager());
         mViewPager = (ViewPager) findViewById(R.id.container2);
