@@ -7,7 +7,7 @@
             >
 
             <solid
-                android:color="@color/colorForeground" >
+                android:color="@color/backgroundDefaultWhite" >
             </solid>
 
             <stroke

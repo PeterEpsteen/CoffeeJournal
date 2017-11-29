@@ -87,11 +87,16 @@ public class AddBrew extends AppCompatActivity implements View.OnClickListener {
             brewTime = Integer.parseInt(array1[0]);
         }
 
-
-
+        bloomTime = 0;
         EditText bloomTimeEdit = (EditText) findViewById(R.id.bloom_time_edit);
-        bloomTime = Integer.parseInt(bloomTimeEdit.getText().toString());
-
+        String bloomTimeString = bloomTimeEdit.getText().toString();
+        String[] array2 = bloomTimeString.split(":");
+        if (array2.length > 1) {
+            bloomTime = Integer.parseInt(array2[0]) * 60 + Integer.parseInt(array2[1]);
+        }
+        else {
+            bloomTime = Integer.parseInt(array2[0]);
+        }
 
         //Create brewRecipe, open db and insert
         br = new BrewRecipe(name, brewMethod, grind, notes, coffeeUnits, waterUnits, metric, brewTime, bloomTime);

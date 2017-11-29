@@ -32,6 +32,7 @@
         android:scaleType="centerCrop"
         android:id="@+id/brew_method_icon_image_view"
         android:src="@drawable/pour_over"
+
         />
 
 

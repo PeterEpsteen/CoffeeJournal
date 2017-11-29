@@ -4,10 +4,10 @@
     <color name="colorPrimaryDark">#4E342E</color>
     <color name="colorAccent">#FF5252</color>
     <color name="colorBackground">#ece0d1</color>
-    <color name="colorForeground">#dbc1ac</color>
+    <color name="colorForeground">#ECECEC</color>
     <color name="colorTextDark">#000000</color>
     <color name="colorTextLight">#adadad</color>
-    <color name="backgroundDefaultWhite">#FFFFFD</color>
+    <color name="backgroundDefaultWhite">#FAFAFA</color>
     <color name="greyBackground">#fffafafa</color>
 
 

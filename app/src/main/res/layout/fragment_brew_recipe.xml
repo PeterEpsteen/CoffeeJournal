@@ -107,6 +107,8 @@
             app:layout_constraintTop_toBottomOf="@id/coffee_units_button"
             android:id="@+id/slider_linear_layout"
             android:layout_marginBottom="8dp"
+            android:paddingLeft= "16dp"
+            android:paddingRight= "16dp"
             >
 
             <TextView
@@ -131,18 +133,40 @@
         </LinearLayout>
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Grind: "
+            app:layout_constraintRight_toLeftOf="@id/grind_recipe_textview"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBaseline_toBaselineOf="@id/grind_recipe_textview"
+            android:layout_marginLeft="16dp"
+            style="@style/TextAppearance.AppCompat.Subhead"
+            android:id="@+id/grind_label"/>
+
+        <TextView
             android:layout_width="0dp"
             app:layout_constraintHorizontal_weight="1"
             android:layout_height="wrap_content"
-            android:text="Grind: Coarse"
+            android:text="Coarse"
             app:layout_constraintTop_toBottomOf="@id/slider_linear_layout"
             android:id="@+id/grind_recipe_textview"
-            android:gravity="center"
+            android:gravity="start"
             style="@style/TextAppearance.AppCompat.Subhead"
             app:layout_constraintBottom_toTopOf="@id/timer_relative_layout"
-            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/grind_label"
             app:layout_constraintRight_toLeftOf="@id/strength_spinner"
             android:padding="0dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            app:layout_constraintHorizontal_weight="1"
+            android:layout_height="wrap_content"
+            android:id="@+id/strength_label"
+            app:layout_constraintLeft_toRightOf="@id/grind_recipe_textview"
+            app:layout_constraintRight_toLeftOf="@id/strength_spinner"
+            android:text="Strength: "
+            style="@style/TextAppearance.AppCompat.Subhead"
+            app:layout_constraintBottom_toBottomOf="@id/strength_spinner"/>
 
         <Spinner
             android:layout_width="0dp"
