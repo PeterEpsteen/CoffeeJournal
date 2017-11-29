@@ -90,8 +90,8 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
         db = new DBOperator(getContext());
         br = db.getBrewRecipe(brewName);
         Log.i("BR", "Brew recipe is: " + br.getName());
-        waterWeightTv = (TextView) rootView.findViewById(R.id.water_weight_text_view);
-        coffeeWeightTv = (TextView) rootView.findViewById(R.id.coffee_weight_text_view);
+        waterWeightTv = (TextView) getActivity().findViewById(R.id.water_weight_text_view);
+        coffeeWeightTv = (TextView) getActivity().findViewById(R.id.coffee_weight_text_view);
         Spinner spinner = (Spinner) rootView.findViewById(R.id.strength_spinner);
 // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
@@ -103,7 +103,7 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
         spinner.setOnItemSelectedListener(this);
 
         DecimalFormat df = new DecimalFormat("#.##");
-        stepTv = rootView.findViewById(R.id.step_tv);
+        stepTv = getActivity().findViewById(R.id.step_tv);
 
         waterUnits = br.getWaterUnits();
         coffeeUnits = br.getCoffeeUnits();
@@ -115,7 +115,7 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
         scaleSlider.setOnSeekBarChangeListener(this);
         grindTv = (TextView) rootView.findViewById(R.id.grind_recipe_textview);
         grindTv.setText(br.getGrind());
-        textTimer = (TextView) rootView.findViewById(R.id.tvTimeCount);
+        textTimer = (TextView) getActivity().findViewById(R.id.tvTimeCount);
         bloomSeconds = br.getBloomTime();
         coffeeUnitsButton = (Button) rootView.findViewById(R.id.coffee_units_button);
         waterUnitsButton = (Button) rootView.findViewById(R.id.water_units_button);
@@ -124,8 +124,7 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
         waterUnitsButton.setOnClickListener(this);
         brewSeconds = br.getBrewTime();
         if(bloomSeconds == 0) {
-            TextView tv = rootView.findViewById(R.id.step_tv);
-            tv.setText("Brew");
+            stepTv.setText("Brew");
         }
 
         if(br.isMetric()) {
@@ -140,7 +139,7 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
 
 
         textTimer.setText(String.format("%02d", bloomSeconds/60) + ":" + String.format("%02d", bloomSeconds%60));
-        barTimer = rootView.findViewById(R.id.progressbarRL);
+        barTimer = getActivity().findViewById(R.id.progressbarRL);
         startButton = rootView.findViewById(R.id.start_button);
         startButton.setOnClickListener(this);
 
