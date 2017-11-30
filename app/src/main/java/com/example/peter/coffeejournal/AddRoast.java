@@ -115,9 +115,10 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener 
             else {
                 Context context = getApplicationContext();
                 int duration = Toast.LENGTH_LONG;
-                    CharSequence text = "Please enter a valid bean row.";
+                    CharSequence text = "Please at least one bean row.";
                     Toast toast = Toast.makeText(context, text, duration);
                     toast.show();
+                    return roast;
             }
         }
 

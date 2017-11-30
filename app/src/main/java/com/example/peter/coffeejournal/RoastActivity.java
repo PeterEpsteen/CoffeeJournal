@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -40,10 +41,10 @@ public class RoastActivity extends AppCompatActivity {
         int count = 1;
         TextView beanTv = (TextView) inflater.inflate(R.layout.generic_text_view, roastContainer, false);
         beanTv.setText("Beans");
-        roastContainer.addView(beanTv);
+//        roastContainer.addView(beanTv);
         CardView beansCv = (CardView) inflater.inflate(R.layout.generic_card_view, roastContainer, false);
         LinearLayout beansCvContainer = beansCv.findViewById(R.id.card_view_container);
-
+        beansCvContainer.addView(beanTv);
         LinearLayout topBeanRow = (LinearLayout) inflater.inflate(R.layout.bean_row, roastContainer, false);
         TextView topBeanNumbTv = topBeanRow.findViewById(R.id.bean_number_text_view);
         topBeanNumbTv.setText("");
@@ -71,9 +72,10 @@ public class RoastActivity extends AppCompatActivity {
         count = 1;
         TextView stepTv = (TextView) inflater.inflate(R.layout.generic_text_view, roastContainer, false);
         stepTv.setText("Steps");
-        roastContainer.addView(stepTv);
+//        roastContainer.addView(stepTv);
         CardView stepsCv = (CardView) inflater.inflate(R.layout.generic_card_view, roastContainer, false);
         LinearLayout stepsCvContainer = stepsCv.findViewById(R.id.card_view_container);
+        stepsCvContainer.addView(stepTv);
         LinearLayout topStepRow = (LinearLayout) inflater.inflate(R.layout.step_row, roastContainer, false);
         TextView topStepNumbTv = topStepRow.findViewById(R.id.step_number_text_view);
         topStepNumbTv.setText("");
@@ -103,8 +105,8 @@ public class RoastActivity extends AppCompatActivity {
         roastContainer.addView(stepsCv);
         TextView notesTitleTv = (TextView) inflater.inflate(R.layout.generic_text_view, roastContainer, false);
         notesTitleTv.setText("Tasting Notes");
-        roastContainer.addView(notesTitleTv);
         CardView notesCv = (CardView) inflater.inflate(R.layout.generic_card_view, roastContainer, false);
+        notesCv.addView(notesTitleTv);
         LinearLayout tastingLayout = (LinearLayout) inflater.inflate(R.layout.roast_tasting_notes_linear_layout, roastContainer, false);
         TextView notesTv = tastingLayout.findViewById(R.id.tasting_notes_text_view);
         notesTv.setText(roast.getNotes());

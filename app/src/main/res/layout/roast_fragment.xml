@@ -6,22 +6,32 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_marginBottom="56dp"
-        android:layout_marginTop="-8dp"
         android:clipToPadding="false"
-        android:fitsSystemWindows="true"
         tools:context="com.example.peter.coffeejournal.RoastFragment">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="56dp"
+            style="@style/TextAppearance.AppCompat.Display1"
+            android:id="@+id/no_roasts_tv"
+            android:text="Add a Roast!"/>
 
         <ListView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/roast_list_view"
             android:clipToPadding="false"
-            android:padding="16dp"
-            android:dividerHeight="0dp"
+            android:layout_gravity="fill_vertical"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:layout_marginTop="8dp"
             android:divider="@null"
-            ></ListView>
+            android:layout_marginBottom="56dp"
+           />
+
+
 
     </FrameLayout>
 

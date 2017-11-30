@@ -1,5 +1,6 @@
 package com.example.peter.coffeejournal;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 public class AddBrew extends AppCompatActivity implements View.OnClickListener {
 
@@ -59,68 +61,87 @@ public class AddBrew extends AppCompatActivity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         //Initialize all settings for BrewRecipe obj
+        //Get all edit texts
         EditText nameEdit = (EditText) findViewById(R.id.recipe_name_edit);
-        name = nameEdit.getText().toString();
-        //Spinner selection is handled in onItemSelected above
         EditText grindEdit = (EditText) findViewById(R.id.grind_edit);
-        grind = grindEdit.getText().toString();
         EditText notesEdit = (EditText) findViewById(R.id.notes_edit);
-        notes = notesEdit.getText().toString();
         SwitchCompat metricEdit = (SwitchCompat) findViewById(R.id.metric_edit);
-        if(metricEdit.isChecked())
-            metric = 0;
-        else
-            metric = 1;
         EditText coffeeEdit = (EditText) findViewById(R.id.coffee_amount_edit);
-        coffeeUnits =Double.parseDouble(coffeeEdit.getText().toString());
         EditText waterEdit = (EditText) findViewById(R.id.water_amount_edit);
-        waterUnits =Double.parseDouble(waterEdit.getText().toString());
-
-        brewTime = 0;
         EditText brewTimeEdit = (EditText) findViewById(R.id.brew_time_edit);
-        String timeString = brewTimeEdit.getText().toString();
-        String[] array1 = timeString.split(":");
-        if (array1.length > 1 && !array1[0].equals("")) {
-            brewTime = Integer.parseInt(array1[0]) * 60 + Integer.parseInt(array1[1]);
-        }
-        else if(array1.length>1 && array1[0].equals("")){
-            bloomTime = Integer.parseInt(array1[1]);
-        }
-        else {
-            brewTime = Integer.parseInt(array1[0]);
-        }
-
-        bloomTime = 0;
         EditText bloomTimeEdit = (EditText) findViewById(R.id.bloom_time_edit);
-        String bloomTimeString = bloomTimeEdit.getText().toString();
-        String[] array2 = bloomTimeString.split(":");
-        if (array2.length > 1 && !array2[0].equals("")) {
-            bloomTime = Integer.parseInt(array2[0]) * 60 + Integer.parseInt(array2[1]);
-        }
-        else if(array2.length>1 && array2[0].equals("")){
-            bloomTime = Integer.parseInt(array2[1]);
+
+        Context context = getApplicationContext();
+        int duration = Toast.LENGTH_LONG;
+
+        name = nameEdit.getText().toString();
+
+        if(name.equals("")) {
+            CharSequence text = "Please enter a valid brew name.";
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
         }
         else {
-            bloomTime = Integer.parseInt(array2[0]);
+            //Spinner selection is handled in onItemSelected above
+            grind = grindEdit.getText().toString();
+            notes = notesEdit.getText().toString();
+            if (metricEdit.isChecked())
+                metric = 0;
+            else
+                metric = 1;
+            String coffeeUnitsString = coffeeEdit.getText().toString();
+            String waterUnitsString = waterEdit.getText().toString();
+            if(coffeeUnitsString.equals("")) {
+                CharSequence text = "Please enter amount of coffee.";
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+                return;
+            }
+            if(waterUnitsString.equals("")) {
+                CharSequence text = "Please enter amount of water.";
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+                return;
+            }
+
+            coffeeUnits = Double.parseDouble(coffeeEdit.getText().toString());
+            waterUnits = Double.parseDouble(waterEdit.getText().toString());
+            brewTime = 0;
+            String timeString = brewTimeEdit.getText().toString();
+            if(!timeString.equals("")) {
+                String[] array1 = timeString.split(":");
+                if (array1.length > 1 && !array1[0].equals("")) {
+                    brewTime = Integer.parseInt(array1[0]) * 60 + Integer.parseInt(array1[1]);
+                } else if (array1.length > 1 && array1[0].equals("")) {
+                    bloomTime = Integer.parseInt(array1[1]);
+                } else {
+                    brewTime = Integer.parseInt(array1[0]);
+                }
+            }
+
+            bloomTime = 0;
+            String bloomTimeString = bloomTimeEdit.getText().toString();
+            if (!bloomTimeString.equals("")) {
+                String[] array2 = bloomTimeString.split(":");
+                if (array2.length > 1 && !array2[0].equals("")) {
+                    bloomTime = Integer.parseInt(array2[0]) * 60 + Integer.parseInt(array2[1]);
+                } else if (array2.length > 1 && array2[0].equals("")) {
+                    bloomTime = Integer.parseInt(array2[1]);
+                } else {
+                    bloomTime = Integer.parseInt(array2[0]);
+                }
+            }
+
+            //Create brewRecipe, open db and insert
+            br = new BrewRecipe(name, brewMethod, grind, notes, coffeeUnits, waterUnits, metric, brewTime, bloomTime);
+            db = new DBOperator(this);
+            long rows = db.insert(br);
+            if (rows != -1)
+                Log.i("db", "Sucessfully inserted rows: " + rows);
+            Intent myIntent = new Intent(this, MainActivity.class);
+            startActivity(myIntent);
+            finish();
+
         }
-
-        //Create brewRecipe, open db and insert
-        br = new BrewRecipe(name, brewMethod, grind, notes, coffeeUnits, waterUnits, metric, brewTime, bloomTime);
-        db = new DBOperator(this);
-        long rows = db.insert(br);
-        if(rows != -1)
-            Log.i("db", "Sucessfully inserted rows: " + rows);
-        Intent myIntent = new Intent(this, MainActivity.class);
-        startActivity(myIntent);
-        finish();
-
-
-        //Update main activity and send back to it
-
-
-
-
-
-
     }
 }

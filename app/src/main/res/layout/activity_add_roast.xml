@@ -1,38 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/greyBackground">
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/greyBackground"
+        >
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="@dimen/cardview_default_radius"
+            android:elevation="@dimen/cardview_default_elevation"
+            app:cardUseCompatPadding="true">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
-            style="@style/TextAppearance.AppCompat.Headline"
+            style="@style/TextAppearance.AppCompat.Title"
             android:text="Roast name" />
 
         <EditText
             android:id="@+id/roast_name_edit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/Base.V12.Widget.AppCompat.EditText"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:inputType="text"
             android:singleLine="true" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_height="wrap_content"
-            style="@style/TextAppearance.AppCompat.Headline"
-            android:text="Beans"/>
+            </LinearLayout>
 
+        </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
@@ -41,6 +58,11 @@
             android:elevation="@dimen/cardview_default_radius"
             app:cardUseCompatPadding="true"
             >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="8dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -49,7 +71,14 @@
             android:orientation="vertical"
             android:padding="8dp">
 
-        <LinearLayout
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TextAppearance.AppCompat.Title"
+                android:text="Beans"/>
+
+
+            <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -58,7 +87,7 @@
             <EditText
                 android:layout_width="0dp"
                 android:layout_height="56dp"
-                android:layout_weight="2"
+                android:layout_weight="3"
                 android:textSize="14sp"
                 android:inputType="text"
                 android:singleLine="true"
@@ -69,29 +98,31 @@
             <EditText
                 android:layout_width="0dp"
                 android:layout_height="56dp"
-                android:layout_weight="1"
+                android:layout_weight="2"
                 android:textSize="14sp"
                 android:inputType="number"
                 android:id="@+id/bean_weight_edit_text"
                 android:hint="Weight"/>
         </LinearLayout>
 
+
+
         </LinearLayout>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New Row"
+                android:layout_gravity="end"
+                android:id="@+id/add_bean_row_button"
+                android:backgroundTint="@color/colorAccent"
+                android:textColor="@color/common_google_signin_btn_text_dark"
+                />
+
+            </LinearLayout>
 
         </android.support.v7.widget.CardView>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Row"
-            android:layout_gravity="end"
-            android:id="@+id/add_bean_row_button"
-                />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/TextAppearance.AppCompat.Headline"
-            android:layout_marginLeft="8dp"
-            android:text="Steps"/>
+
+
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
@@ -100,6 +131,19 @@
             android:elevation="@dimen/cardview_default_radius"
             app:cardUseCompatPadding="true"
             >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="8dp"
+                android:paddingTop="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextAppearance.AppCompat.Title"
+                    android:layout_marginLeft="8dp"
+                    android:text="Steps"/>
 
         <LinearLayout
             android:id="@+id/steps_linear_layout"
@@ -145,21 +189,22 @@
             </LinearLayout>
 
         </LinearLayout>
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="New Row"
+                    android:layout_gravity="end"
+                    android:elevation="6dp"
+                    android:id="@+id/add_step_row_button"
+                    android:backgroundTint="@color/colorAccent"
+                    android:textColor="@color/common_google_signin_btn_text_dark"
+                    />
+
+            </LinearLayout>
         </android.support.v7.widget.CardView>
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Row"
-            android:layout_gravity="end"
-            android:elevation="6dp"
-            android:id="@+id/add_step_row_button"
-            />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Tasting Notes"
-            style="@style/TextAppearance.AppCompat.Headline"/>
+
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
@@ -168,17 +213,31 @@
             android:elevation="@dimen/cardview_default_radius"
             app:cardCornerRadius="@dimen/cardview_default_radius"
             android:padding="8dp">
-        <EditText
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Tasting Notes"
+                    style="@style/TextAppearance.AppCompat.Title"/>
+
+                <EditText
             android:id="@+id/tasting_notes_edit"
             android:layout_width="match_parent"
             android:layout_margin="8dp"
             android:layout_height="wrap_content"
             android:inputType="textMultiLine"
-            android:lines="3"
+            android:minLines="6"
             android:textSize="14sp"
             android:background="@android:color/transparent"
             android:gravity="start|top"
             android:hint="Notes"/>
+            </LinearLayout>
         </android.support.v7.widget.CardView>
         <LinearLayout
             android:layout_width="match_parent"
@@ -197,14 +256,31 @@
 
         <Button
             android:id="@+id/add_roast_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            style="@style/TextAppearance.AppCompat.Title"
             android:textColor="@color/common_google_signin_btn_text_dark"
             android:backgroundTint="@color/colorAccent"
             android:text="Add Roast"
+            android:layout_marginBottom="8dp"
             />
         </LinearLayout>
 
+
+
     </LinearLayout>
 
-</ScrollView>
+
+
+    </android.support.v4.widget.NestedScrollView>
+
+    <!--<android.support.design.widget.FloatingActionButton-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="16dp"-->
+        <!--android:layout_marginRight="16dp"-->
+        <!--android:layout_gravity="bottom|end"-->
+        <!--app:srcCompat="@android:drawable/ic_input_add"-->
+        <!--android:tint="#ffffff"/>-->
+
+</android.support.design.widget.CoordinatorLayout>

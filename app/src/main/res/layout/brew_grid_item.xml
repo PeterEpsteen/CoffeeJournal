@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/shape"
-    android:elevation="5dp"
+    android:elevation="@dimen/cardview_default_elevation"
     android:padding="8dp">
     <TextView
         style="@style/TextStyle"

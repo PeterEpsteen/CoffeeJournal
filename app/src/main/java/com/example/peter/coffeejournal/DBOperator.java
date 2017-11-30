@@ -17,7 +17,7 @@ import java.util.List;
 
 public class DBOperator extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 11;
     private static final String DATABASE_NAME = "COFFEE_JOURNAL_DB";
     private static final String BREW_TABLE_NAME = "BREW_TABLE";
     private static final String ROAST_TABLE_NAME = "ROAST_TABLE";
@@ -75,7 +75,24 @@ public class DBOperator extends SQLiteOpenHelper {
         brewMethodValues.put(WATER_UNITS, 300);
         brewMethodValues.put(COFFEE_UNITS, 20);
         brewMethodValues.put(METRIC, 1);
-        brewMethodValues.put(NOTES, "TO DO - ADD DEFAULT STEPS AND WHATNOT");
+        brewMethodValues.put(NOTES, "    Dosage: 29 Grams for 440 mL (66g/L)\n" +
+                "    Grind: Medium (or finer) (15-20/40)\n" +
+                "    Temp: Off the boil (I brewed at 203°-205°)\n" +
+                "    Pre-Infusion: Pre-wet and let sit for 45 seconds\n" +
+                "    Total Time: N/A\n" +
+                "\n" +
+                "Method\n" +
+                "\n" +
+                "    Rinse Filter\n" +
+                "    Grind and pour coffee into V60 shaking to settle grounds.\n" +
+                "    Pre-infuse with water allowing it to sit 45 seconds\n" +
+                "    Begin pouring from the center out clockwise in a circular motion until volume is reached.\n" +
+                "\n" +
+                "Tasting Notes\n" +
+                "\n" +
+                "    Light acidity for the duration of the sip\n" +
+                "    Light orange peel sweetness\n" +
+                "    Finishes clean with ripe berry (very similar to a naturally processed coffee)\n");
         brewMethodValues.put(GRIND, "Medium-Fine");
         brewMethodValues.put(BLOOM_TIME, 30);
         brewMethodValues.put(BREW_TIME, 180);
@@ -88,7 +105,39 @@ public class DBOperator extends SQLiteOpenHelper {
         brewMethodValues.put(WATER_UNITS, 400);
         brewMethodValues.put(COFFEE_UNITS, 27);
         brewMethodValues.put(METRIC, 1);
-        brewMethodValues.put(NOTES, "TO DO - ADD DEFAULT STEPS AND WHATNOT");
+        brewMethodValues.put(NOTES, " 1. Start with delicious water...\n" +
+                "\n" +
+                "Coffee is 98 percent H2O, Moore says, so make sure your water tastes pretty darn good. Still, delicious doesn’t have to mean fancy. “If you want to use tap water, the real rule of thumb is to drink it first. If it tastes OK to you, go ahead and use it,” says Shawn Steiman, author of the forthcoming The Little Coffee Know-It-All. Tap leaving a bad taste in your mouth? Opt for filtered or bottle water instead.\n" +
+                "2. ...and really, really fresh coffee beans.\n" +
+                "\n" +
+                "It probably goes without saying, but freshly roasted beans are key to a flavorful cuppa. “You don’t want beans that have been exposed to air for a long time. The beans should look a little oily and smell fresh and aromatic,” Moore says. Three ways to get your hands on them:\n" +
+                "\n" +
+                "    Flavor-sealed containers or bags. Unopened ones are airtight, so the beans inside will stay good until their expiration date (usually about 32 weeks after packaging). Once opened, though, the beans will start to lose flavor after about a week.\n" +
+                "    Unsealed containers or bags. If you’re buying beans in a package that isn’t air-sealed (like a paper bag), look for the roast date. Anything roasted more than a month ago probably won’t be very fresh, Moore says.\n" +
+                "    Bulk bins. Bulk coffee beans can be fresh—but the roast date isn’t always listed, and the beans are exposed to more air since people are constantly opening and closing the bins. If you’re not sure whether the bulk coffee you want to buy is fresh, speak up! “If you ask a purveyor when the coffee was roasted and they can answer with specific detail, there’s a good chance the coffee is decent,” Steiman says.\n" +
+                "\n" +
+                "3. Grind it up.\n" +
+                "\n" +
+                "You’ll get the best-flavored java by grinding your beans right before you brew them. “If you cut into an apple, it starts to oxidize and turn brown. Coffee beans do the same thing, you just can’t see it,” Moore explains. But watch that grind: The grounds used for drip coffee are way too small and risk clogging a French press filter. Instead, think big. “You want pieces the size of small breadcrumbs or a little smaller than Kosher salt,” Steiman says.\n" +
+                "4. Break out the measuring cups.\n" +
+                "Ground Coffee\n" +
+                "\n" +
+                "When it comes to the ideal coffee-to-water ratio, it depends how strong you want your brew. Between 18 and 20 grams of coffee (about a heaping tablespoon) per eight ounces of water is a good place to start, says coffee industry consultant Andrew Hetzel, who leads training courses for the Coffee Quality Institute. Like it bold? Moore recommends using two tablespoons of coffee per six ounces of water. “If it’s a little too strong, you can always add more hot water to your cup,” he adds.\n" +
+                "5. Bring the water to the right temp.\n" +
+                "\n" +
+                "Too-hot agua can make for bitter joe, while water that isn’t hot enough means you miss out on flavor. Aim for a temperature of around 200 degrees Fahrenheit—but don’t bother breaking out a thermometer. “Bring the water to a boil and let it sit for 30 seconds,” Steiman says. (Told you this was easy.)\n" +
+                "6. Fill ‘er up.\n" +
+                "\n" +
+                "Place the coffee grounds in the bottom of your French press, and pour about a third of the water over top. Let everything sit for about 30 seconds, then give it a gentle stir, Hetzel says. This makes sure all of the grounds are fully saturated with water so you get a flavor-packed brew. Add the rest of the water and place the lid on your carafe with the plunger pulled up all the way.\n" +
+                "7. Start your timer.\n" +
+                "\n" +
+                "Again, it’s a balancing act. Brew too short, and your coffee will taste thin and sour. Too long, and it’ll end up bitter or astringent. For the best flavor, Hetzel and Moore recommend letting your coffee brew for four minutes. Though if you like your coffee stronger, you can let it go for as long as six, Steiman says.\n" +
+                "8. Extract with care.\n" +
+                "\n" +
+                "When your timer buzzes, gently but firmly press the plunger all the way down. \n" +
+                "9. Pour—and drink up.\n" +
+                "\n" +
+                "If you’re drip person, you’re probably used to brewing a big pot of coffee, pouring some into your mug, and letting the rest sit around all morning. But anything that’s left in a French press will keep brewing since the grounds and the water are still mingling in the carafe, and after a few minutes, it’ll turn bitter. 'If you have any leftovers, pour it into another mug or thermos. Or brew less next time,' Steiman says.");
         brewMethodValues.put(GRIND, "Course");
         brewMethodValues.put(BLOOM_TIME, 30);
         brewMethodValues.put(BREW_TIME, 240);
@@ -101,7 +150,21 @@ public class DBOperator extends SQLiteOpenHelper {
         brewMethodValues.put(WATER_UNITS, 600);
         brewMethodValues.put(COFFEE_UNITS, 40);
         brewMethodValues.put(METRIC, 1);
-        brewMethodValues.put(NOTES, "TO DO - ADD DEFAULT STEPS AND WHATNOT");
+        brewMethodValues.put(NOTES, "One: Fill pouring kettle with hot filtered water and rinse filter until the glass is heated. Discard water from both.\n" +
+                "\n" +
+                "Two: Weigh coffee to desired strength (50-57 grams) and grind.\n" +
+                "\n" +
+                "Three: Place the chemex on a scale, add coffee, shake to level the coffee bed, zero the scale.\n" +
+                "\n" +
+                "Four: Fill your pouring kettle with hot filtered water.\n" +
+                "\n" +
+                "Five: Start timer and pour 260g of water in 30 seconds. Start in the center and work your way out in concentric circles.\n" +
+                "\n" +
+                "Six: at 1:00, pour to 520g of water in 30 seconds.\n" +
+                "\n" +
+                "Seven: At 2:30, pour to 780g of water in 30 seconds.\n" +
+                "\n" +
+                "Eight: Coffee should drain at around 5 minutes. Remove filter. Serve.");
         brewMethodValues.put(GRIND, "Medium");
         brewMethodValues.put(BLOOM_TIME, 30);
         brewMethodValues.put(BREW_TIME, 180);
@@ -114,7 +177,26 @@ public class DBOperator extends SQLiteOpenHelper {
         brewMethodValues.put(WATER_UNITS, 60);
         brewMethodValues.put(COFFEE_UNITS, 18);
         brewMethodValues.put(METRIC, 1);
-        brewMethodValues.put(NOTES, "TO DO - ADD DEFAULT STEPS AND WHATNOT");
+        brewMethodValues.put(NOTES, "\n" +
+                "\n" +
+                "WATER: Your espresso will taste only as good as the water you start with. Sediment, scale, and unwelcome minerals will doom your drink and your equipment if they're not dealt with up front, so, before you get too far, learn about the quality of your water. Most hardware stores have inexpensive water test kits available for purchase but you can also contact your local water source for details about what they pump to your pipes. With that information fresh in hand, check out the Specialty Coffee Association of America's water standards . If your H2O is off-the-charts funky, give us a call and we'll walk you through some water treatment solutions. And no matter your situation, you can keep out a lot of nasty stuff with a simple carbon filter, like that in a Brita pitcher.\n" +
+                "Espresso coffee grind\n" +
+                "\n" +
+                "GRIND: Before brewing, coffee beans need to be cut into smaller pieces. Making espresso requires a finer grind than most methods, with particles around the size of table salt. You know you're in the right neighborhood once the ground coffee begins to clump together. Later, you'll learn how to manipulate the grind to achieve different results.\n" +
+                "\n" +
+                "DOSE: For a \"double shot\" – the standard serving size – we prefer to use between 18 and 21 grams of ground coffee. As you add more coffee, your shot will increase in both body and intensity. Feel free to adjust your dose according to taste and make use of the troubleshooting tips below.\n" +
+
+
+                "TAMP: Compacting ground coffee with a tamper restricts the flow of water, forcing coffee and water to interact. Start with a 30-pound press (your bathroom scale can tell you what this feels like), applied evenly. A firm, level tamp is essential to even extraction.\n" +
+                "\n" +
+                "TEMP: Water heated to 195-205ºF is ideal for preparing coffee, and some espresso machines allow you to control this temperature. (For most systems, this is made possible by a \"PID controller\".) If yours does, play within this range to find what you like. You'll notice that lower temperatures draw out more brightness, while cranking up the heat produces roasty flavors. If you're not able to choose the temperature for yourself, you can assume for now that the machine is doing its job.\n" +
+                "Espresso shot yield\n" +
+                "\n" +
+                "YIELD: With brewed coffee, we measure coffee input and water input, but when making espresso it's coffee input and beverage output. Depending on your dose and basket size, shoot for about 2 ounces of espresso out, enough to fill a large shot glass. If you're weighing your shots, a 30-gram yield is a safe place to start.\n" +
+                "\n" +
+                "Note: The density of espresso can be a tricky thing, as the gasses trapped in the crema can make for fluffy, heady shots that only weigh 30 grams, or thin and silky shots that weigh 60. With many espresso blends, you should have a decent cap of crema - say, a 1/2 inch or so - and a total mass of about 30-40 grams for a 2-ounce shot. But some coffees will skew one way or the other, leading to less dense crema-bombs or denser, juicier single origin marvels. Whichever way you like your espresso, our reference points of 2 ounces or 30 grams are merely places to start, so feel free to make adjustments until you're doing a happy little dance after every shot!\n" +
+                "\n" +
+                "TIME: With our recommended dose and yield, about 25-30 seconds should pass between the beginning of extraction and the moment your glass is full. Half a minute for a happy tongue? Not bad.\n");
         brewMethodValues.put(GRIND, "Extra-Fine");
         brewMethodValues.put(BLOOM_TIME, 30);
         brewMethodValues.put(BREW_TIME, 180);
@@ -127,7 +209,37 @@ public class DBOperator extends SQLiteOpenHelper {
         brewMethodValues.put(WATER_UNITS, 300);
         brewMethodValues.put(COFFEE_UNITS, 21);
         brewMethodValues.put(METRIC, 1);
-        brewMethodValues.put(NOTES, "TO DO - ADD DEFAULT STEPS AND WHATNOT");
+        brewMethodValues.put(NOTES, "Rinse filter (with boiling water) by pouring directly into middle of filter. Pouring on the sides can compromise the shape of the “wave” filter. Rinsing the filter removes any paper taste of the filter and the hot water will preheat the Kalita. \n" +
+
+                "\n" +
+                "Weigh out about 27 grams of coffee to be ground. Fill kettle and heat water. Pro tip: weigh out slightly more coffee than will be used, often a gram or two is lost in the grinder. \n" +
+
+                "STEP 2\n" +
+                "\n" +
+                "GRIND AND WEIGH\n" +
+                "\n" +
+                "Grind coffee. The particle size should be just finer than sea salt. Weigh 25 grams of ground coffee into Kalita and tare scale. Give it a gentle tap to flatten coffee bed. This will help to even the water distribution when pouring. \n" +
+
+                "STEP 3\n" +
+                "\n" +
+                "BREW \n" +
+                "\n" +
+                "Just after boiling, remove kettle and let water settle. Start timer and pour enough water to just saturate coffee bed. Let bloom, or expand for 30 seconds. Allowing the coffee to bloom ensures even water dispersion and a delicious cup. Pro tip: try to use only 25-30 grams of water to cover all coffee. This will leave you with the correct amount of water to complete the brewing on time.\n" +
+
+
+                "Pouring in slow concentric circles, add enough water to raise slurry to about halfway up the side of filter. Continue adding water slowly in stages (also called pulse brewing), submerging the crust as you go and letting the slurry drop a little before adding water to bring it back to the same level. \n" +
+
+                "\n" +
+                "Try to add all water by 2:45-3:00. Once you’ve added 400 grams of water, give it a little stir if needed and let drain. You've done it right if the coffee bed is flat after draining. Your total brew time should be 3:30-3:50, depending on the coffee.\n" +
+
+                "Step 4\n" +
+                "\n" +
+                "SERVE AND ENJOY!\n" +
+                "\n" +
+                "Remove filter and serve. Most importantly, enjoy!\n" +
+
+                "\n" +
+                "With any pour-over, the water level will greatly affect how your extraction progresses. Keeping your level low will slow down the flow rate as well as allow you to maintain a more constant temperature by adding water a little at a time. A high level will drain faster and dissipate heat more quickly. A good barista will be able to manipulate their water level to achieve the desired flow rate and overall contact time. In other words, if you’re making a smaller batch, take care not to add too much water too quickly as you’ll finish before your target time and end up with under extracted coffee. If you’re making a larger batch and you find things are going too slowly, you can add water faster to speed things up.");
         brewMethodValues.put(GRIND, "Medium");
         brewMethodValues.put(BLOOM_TIME, 30);
         brewMethodValues.put(BREW_TIME, 180);
@@ -140,7 +252,28 @@ public class DBOperator extends SQLiteOpenHelper {
         brewMethodValues.put(WATER_UNITS, 300);
         brewMethodValues.put(COFFEE_UNITS, 21);
         brewMethodValues.put(METRIC, 1);
-        brewMethodValues.put(NOTES, "TO DO - ADD DEFAULT STEPS AND WHATNOT");
+        brewMethodValues.put(NOTES, "Winner: 2017 World AeroPress Championship\n" +
+                "\n" +
+                "Coffee: 35g\n" +
+                "Water: 370g @ 84°C\n" +
+                "Brewer: Inverted\n" +
+                "Filter: Paper\n" +
+                "\n" +
+                "    Put 35g of coffee into your AeroPress\n" +
+                "\n" +
+                "    From 0:00 to 0:15, add 150g of water\n" +
+                "\n" +
+                "    From 0:15 to 0:35, stir and keep stirring\n" +
+                "\n" +
+                "    At 0:35, put filter cap (with pre-wet filter) in place\n" +
+                "\n" +
+                "    At 1:05, flip the AeroPress and start pressing\n" +
+                "\n" +
+                "    At 1:35, stop pressing. You should have now 90ml of the concentrated brew (4.5%TDS)\n" +
+                "\n" +
+                "    Add 160g - 200g of hot water and enjoy!\n" +
+                "\n" +
+                "Total brew time - 1:35");
         brewMethodValues.put(GRIND, "Medium");
         brewMethodValues.put(BLOOM_TIME, 30);
         brewMethodValues.put(BREW_TIME, 180);
