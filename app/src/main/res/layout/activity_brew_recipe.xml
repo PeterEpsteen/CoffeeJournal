@@ -87,6 +87,14 @@
                     android:textStyle="bold"
                     />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/water_units_text_view"
+                    style="@style/TextAppearance.AppCompat.Body1"
+                    android:text="Grams"
+                    android:layout_gravity="center"/>
+
 
             </LinearLayout>
             <LinearLayout
@@ -172,6 +180,14 @@
                     android:layout_gravity="center"
 
                     />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/coffee_units_text_view"
+                    style="@style/TextAppearance.AppCompat.Body1"
+                    android:text="Grams"
+                    android:layout_gravity="center"/>
 
             </LinearLayout>
 

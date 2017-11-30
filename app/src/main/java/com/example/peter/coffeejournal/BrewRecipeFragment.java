@@ -37,7 +37,7 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
 
     private BrewRecipe br;
     DBOperator db;
-    TextView waterWeightTv, coffeeWeightTv, grindTv, strengthTv, textTimer, stepTv;
+    TextView waterWeightTv, coffeeWeightTv, grindTv, strengthTv, textTimer, stepTv, waterUnitsTv, coffeeUnitsTv;
     CountDownTimer countDownTimer;
     ProgressBar barTimer;
     Button startButton, waterUnitsButton, coffeeUnitsButton;
@@ -118,6 +118,8 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
         bloomSeconds = br.getBloomTime();
         coffeeUnitsButton = (Button) rootView.findViewById(R.id.coffee_units_button);
         waterUnitsButton = (Button) rootView.findViewById(R.id.water_units_button);
+        waterUnitsTv = getActivity().findViewById(R.id.water_units_text_view);
+        coffeeUnitsTv = getActivity().findViewById(R.id.coffee_units_text_view);
         metric = br.isMetric();
         coffeeUnitsButton.setOnClickListener(this);
         waterUnitsButton.setOnClickListener(this);
@@ -129,9 +131,13 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
         if (br.isMetric()) {
             coffeeUnitsButton.setText("Grams");
             waterUnitsButton.setText("Grams");
+            coffeeUnitsTv.setText("Grams");
+            waterUnitsTv.setText("Grams");
         } else {
             coffeeUnitsButton.setText("Ounces");
             waterUnitsButton.setText("Ounces");
+            coffeeUnitsTv.setText("Ounces");
+            waterUnitsTv.setText("Ounces");
         }
 
 
@@ -231,24 +237,29 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
                 ogWaterUnits = convertGramsToOz(ogWaterUnits);
                 waterWeightTv.setText(String.format("%.2f", oz));
                 waterUnitsButton.setText("Ounces");
+                waterUnitsTv.setText("Ounces");
+
             } else {
                 double grams = convertOzToGrams(Double.parseDouble(waterWeightTv.getText().toString()));
                 waterWeightTv.setText(String.format("%.0f", grams));
                 waterUnits = convertOzToGrams(waterUnits);
                 ogWaterUnits = convertOzToGrams(ogWaterUnits);
                 waterUnitsButton.setText("Grams");
+                waterUnitsTv.setText("Grams");
             }
         } else if (v == coffeeUnitsButton) {
             if (coffeeUnitsButton.getText().toString().equalsIgnoreCase("Grams")) {
                 double oz = convertGramsToOz(Double.parseDouble(coffeeWeightTv.getText().toString()));
                 coffeeWeightTv.setText(String.format("%.2f", oz));
                 coffeeUnitsButton.setText("Ounces");
+                coffeeUnitsTv.setText("Ounces");
                 coffeeUnits = convertGramsToOz(coffeeUnits);
                 ogCoffeeUnits = convertGramsToOz(ogCoffeeUnits);
             } else {
                 double grams = convertOzToGrams(Double.parseDouble(coffeeWeightTv.getText().toString()));
                 coffeeWeightTv.setText(String.format("%.1f", grams));
                 coffeeUnitsButton.setText("Grams");
+                coffeeUnitsTv.setText("Grams");
                 coffeeUnits = convertOzToGrams(coffeeUnits);
                 ogCoffeeUnits = convertOzToGrams(ogCoffeeUnits);
             }
