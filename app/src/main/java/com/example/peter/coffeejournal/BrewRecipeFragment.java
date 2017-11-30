@@ -40,7 +40,7 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
     TextView waterWeightTv, coffeeWeightTv, grindTv, strengthTv, textTimer, stepTv, waterUnitsTv, coffeeUnitsTv;
     CountDownTimer countDownTimer;
     ProgressBar barTimer;
-    Button startButton, waterUnitsButton, coffeeUnitsButton;
+    Button startButton, waterUnitsButton, coffeeUnitsButton, plusButton, minusButton;
     int bloomMinutes, bloomSeconds, brewSeconds;
     boolean brewFinished;
     double waterUnits, coffeeUnits, ogWaterUnits, ogCoffeeUnits;
@@ -108,6 +108,12 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
         coffeeUnits = br.getCoffeeUnits();
         ogCoffeeUnits = coffeeUnits;
         ogWaterUnits = waterUnits;
+
+        minusButton = rootView.findViewById(R.id.minus_volume_button);
+        minusButton.setOnClickListener(this);
+        plusButton = rootView.findViewById(R.id.plus_volume_button);
+        plusButton.setOnClickListener(this);
+
         coffeeWeightTv.setText(String.valueOf(coffeeUnits));
         waterWeightTv.setText(String.valueOf(waterUnits));
         scaleSlider = (SeekBar) rootView.findViewById(R.id.scaleSeekBar);
@@ -218,6 +224,8 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
+        //convert to switch statement
+
         Button btn = (Button) v;
         if (v == startButton) {
             switch (btn.getText().toString()) {
@@ -230,7 +238,17 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
                     ((BrewRecipeActivity) getActivity()).update();
                     break;
             }
-        } else if (v == waterUnitsButton) {
+        }
+
+        else if (v == plusButton){
+            scaleSlider.incrementProgressBy(2);
+        }
+
+        else if (v == minusButton) {
+            scaleSlider.incrementProgressBy(-2);
+        }
+
+        else if (v == waterUnitsButton) {
             if (waterUnitsButton.getText().toString().equalsIgnoreCase("Grams")) {
                 double oz = convertGramsToOz(Double.parseDouble(waterWeightTv.getText().toString()));
                 waterUnits = convertGramsToOz(waterUnits);
@@ -278,7 +296,7 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
-        double multiplier = seekBar.getProgress() / 100.0;
+        double multiplier = seekBar.getProgress() / 1000.0;
         double waterWeight = 0;
         double coffeeWeight = 0;
         waterWeight = waterUnits * multiplier;
