@@ -54,7 +54,7 @@ public class BrewRecipeActivity extends AppCompatActivity implements BrewRecipeF
         setContentView(R.layout.activity_brew_recipe);
         myBar = findViewById(R.id.my_bar);
         setSupportActionBar(myBar);
-        
+
         ActionBar bar = getSupportActionBar();
         bar.setTitle(name);
         bar.setDisplayHomeAsUpEnabled(true);
