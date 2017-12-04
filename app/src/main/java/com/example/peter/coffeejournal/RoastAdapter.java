@@ -51,8 +51,8 @@ public class RoastAdapter extends BaseAdapter {
             // if it's not recycled, initialize some attributes
             convertView = LayoutInflater.from(mContext).inflate(R.layout.roast_list_item, parent, false);}
 
-        TextView roastNameTv = (TextView) convertView.findViewById(R.id.roast_name_text_view);
-        TextView dateAddedTv = (TextView) convertView.findViewById(R.id.date_added_text_view);
+        TextView roastNameTv = convertView.findViewById(R.id.roast_name_text_view);
+        TextView dateAddedTv = convertView.findViewById(R.id.date_added_text_view);
 
 
         Roast roast = new Roast();

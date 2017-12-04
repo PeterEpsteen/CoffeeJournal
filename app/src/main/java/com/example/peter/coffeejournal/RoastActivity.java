@@ -58,7 +58,7 @@ public class RoastActivity extends AppCompatActivity {
         for(Bean bean : beans) {
             Log.i("BeanRow", "Bean row: " + bean.getBeanName());
             LinearLayout beanRow = (LinearLayout) inflater.inflate(R.layout.bean_row, roastContainer, false);
-            TextView beanNameTv = (TextView) beanRow.findViewById(R.id.bean_name_text_view);
+            TextView beanNameTv = beanRow.findViewById(R.id.bean_name_text_view);
             beanNameTv.setText(bean.getBeanName());
             TextView beanWeightTv = beanRow.findViewById(R.id.bean_weight_text_view);
             beanWeightTv.setText(Integer.toString(bean.getBeanWeight()));

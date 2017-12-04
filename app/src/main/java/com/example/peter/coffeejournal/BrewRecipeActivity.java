@@ -46,10 +46,10 @@ public class BrewRecipeActivity extends AppCompatActivity implements BrewRecipeF
         ab.setElevation(0);
         setContentView(R.layout.activity_brew_recipe);
         mSectionsPageAdapter = new SectionsPageAdapter(getSupportFragmentManager());
-        mViewPager = (ViewPager) findViewById(R.id.container2);
+        mViewPager = findViewById(R.id.container2);
         setupViewPager(mViewPager);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs2);
+        TabLayout tabLayout = findViewById(R.id.tabs2);
         tabLayout.setupWithViewPager(mViewPager);
 
 

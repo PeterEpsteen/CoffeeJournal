@@ -40,14 +40,14 @@ public class MainActivity extends AppCompatActivity implements BrewFragment.OnFr
         setContentView(R.layout.activity_main);
 
         mSectionsPageAdapter = new SectionsPageAdapter(getSupportFragmentManager());
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = findViewById(R.id.container);
         setupViewPager(mViewPager);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
 
-        addButton = (FloatingActionButton) findViewById(R.id.fab);
+        addButton = findViewById(R.id.fab);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -64,7 +64,7 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemLongClic
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_brew, container, false);
-        gv = (GridView) rootView.findViewById(R.id.brew_grid_view);
+        gv = rootView.findViewById(R.id.brew_grid_view);
         mDBOperator = new DBOperator(this.getContext());
         brewRecipeArrayList = mDBOperator.getBrewRecipes();
         ba = new BrewAdapter(rootView.getContext(), brewRecipeArrayList);
@@ -140,7 +140,7 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemLongClic
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        TextView tv = (TextView) view.findViewById(R.id.brew_title_text_view);
+        TextView tv = view.findViewById(R.id.brew_title_text_view);
         String brewName = tv.getText().toString();
         Intent myIntent = new Intent(view.getContext(), BrewRecipeActivity.class);
         myIntent.putExtra("Brew Name", brewName);

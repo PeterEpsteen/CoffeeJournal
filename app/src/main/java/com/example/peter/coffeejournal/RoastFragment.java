@@ -76,7 +76,7 @@ public class RoastFragment extends Fragment implements AdapterView.OnItemClickLi
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.roast_fragment, container, false);
-        lv = (ListView) view.findViewById(R.id.roast_list_view);
+        lv = view.findViewById(R.id.roast_list_view);
         TextView noRoasts = view.findViewById(R.id.no_roasts_tv);
         dbOperator = new DBOperator(this.getContext());
         roastArrayList = dbOperator.getRoasts();

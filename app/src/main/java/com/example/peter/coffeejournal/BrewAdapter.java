@@ -52,9 +52,9 @@ public class BrewAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(mContext).inflate(R.layout.brew_grid_item, parent, false);
         }
 
-        TextView brewNameTv = (TextView) convertView.findViewById(R.id.brew_title_text_view);
-        TextView brewMethodTv = (TextView) convertView.findViewById(R.id.brew_method_text_view);
-        ImageView brewMethodIv = (ImageView) convertView.findViewById(R.id.brew_method_icon_image_view);
+        TextView brewNameTv = convertView.findViewById(R.id.brew_title_text_view);
+        TextView brewMethodTv = convertView.findViewById(R.id.brew_method_text_view);
+        ImageView brewMethodIv = convertView.findViewById(R.id.brew_method_icon_image_view);
 
         BrewRecipe recipe = new BrewRecipe();
 

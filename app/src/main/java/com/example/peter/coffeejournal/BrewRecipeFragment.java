@@ -89,9 +89,9 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
         db = new DBOperator(getContext());
         br = db.getBrewRecipe(brewName);
         Log.i("BR", "Brew recipe is: " + br.getName());
-        waterWeightTv = (TextView) getActivity().findViewById(R.id.water_weight_text_view);
-        coffeeWeightTv = (TextView) getActivity().findViewById(R.id.coffee_weight_text_view);
-        Spinner spinner = (Spinner) rootView.findViewById(R.id.strength_spinner);
+        waterWeightTv = getActivity().findViewById(R.id.water_weight_text_view);
+        coffeeWeightTv = getActivity().findViewById(R.id.coffee_weight_text_view);
+        Spinner spinner = rootView.findViewById(R.id.strength_spinner);
 // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
                 R.array.brew_strength_array, android.R.layout.simple_spinner_item);
@@ -116,14 +116,14 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
 
         coffeeWeightTv.setText(String.valueOf(coffeeUnits));
         waterWeightTv.setText(String.valueOf(waterUnits));
-        scaleSlider = (SeekBar) rootView.findViewById(R.id.scaleSeekBar);
+        scaleSlider = rootView.findViewById(R.id.scaleSeekBar);
         scaleSlider.setOnSeekBarChangeListener(this);
-        grindTv = (TextView) rootView.findViewById(R.id.grind_recipe_textview);
+        grindTv = rootView.findViewById(R.id.grind_recipe_textview);
         grindTv.setText(br.getGrind());
-        textTimer = (TextView) getActivity().findViewById(R.id.tvTimeCount);
+        textTimer = getActivity().findViewById(R.id.tvTimeCount);
         bloomSeconds = br.getBloomTime();
-        coffeeUnitsButton = (Button) rootView.findViewById(R.id.coffee_units_button);
-        waterUnitsButton = (Button) rootView.findViewById(R.id.water_units_button);
+        coffeeUnitsButton = rootView.findViewById(R.id.coffee_units_button);
+        waterUnitsButton = rootView.findViewById(R.id.water_units_button);
         waterUnitsTv = getActivity().findViewById(R.id.water_units_text_view);
         coffeeUnitsTv = getActivity().findViewById(R.id.coffee_units_text_view);
         metric = br.isMetric();
@@ -354,6 +354,6 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
     }
 
     public interface SendBrew {
-        public void sendBrewRecipe(BrewRecipe brew);
+        void sendBrewRecipe(BrewRecipe brew);
     }
 }

@@ -35,7 +35,7 @@ public class AddBrew extends AppCompatActivity implements View.OnClickListener {
         Button btn = findViewById(R.id.add_brew_button);
         btn.setOnClickListener(this);
 
-        Spinner spinner = (Spinner) findViewById(R.id.brew_method_spinner);
+        Spinner spinner = findViewById(R.id.brew_method_spinner);
 // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.brew_methods_array, android.R.layout.simple_spinner_item);
@@ -62,14 +62,14 @@ public class AddBrew extends AppCompatActivity implements View.OnClickListener {
     public void onClick(View v) {
         //Initialize all settings for BrewRecipe obj
         //Get all edit texts
-        EditText nameEdit = (EditText) findViewById(R.id.recipe_name_edit);
-        EditText grindEdit = (EditText) findViewById(R.id.grind_edit);
-        EditText notesEdit = (EditText) findViewById(R.id.notes_edit);
-        SwitchCompat metricEdit = (SwitchCompat) findViewById(R.id.metric_edit);
-        EditText coffeeEdit = (EditText) findViewById(R.id.coffee_amount_edit);
-        EditText waterEdit = (EditText) findViewById(R.id.water_amount_edit);
-        EditText brewTimeEdit = (EditText) findViewById(R.id.brew_time_edit);
-        EditText bloomTimeEdit = (EditText) findViewById(R.id.bloom_time_edit);
+        EditText nameEdit = findViewById(R.id.recipe_name_edit);
+        EditText grindEdit = findViewById(R.id.grind_edit);
+        EditText notesEdit = findViewById(R.id.notes_edit);
+        SwitchCompat metricEdit = findViewById(R.id.metric_edit);
+        EditText coffeeEdit = findViewById(R.id.coffee_amount_edit);
+        EditText waterEdit = findViewById(R.id.water_amount_edit);
+        EditText brewTimeEdit = findViewById(R.id.brew_time_edit);
+        EditText bloomTimeEdit = findViewById(R.id.bloom_time_edit);
 
         Context context = getApplicationContext();
         int duration = Toast.LENGTH_LONG;
