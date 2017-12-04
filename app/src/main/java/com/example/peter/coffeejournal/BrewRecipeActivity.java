@@ -3,6 +3,7 @@ package com.example.peter.coffeejournal;
 import android.animation.ObjectAnimator;
 import android.app.Fragment;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.CountDownTimer;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -15,7 +16,9 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
+import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 
 public class BrewRecipeActivity extends AppCompatActivity implements BrewRecipeFragment.SendBrew {
@@ -29,6 +32,7 @@ public class BrewRecipeActivity extends AppCompatActivity implements BrewRecipeF
     Button startButton;
     int bloomMinutes, bloomSeconds, brewSeconds;
     boolean brewFinished;
+    android.support.v7.widget.Toolbar myBar;
 
     private SectionsPageAdapter mSectionsPageAdapter;
     private ViewPager mViewPager;
@@ -41,10 +45,17 @@ public class BrewRecipeActivity extends AppCompatActivity implements BrewRecipeF
         super.onCreate(savedInstanceState);
         String name = "Test";
         name = getIntent().getExtras().getString("Brew Name");
-        ActionBar ab = getSupportActionBar();
-        ab.setTitle(name);
-        ab.setElevation(0);
+//        ActionBar ab = getSupportActionBar();
+//        ab.setTitle(name);
+//        ab.setElevation(0);
+//        ab.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         setContentView(R.layout.activity_brew_recipe);
+        myBar = findViewById(R.id.my_bar);
+        setSupportActionBar(myBar);
+        ActionBar bar = getSupportActionBar();
+        bar.setTitle(name);
+        bar.setDisplayHomeAsUpEnabled(true);
+        bar.setDisplayHomeAsUpEnabled(true);
         mSectionsPageAdapter = new SectionsPageAdapter(getSupportFragmentManager());
         mViewPager = findViewById(R.id.container2);
         setupViewPager(mViewPager);
@@ -55,9 +66,20 @@ public class BrewRecipeActivity extends AppCompatActivity implements BrewRecipeF
 
     }
 
+    @Override
+    public void onConfigurationChanged(final Configuration config) {
+        super.onConfigurationChanged(config);
+//        forceTabs();
+    }
 
-    public void updateView(){
-
+    private void forceTabs() {
+        try {
+            final android.app.ActionBar actionBar = getActionBar();
+            final Method setHasEmbeddedTabsMethod = actionBar.getClass().getDeclaredMethod("setHasEmbeddedTabs", boolean.class);
+            setHasEmbeddedTabsMethod.setAccessible(true);
+            setHasEmbeddedTabsMethod.invoke(actionBar, true);
+        }
+        catch (Exception e){}
     }
 
 
