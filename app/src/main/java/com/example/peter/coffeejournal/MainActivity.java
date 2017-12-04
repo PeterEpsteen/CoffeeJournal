@@ -1,3 +1,5 @@
+//TODO Rethink the layout of spinner and grind. Fix layouts in landscape
+//Test
 package com.example.peter.coffeejournal;
 
 import android.content.Intent;
@@ -32,8 +34,7 @@ public class MainActivity extends AppCompatActivity implements BrewFragment.OnFr
     private FloatingActionButton addButton;
 
     DBOperator mDBOperator;
-//TESTING
-
+    String test;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
