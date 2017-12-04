@@ -11,7 +11,9 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Surface;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -33,6 +35,7 @@ public class BrewRecipeActivity extends AppCompatActivity implements BrewRecipeF
     int bloomMinutes, bloomSeconds, brewSeconds;
     boolean brewFinished;
     android.support.v7.widget.Toolbar myBar;
+    String name;
 
     private SectionsPageAdapter mSectionsPageAdapter;
     private ViewPager mViewPager;
@@ -43,7 +46,6 @@ public class BrewRecipeActivity extends AppCompatActivity implements BrewRecipeF
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String name = "Test";
         name = getIntent().getExtras().getString("Brew Name");
 //        ActionBar ab = getSupportActionBar();
 //        ab.setTitle(name);
@@ -52,10 +54,13 @@ public class BrewRecipeActivity extends AppCompatActivity implements BrewRecipeF
         setContentView(R.layout.activity_brew_recipe);
         myBar = findViewById(R.id.my_bar);
         setSupportActionBar(myBar);
+        
         ActionBar bar = getSupportActionBar();
         bar.setTitle(name);
         bar.setDisplayHomeAsUpEnabled(true);
         bar.setDisplayHomeAsUpEnabled(true);
+        bar.setDisplayShowTitleEnabled(true);
+
         mSectionsPageAdapter = new SectionsPageAdapter(getSupportFragmentManager());
         mViewPager = findViewById(R.id.container2);
         setupViewPager(mViewPager);
@@ -69,7 +74,9 @@ public class BrewRecipeActivity extends AppCompatActivity implements BrewRecipeF
     @Override
     public void onConfigurationChanged(final Configuration config) {
         super.onConfigurationChanged(config);
-//        forceTabs();
+//        TextView title = findViewById(R.id.landscape_title);
+//        title.setText(name);
+
     }
 
     private void forceTabs() {
