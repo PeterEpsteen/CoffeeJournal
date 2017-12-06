@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,7 +47,9 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
     ToggleButton lightButton, regButton, strongButton;
     int bloomMinutes, bloomSeconds, brewSeconds;
     boolean brewFinished;
+    double ratio;
     double waterUnits, coffeeUnits, ogWaterUnits, ogCoffeeUnits;
+    SwitchCompat coffeeSwitch, waterSwitch;
     SeekBar scaleSlider;
     boolean metric;
     SendBrew mCallback;
@@ -109,6 +112,7 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
 
         waterUnits = br.getWaterUnits();
         coffeeUnits = br.getCoffeeUnits();
+        ratio = waterUnits/coffeeUnits;
         ogCoffeeUnits = coffeeUnits;
         ogWaterUnits = waterUnits;
 
@@ -116,6 +120,11 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
         minusButton.setOnClickListener(this);
         plusButton = rootView.findViewById(R.id.plus_volume_button);
         plusButton.setOnClickListener(this);
+
+        waterSwitch = rootView.findViewById(R.id.water_units_switch);
+        coffeeSwitch = rootView.findViewById(R.id.coffee_units_switch);
+        waterSwitch.setOnCheckedChangeListener(this);
+        coffeeSwitch.setOnCheckedChangeListener(this);
 
         coffeeWeightTv.setText(String.valueOf(coffeeUnits));
         waterWeightTv.setText(String.valueOf(waterUnits));
@@ -247,17 +256,11 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
                     ((BrewRecipeActivity) getActivity()).update();
                     break;
             }
-        }
-
-        else if (v == plusButton){
+        } else if (v == plusButton) {
             scaleSlider.incrementProgressBy(2);
-        }
-
-        else if (v == minusButton) {
+        } else if (v == minusButton) {
             scaleSlider.incrementProgressBy(-2);
-        }
-
-        else if (v == waterUnitsButton) {
+        } else if (v == waterUnitsButton) {
             if (waterUnitsButton.getText().toString().equalsIgnoreCase("Grams")) {
                 double oz = convertGramsToOz(Double.parseDouble(waterWeightTv.getText().toString()));
                 waterUnits = convertGramsToOz(waterUnits);
@@ -304,23 +307,10 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-        double multiplier = seekBar.getProgress() / 1000.0;
-        double waterWeight = 0;
-        double coffeeWeight = 0;
-        waterWeight = waterUnits * multiplier;
-        coffeeWeight = coffeeUnits * multiplier;
-        if (waterUnitsButton.getText().toString().equalsIgnoreCase("grams")) {
-            waterWeightTv.setText(String.format("%.0f", waterWeight));
-        } else {
-            waterWeightTv.setText(String.format("%.2f", waterWeight));
-        }
-        if (coffeeUnitsButton.getText().toString().equalsIgnoreCase("grams")) {
-            coffeeWeightTv.setText(String.format("%.1f", coffeeWeight));
-        } else {
-            coffeeWeightTv.setText(String.format("%.2f", coffeeWeight));
-        }
-
+        double multiplier = (progress+1) / 1000.0;
+        waterUnits = ogWaterUnits * multiplier;
+        coffeeUnits = ogCoffeeUnits * multiplier;
+        updateMeasurementViews();
     }
 
     @Override
@@ -335,16 +325,52 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
 
 
     private void updateMeasurementViews() {
-        scaleSlider.incrementProgressBy(1);
-        scaleSlider.incrementProgressBy(-1);
+        if (waterUnitsTv.getText().toString().equalsIgnoreCase("grams")) {
+            waterWeightTv.setText(String.format("%.0f", waterUnits));
+        } else {
+            waterWeightTv.setText(String.format("%.2f", waterUnits));
+        }
+        if (coffeeUnitsTv.getText().toString().equalsIgnoreCase("grams")) {
+            coffeeWeightTv.setText(String.format("%.1f", coffeeUnits));
+        } else {
+            coffeeWeightTv.setText(String.format("%.2f", coffeeUnits));
+        }
 
     }
 
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        if(isChecked) {
-            if (buttonView != lightButton){
+
+       if (buttonView == waterSwitch) {
+            if (isChecked) {
+                waterUnits = convertGramsToOz(waterUnits);
+                ogWaterUnits = convertGramsToOz(ogWaterUnits);
+                waterWeightTv.setText(String.format("%.2f", waterUnits));
+                waterUnitsTv.setText("Ounces");
+
+            } else {
+                waterUnits = convertOzToGrams(waterUnits);
+                ogWaterUnits = convertOzToGrams(ogWaterUnits);
+                waterUnitsButton.setText("Grams");
+                waterUnitsTv.setText("Grams");
+            }
+        } else if (buttonView == coffeeSwitch) {
+            if (isChecked) {
+                coffeeUnits = convertGramsToOz(coffeeUnits);
+                ogCoffeeUnits = convertGramsToOz(ogCoffeeUnits);
+                coffeeWeightTv.setText(String.format("%.2f", coffeeUnits));
+                coffeeUnitsTv.setText("Ounces");
+
+            } else {
+                coffeeUnits = convertOzToGrams(coffeeUnits);
+                ogCoffeeUnits = convertOzToGrams(ogCoffeeUnits);
+                coffeeWeightTv.setText(String.format("%.1f", coffeeUnits));
+                coffeeUnitsTv.setText("Grams");
+            }
+        }
+        if (isChecked) {
+            if (buttonView != lightButton) {
                 lightButton.setChecked(false);
 
             }
@@ -356,17 +382,16 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
             }
 
             if (buttonView == regButton) {
-                coffeeUnits = ogCoffeeUnits;
-            }
-            else if (buttonView == lightButton) {
-                coffeeUnits = ogCoffeeUnits * .9;
+                waterUnits = coffeeUnits * ratio;
+            } else if (buttonView == lightButton) {
+                waterUnits = coffeeUnits * (1.1 * ratio);
+            } else if (buttonView == strongButton) {
+                waterUnits = coffeeUnits * (.9 * ratio);
             }
 
-            else if (buttonView == strongButton) {
-                coffeeUnits = ogCoffeeUnits * 1.1;
-            }
-            updateMeasurementViews();
         }
+        updateMeasurementViews();
+
     }
 
     public interface SendBrew {

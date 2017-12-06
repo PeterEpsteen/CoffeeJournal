@@ -171,15 +171,44 @@
                 android:layout_width="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 style="@style/TextAppearance.AppCompat.Subhead"
                 android:text="Water Units"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_gravity="center">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="8dp"
+                    style="@android:style/TextAppearance.Material.Body2"
+                    android:text="Grams"/>
 
             <android.support.v7.widget.SwitchCompat
                 android:layout_width="wrap_content"
                 app:switchMinWidth="48dp"
+                android:id="@+id/water_units_switch"
+                android:checked="false"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_marginLeft="8dp"
+                    android:layout_gravity="center"
+                    style="@android:style/TextAppearance.Material.Body2"
+                    android:text="Ounces"/>
+
+            </LinearLayout>
 
             <Button
                 android:background="@drawable/start_button_shape"
@@ -191,15 +220,17 @@
                 android:id="@+id/water_units_button"
                 android:backgroundTint="@color/lightGrey"
                 android:layout_marginBottom="8dp"
-
                 android:text="Ounces"/>
         </LinearLayout>
+
+
+
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -207,6 +238,44 @@
                     style="@style/TextAppearance.AppCompat.Subhead"
                     android:layout_marginBottom="8dp"
                     android:text="Coffee Units"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_gravity="center">
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="8dp"
+                        style="@android:style/TextAppearance.Material.Body2"
+                        android:text="Grams"/>
+
+                    <android.support.v7.widget.SwitchCompat
+                        android:layout_width="wrap_content"
+                        app:switchMinWidth="48dp"
+                        android:checked="false"
+                        android:id="@+id/coffee_units_switch"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_marginLeft="8dp"
+                        android:layout_gravity="center"
+                        style="@android:style/TextAppearance.Material.Body2"
+                        android:text="Ounces"/>
+
+                </LinearLayout>
+
+
 
                 <Button
                     android:background="@drawable/start_button_shape"
