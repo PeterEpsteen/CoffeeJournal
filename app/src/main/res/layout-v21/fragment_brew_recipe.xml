@@ -113,7 +113,7 @@
             <ToggleButton
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_margin="8dp"
+                android:layout_margin="0dp"
                 android:layout_height="48dp"
                 android:textOff="Light"
                 android:textOn="Light"
@@ -127,8 +127,9 @@
                 android:layout_weight="1"
                 android:layout_height="48dp"
                 android:textOff="Regular"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 android:textOn="Regular"
-                android:padding="8dp"
                 android:id="@+id/regular_toggle_button"
                 style="@android:style/Widget.Material.Light.Button.Toggle"
                 />
@@ -139,7 +140,7 @@
                 android:layout_weight="1"
                 android:layout_height="48dp"
                 android:id="@+id/strong_toggle_button"
-                android:layout_margin="8dp"
+                android:layout_margin="0dp"
                 style="@android:style/Widget.Material.Light.Button.Toggle"
                 android:textOff="Strong"
                 android:textOn="Strong"/>
@@ -173,6 +174,13 @@
                 style="@style/TextAppearance.AppCompat.Subhead"
                 android:text="Water Units"/>
 
+            <android.support.v7.widget.SwitchCompat
+                android:layout_width="wrap_content"
+                app:switchMinWidth="48dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                />
+
             <Button
                 android:background="@drawable/start_button_shape"
                 android:layout_width="wrap_content"
@@ -181,7 +189,6 @@
                 android:layout_height="48dp"
                 style="@style/TextAppearance.AppCompat.Button"
                 android:id="@+id/water_units_button"
-
                 android:backgroundTint="@color/lightGrey"
                 android:layout_marginBottom="8dp"
 
