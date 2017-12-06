@@ -39,7 +39,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Volume"
-                style="@style/TextAppearance.AppCompat.Title"
+                style="@style/TextAppearance.AppCompat.Subhead"
                 android:gravity="center"
                 />
             <LinearLayout
@@ -49,18 +49,17 @@
                 android:gravity="center">
 
                 <Button
-                    android:layout_width="40dp"
-                    android:paddingTop="4dp"
-                    android:background="@drawable/circle_shape"
-                    android:textAlignment="gravity"
-                    android:minHeight="0dp"
-                    android:minWidth="0dp"
-                    android:id="@+id/minus_volume_button"
+                    android:layout_width="46dp"
+                    android:textAlignment="center"
+                    android:text="-"
+                    android:layout_margin="0dp"
                     android:includeFontPadding="false"
-                    android:layout_height="40dp"
+                    android:gravity="center"
+                    android:id="@+id/minus_volume_button"
+                    android:layout_height="46dp"
+                    android:background="@drawable/start_button_shape"
                     android:textColor="@color/common_google_signin_btn_text_dark"
                     android:backgroundTint="@color/colorAccent"
-                    android:text="-"
                     style="@style/TextAppearance.AppCompat.Display1"/>
 
             <SeekBar
@@ -68,22 +67,22 @@
                 android:max="3000"
                 android:progress="1000"
                 android:layout_gravity="center"
-                android:layout_width="224dp"
+                android:layout_weight="1"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
+                android:backgroundTint="@color/colorAccent"
                 />
 
                 <Button
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:minWidth="0dp"
-                    android:minHeight="0dp"
-                    android:includeFontPadding="false"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:gravity="center"
-                    android:textAlignment="gravity"
+                    android:textAlignment="center"
+                    android:includeFontPadding="false"
                     android:textColor="@color/common_google_signin_btn_text_dark"
-                    android:background="@drawable/circle_shape"
                     android:text="+"
+                    android:background="@drawable/start_button_shape"
                     android:id="@+id/plus_volume_button"
                     android:backgroundTint="@color/colorAccent"
                     style="@style/TextAppearance.AppCompat.Display1"/>
@@ -92,6 +91,65 @@
             </LinearLayout>
 
         </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/strength_label"
+        android:layout_gravity="center"
+        android:text="Strength"
+        android:layout_marginBottom="8dp"
+        style="@style/TextAppearance.AppCompat.Subhead"
+        />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginBottom="16dp">
+
+            <ToggleButton
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_margin="8dp"
+                android:layout_height="48dp"
+                android:textOff="Light"
+                android:textOn="Light"
+                android:id="@+id/light_toggle_button"
+                style="@android:style/Widget.Material.Light.Button.Toggle"
+
+                />
+
+            <ToggleButton
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="48dp"
+                android:textOff="Regular"
+                android:textOn="Regular"
+                android:padding="8dp"
+                android:id="@+id/regular_toggle_button"
+                style="@android:style/Widget.Material.Light.Button.Toggle"
+                />
+
+
+            <ToggleButton
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="48dp"
+                android:id="@+id/strong_toggle_button"
+                android:layout_margin="8dp"
+                style="@android:style/Widget.Material.Light.Button.Toggle"
+                android:textOff="Strong"
+                android:textOn="Strong"/>
+
+
+        </LinearLayout>
+
+
+
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -123,8 +181,8 @@
                 android:layout_height="48dp"
                 style="@style/TextAppearance.AppCompat.Button"
                 android:id="@+id/water_units_button"
-                android:textColor="@color/common_google_signin_btn_text_dark"
-                android:backgroundTint="@color/colorPrimaryDark"
+
+                android:backgroundTint="@color/lightGrey"
                 android:layout_marginBottom="8dp"
 
                 android:text="Ounces"/>
@@ -150,54 +208,13 @@
                     style="@style/TextAppearance.AppCompat.Button"
                     android:layout_gravity="center_horizontal"
                     android:id="@+id/coffee_units_button"
-                    android:textColor="@color/common_google_signin_btn_text_dark"
-                    android:backgroundTint="@color/colorPrimaryDark"
+                    android:backgroundTint="@color/lightGrey"
                     android:layout_marginBottom="8dp"
                     android:text="Ounces"/>
             </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:layout_marginBottom="16dp">
-        <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Grind: "
-        android:layout_marginLeft="16dp"
-        style="@style/TextAppearance.AppCompat.Subhead"
-        android:id="@+id/grind_label"/>
 
-        <TextView
-        android:layout_width="0dp"
-            android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:text="Coarse"
-        android:id="@+id/grind_recipe_textview"
-        android:gravity="start"
-        style="@style/TextAppearance.AppCompat.Subhead"
-        android:padding="0dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/strength_label"
-                android:text="Strength: "
-                style="@style/TextAppearance.AppCompat.Subhead"
-                />
-
-            <Spinner
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                style="@style/TextAppearance.AppCompat.Subhead"
-                android:gravity="end"
-                android:id="@+id/strength_spinner"/>
-
-        </LinearLayout>
 
 
 
