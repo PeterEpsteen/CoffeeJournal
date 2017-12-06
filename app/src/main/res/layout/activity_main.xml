@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@color/greyBackground"
+    android:background="@color/lightGrey"
     tools:context="com.example.peter.coffeejournal.MainActivity">
 
     <android.support.design.widget.AppBarLayout

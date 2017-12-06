@@ -8,7 +8,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:colorBackground">@color/cardview_light_background</item>
-        <item name="android:windowBackground">@color/greyBackground</item>
+        <item name="android:windowBackground">@color/lightGrey</item>
         <item name="windowNoTitle">true</item>
     </style>
 
@@ -25,5 +25,7 @@
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/colorTextDark</item>
     </style>
+
+
 
 </resources>

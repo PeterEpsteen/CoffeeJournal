@@ -13,10 +13,12 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import java.text.DecimalFormat;
 
@@ -25,7 +27,7 @@ import java.text.DecimalFormat;
  * Use the {@link BrewRecipeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BrewRecipeFragment extends Fragment implements View.OnClickListener, SeekBar.OnSeekBarChangeListener, AdapterView.OnItemSelectedListener {
+public class BrewRecipeFragment extends Fragment implements View.OnClickListener, SeekBar.OnSeekBarChangeListener, CompoundButton.OnCheckedChangeListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -37,10 +39,11 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
 
     private BrewRecipe br;
     DBOperator db;
-    TextView waterWeightTv, coffeeWeightTv, grindTv, strengthTv, textTimer, stepTv, waterUnitsTv, coffeeUnitsTv;
+    TextView waterWeightTv, coffeeWeightTv, textTimer, stepTv, waterUnitsTv, coffeeUnitsTv;
     CountDownTimer countDownTimer;
     ProgressBar barTimer;
     Button startButton, waterUnitsButton, coffeeUnitsButton, plusButton, minusButton;
+    ToggleButton lightButton, regButton, strongButton;
     int bloomMinutes, bloomSeconds, brewSeconds;
     boolean brewFinished;
     double waterUnits, coffeeUnits, ogWaterUnits, ogCoffeeUnits;
@@ -91,15 +94,15 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
         Log.i("BR", "Brew recipe is: " + br.getName());
         waterWeightTv = getActivity().findViewById(R.id.water_weight_text_view);
         coffeeWeightTv = getActivity().findViewById(R.id.coffee_weight_text_view);
-        Spinner spinner = rootView.findViewById(R.id.strength_spinner);
-// Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.brew_strength_array, android.R.layout.simple_spinner_item);
-// Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(R.layout.my_simple_spinner_dropdown_item);
-// Apply the adapter to the spinner
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(this);
+//        Spinner spinner = rootView.findViewById(R.id.strength_spinner);
+//// Create an ArrayAdapter using the string array and a default spinner layout
+//        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+//                R.array.brew_strength_array, android.R.layout.simple_spinner_item);
+//// Specify the layout to use when the list of choices appears
+//        adapter.setDropDownViewResource(R.layout.my_simple_spinner_dropdown_item);
+//// Apply the adapter to the spinner
+//        spinner.setAdapter(adapter);
+//        spinner.setOnItemSelectedListener(this);
 
         DecimalFormat df = new DecimalFormat("#.##");
         stepTv = getActivity().findViewById(R.id.step_tv);
@@ -118,12 +121,17 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
         waterWeightTv.setText(String.valueOf(waterUnits));
         scaleSlider = rootView.findViewById(R.id.scaleSeekBar);
         scaleSlider.setOnSeekBarChangeListener(this);
-        grindTv = rootView.findViewById(R.id.grind_recipe_textview);
-        grindTv.setText(br.getGrind());
         textTimer = getActivity().findViewById(R.id.tvTimeCount);
         bloomSeconds = br.getBloomTime();
         coffeeUnitsButton = rootView.findViewById(R.id.coffee_units_button);
         waterUnitsButton = rootView.findViewById(R.id.water_units_button);
+        lightButton = rootView.findViewById(R.id.light_toggle_button);
+        regButton = rootView.findViewById(R.id.regular_toggle_button);
+        strongButton = rootView.findViewById(R.id.strong_toggle_button);
+        regButton.setChecked(true);
+        lightButton.setOnCheckedChangeListener(this);
+        regButton.setOnCheckedChangeListener(this);
+        strongButton.setOnCheckedChangeListener(this);
         waterUnitsTv = getActivity().findViewById(R.id.water_units_text_view);
         coffeeUnitsTv = getActivity().findViewById(R.id.coffee_units_text_view);
         metric = br.isMetric();
@@ -227,6 +235,7 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
         //convert to switch statement
 
         Button btn = (Button) v;
+
         if (v == startButton) {
             switch (btn.getText().toString()) {
                 case "Start!":
@@ -324,23 +333,6 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
 
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String brewStrength = parent.getItemAtPosition(position).toString();
-        switch (brewStrength) {
-            case "Regular":
-                coffeeUnits = ogCoffeeUnits;
-                break;
-            case "Strong":
-                coffeeUnits = ogCoffeeUnits * 1.1;
-                break;
-            case "Light":
-                coffeeUnits = ogCoffeeUnits * .9;
-                break;
-        }
-
-        updateMeasurementViews();
-    }
 
     private void updateMeasurementViews() {
         scaleSlider.incrementProgressBy(1);
@@ -348,9 +340,33 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
 
     }
 
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
 
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        if(isChecked) {
+            if (buttonView != lightButton){
+                lightButton.setChecked(false);
+
+            }
+            if (buttonView != regButton) {
+                regButton.setChecked(false);
+            }
+            if (buttonView != strongButton) {
+                strongButton.setChecked(false);
+            }
+
+            if (buttonView == regButton) {
+                coffeeUnits = ogCoffeeUnits;
+            }
+            else if (buttonView == lightButton) {
+                coffeeUnits = ogCoffeeUnits * .9;
+            }
+
+            else if (buttonView == strongButton) {
+                coffeeUnits = ogCoffeeUnits * 1.1;
+            }
+            updateMeasurementViews();
+        }
     }
 
     public interface SendBrew {

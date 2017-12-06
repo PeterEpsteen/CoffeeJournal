@@ -8,8 +8,9 @@
     <color name="colorTextDark">#212121</color>
     <color name="colorTextLight">#adadad</color>
     <color name="backgroundDefaultWhite">#FAFAFA</color>
-    <color name="greyBackground">#d7ccc8</color>
+    <color name="lightGrey"> #F3EFEE</color>
     <color name="dividerColor">#BDBDBD</color>
+    <color name="lightBrown">#d7ccc8</color>
 
 
 </resources>
