@@ -106,7 +106,10 @@ public class BrewRecipeActivity extends AppCompatActivity implements BrewRecipeF
     @Override
     public void sendBrewRecipe(BrewRecipe brew) {
         String notes = brew.getNotes();
+        String grind = brew.getGrind();
         BrewNotesFragment bn = (BrewNotesFragment) getSupportFragmentManager().getFragments().get(1);
+        bn.setTitle(brew.getName());
         bn.setNotes(notes);
+        bn.setGrind(grind);
     }
 }

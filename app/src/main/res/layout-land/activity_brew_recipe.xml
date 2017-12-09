@@ -87,7 +87,9 @@
                     style="@style/TextAppearance.AppCompat.Body1"
                     />
 
-                <TextView
+                <EditText
+                    android:inputType="numberDecimal"
+                    android:lines="1"
                     android:id="@+id/water_weight_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -181,7 +183,9 @@
                     style="@style/TextAppearance.AppCompat.Body1"
                     />
 
-                <TextView
+                <EditText
+                    android:inputType="numberDecimal"
+                    android:lines="1"
                     android:id="@+id/coffee_weight_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

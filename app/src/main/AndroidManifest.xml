@@ -15,6 +15,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
+            android:windowSoftInputMode="stateHidden"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,6 +27,7 @@
         <activity android:name=".AddRoast" />
         <activity
             android:name=".BrewRecipeActivity"
+            android:windowSoftInputMode="stateHidden"
             android:label="Test"
             android:parentActivityName=".MainActivity" />
         <activity android:name=".RoastActivity"></activity>

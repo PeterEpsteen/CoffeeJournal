@@ -1,260 +1,294 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:elevation="2dp"
         app:cardCornerRadius="@dimen/cardview_default_radius">
-    <android.support.v4.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
-<LinearLayout android:layout_height="match_parent" android:layout_width="match_parent"
-    android:background="@color/backgroundDefaultWhite"
-    android:orientation="vertical"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-
-        <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:orientation="vertical"
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:paddingTop="8dp"
-            android:id="@+id/slider_linear_layout"
-            android:layout_marginBottom="16dp"
-            android:paddingLeft= "16dp"
-            android:paddingRight= "16dp"
-            >
+            android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/textView"
-                android:layout_margin="0dp"
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Volume"
-                style="@style/TextAppearance.AppCompat.Subhead"
-                android:gravity="center"
-                />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center">
-
-                <Button
-                    android:layout_width="40dp"
-                    android:paddingTop="4dp"
-                    android:background="@drawable/circle_shape"
-                    android:textAlignment="gravity"
-                    android:minHeight="0dp"
-                    android:minWidth="0dp"
-                    android:id="@+id/minus_volume_button"
-                    android:includeFontPadding="false"
-                    android:layout_height="40dp"
-                    android:textColor="@color/common_google_signin_btn_text_dark"
-                    android:backgroundTint="@color/colorAccent"
-                    android:text="-"
-                    style="@style/TextAppearance.AppCompat.Display1"/>
-
-            <SeekBar
-                android:id="@+id/scaleSeekBar"
-                android:max="3000"
-                android:progress="1000"
-                android:layout_gravity="center"
-                android:layout_width="224dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                />
-
-                <Button
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:minWidth="0dp"
-                    android:minHeight="0dp"
-                    android:includeFontPadding="false"
-                    android:gravity="center"
-                    android:textAlignment="gravity"
-                    android:textColor="@color/common_google_signin_btn_text_dark"
-                    android:background="@drawable/circle_shape"
-                    android:text="+"
-                    android:id="@+id/plus_volume_button"
-                    android:backgroundTint="@color/colorAccent"
-                    style="@style/TextAppearance.AppCompat.Display1"/>
-
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/strength_label"
-        android:layout_gravity="center"
-        android:text="Strength"
-        android:layout_marginBottom="8dp"
-        style="@style/TextAppearance.AppCompat.Subhead"
-        />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginLeft="24dp"
-            android:layout_marginRight="24dp"
-            android:layout_marginBottom="16dp">
-
-            <ToggleButton
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_margin="8dp"
-                android:layout_height="48dp"
-                android:textOff="Light"
-                android:textOn="Light"
-                android:id="@+id/light_toggle_button"
-                android:background="@drawable/start_button_shape"
-                android:backgroundTint="@color/lightGrey"
-                />
-
-            <ToggleButton
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="48dp"
-                android:textOff="Regular"
-                android:textOn="Regular"
-                android:layout_margin="8dp"
-                android:id="@+id/regular_toggle_button"
-                android:focusedByDefault="true"
-                android:background="@drawable/start_button_shape"
-                android:backgroundTint="@color/lightGrey"
-                />
-
-
-            <ToggleButton
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="48dp"
-                android:id="@+id/strong_toggle_button"
-                android:layout_margin="8dp"
-                android:background="@drawable/start_button_shape"
-                android:textOff="Strong"
-                android:backgroundTint="@color/lightGrey"
-                android:textOn="Strong"/>
-
-
-        </LinearLayout>
-
-
-
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:layout_marginBottom="16dp"
-            android:clipToPadding="false"
-            android:orientation="horizontal">
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_height="wrap_content"
-                style="@style/TextAppearance.AppCompat.Subhead"
-                android:text="Water Units"/>
-
-            <Button
-                android:background="@drawable/start_button_shape"
-                android:layout_width="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="8dp"
-                android:layout_height="48dp"
-                style="@style/TextAppearance.AppCompat.Button"
-                android:id="@+id/water_units_button"
-
-                android:backgroundTint="@color/lightGrey"
-                android:layout_marginBottom="8dp"
-
-                android:text="Ounces"/>
-        </LinearLayout>
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:background="@color/backgroundDefaultWhite"
+                android:id="@+id/brew_notes_fragment_container"
                 android:orientation="vertical">
 
+                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/slider_linear_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:paddingTop="8dp">
+
+                    <TextView
+                        android:id="@+id/textView"
+                        style="@style/TextAppearance.AppCompat.Subhead"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="0dp"
+                        android:gravity="center"
+                        android:text="Volume" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/minus_volume_button"
+                            style="@style/TextAppearance.AppCompat.Display1"
+                            android:layout_width="46dp"
+                            android:layout_height="46dp"
+                            android:layout_margin="0dp"
+                            android:background="@drawable/start_button_shape"
+                            android:backgroundTint="@color/colorAccent"
+                            android:gravity="center"
+                            android:includeFontPadding="false"
+                            android:text="-"
+                            android:textAlignment="center"
+                            android:textColor="@color/common_google_signin_btn_text_dark" />
+
+                        <SeekBar
+                            android:id="@+id/scaleSeekBar"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="8dp"
+                            android:layout_weight="1"
+                            android:backgroundTint="@color/colorAccent"
+                            android:max="3000"
+                            android:progress="1000" />
+
+                        <Button
+                            android:id="@+id/plus_volume_button"
+                            style="@style/TextAppearance.AppCompat.Display1"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:background="@drawable/start_button_shape"
+                            android:backgroundTint="@color/colorAccent"
+                            android:gravity="center"
+                            android:includeFontPadding="false"
+                            android:text="+"
+                            android:textAlignment="center"
+                            android:textColor="@color/common_google_signin_btn_text_dark" />
+
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
                 <TextView
+                    android:id="@+id/strength_label"
+                    style="@style/TextAppearance.AppCompat.Subhead"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    style="@style/TextAppearance.AppCompat.Subhead"
+                    android:layout_gravity="center"
                     android:layout_marginBottom="8dp"
-                    android:text="Coffee Units"/>
+                    android:text="Strength" />
 
-                <Button
-                    android:background="@drawable/start_button_shape"
-                    android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    style="@style/TextAppearance.AppCompat.Button"
-                    android:layout_gravity="center_horizontal"
-                    android:id="@+id/coffee_units_button"
-                    android:backgroundTint="@color/lightGrey"
-                    android:layout_marginBottom="8dp"
-                    android:text="Ounces"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_marginRight="24dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <ToggleButton
+                        android:id="@+id/light_toggle_button"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_margin="0dp"
+                        android:layout_weight="1"
+                        android:textOff="Light"
+                        android:textOn="Light"
+
+                        />
+
+                    <ToggleButton
+                        android:id="@+id/regular_toggle_button"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_weight="1"
+                        android:textOff="Regular"
+                        android:textOn="Regular" />
+
+
+                    <ToggleButton
+                        android:id="@+id/strong_toggle_button"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_margin="0dp"
+                        android:layout_weight="1"
+                        android:textOff="Strong"
+                        android:textOn="Strong" />
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:layout_weight="1"
+                    android:clipToPadding="false"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/TextAppearance.AppCompat.Subhead"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginBottom="8dp"
+                            android:text="Water Units" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+
+                            <TextView
+                                                                style="@style/TextAppearance.AppCompat.Body1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginRight="8dp"
+                                android:text="Grams" />
+
+                            <android.support.v7.widget.SwitchCompat
+                                android:id="@+id/water_units_switch"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:checked="false"
+                                app:switchMinWidth="48dp" />
+
+                            <TextView
+                                                                style="@style/TextAppearance.AppCompat.Body1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="8dp"
+                                android:gravity="center"
+                                android:text="Ounces" />
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/TextAppearance.AppCompat.Subhead"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginBottom="8dp"
+                            android:text="Coffee Units" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+
+                            <TextView
+                                style="@style/TextAppearance.AppCompat.Body1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginRight="8dp"
+                                android:text="Grams" />
+
+                            <android.support.v7.widget.SwitchCompat
+                                android:id="@+id/coffee_units_switch"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:checked="false"
+                                app:switchMinWidth="48dp" />
+
+                            <TextView
+                                style="@style/TextAppearance.AppCompat.Body1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="8dp"
+                                android:gravity="center"
+                                android:text="Ounces" />
+
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:gravity="center|bottom"
+                    android:padding="16dp">
+
+                    <Button
+                        android:id="@+id/start_button"
+                        style="@style/TextAppearance.AppCompat.Title"
+                        android:layout_width="0dp"
+                        android:layout_height="56dp"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginLeft="48dp"
+                        android:layout_marginRight="48dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/start_button_shape"
+                        android:backgroundTint="@color/colorAccent"
+                        android:padding="8dp"
+                        android:text="Start!"
+                        android:textColor="@color/common_google_signin_btn_text_dark"
+                        android:textStyle="bold"
+
+                        />
+                </LinearLayout>
+
+
             </LinearLayout>
-        </LinearLayout>
-
-
-
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center|bottom"
-        android:padding="16dp"
-        android:clipToPadding="false">
-        <Button
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_marginLeft="48dp"
-            android:layout_marginRight="48dp"
-            android:layout_height="56dp"
-            android:text="Start!"
-            style="@style/TextAppearance.AppCompat.Title"
-            android:textStyle="bold"
-            android:background="@drawable/start_button_shape"
-            android:backgroundTint="@color/colorAccent"
-            android:textColor="@color/common_google_signin_btn_text_dark"
-            android:id="@+id/start_button"
-            android:layout_marginBottom="8dp"
-            android:padding="8dp"
-
-            />
-    </LinearLayout>
-
-
-
-
-
-
-
-
-    </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
+        </android.support.v4.widget.NestedScrollView>
     </android.support.v7.widget.CardView>
 </FrameLayout>
