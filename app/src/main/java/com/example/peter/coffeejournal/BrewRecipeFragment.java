@@ -52,7 +52,7 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
     EditText waterWeightEdit, coffeeWeightEdit;
     CountDownTimer countDownTimer;
     ProgressBar barTimer;
-    Button startButton, plusButton, minusButton;
+    Button startButton, plusButton, minusButton, resetButton;
     ToggleButton lightButton, regButton, strongButton;
     int bloomMinutes, bloomSeconds, brewSeconds, seekBarMin, seekBarMax;
     boolean brewFinished;
@@ -177,6 +177,9 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
         coffeeUnits = br.getCoffeeUnits();
         ratio = waterUnits/coffeeUnits;
         originalRatio = ratio;
+
+        resetButton = rootView.findViewById(R.id.reset_button);
+        resetButton.setOnClickListener(this);
 
 
         minusButton = rootView.findViewById(R.id.minus_volume_button);
@@ -351,20 +354,19 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
         Button btn = (Button) v;
 
         if (v == startButton) {
-            switch (btn.getText().toString()) {
-                case "Start!":
-                    startBloomTimer(bloomSeconds);
-                    brewFinished = false;
-                    btn.setText("Reset");
-                    break;
-                case "Reset":
-                    ((BrewRecipeActivity) getActivity()).update();
-                    break;
-            }
-        } else if (v == plusButton) {
+            startBloomTimer(bloomSeconds);
+            brewFinished = false;
+            btn.setEnabled(false);
+        }
+        else if (v == resetButton) {
+            ((BrewRecipeActivity) getActivity()).update();
+        }
+
+        else if (v == plusButton) {
             plusMinusButtonClicked = true;
             scaleSlider.incrementProgressBy(1);
-        } else if (v == minusButton) {
+        }
+        else if (v == minusButton) {
             plusMinusButtonClicked = true;
             scaleSlider.incrementProgressBy(-1);
         }
@@ -498,7 +500,7 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
                 updateSeekBar();
             }
         }
-        if (isChecked) {
+        else if (isChecked) {
             if (buttonView != lightButton) {
                 lightButton.setChecked(false);
 
@@ -517,7 +519,7 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
                         setCoffeeUnits(convertGramsToOz(waterUnits/ratio));
                     }
                     else {
-                        setCoffeeUnits(convertOzToGrams(coffeeUnits * ratio));
+                        setCoffeeUnits(convertOzToGrams(waterUnits/ratio));
                     }
                 }
                 else
