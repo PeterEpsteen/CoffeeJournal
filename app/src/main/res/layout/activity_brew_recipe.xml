@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/lightBrown">
+        android:background="@color/backgroundColorBeige">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar2"
@@ -64,7 +64,7 @@
             android:id="@+id/top_measurements_container"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:background="@color/backgroundDefaultWhite"
+            android:background="@color/backgroundColorBeige"
             android:padding="16dp">
 
             <LinearLayout

@@ -1,22 +1,27 @@
-<android.support.constraint.ConstraintLayout android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    >
+
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
+        android:background="@color/backgroundColorBeige"
         tools:context="com.example.peter.coffeejournal.RoastFragment">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center|top"
-            android:layout_marginTop="56dp"
-            style="@style/TextAppearance.AppCompat.Display1"
-            android:id="@+id/no_roasts_tv"
-            android:text="Add a Roast!"/>
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Roasts"
+                android:padding="16dp"
+                android:background="@color/backgroundColorBeige"
+                android:elevation="@dimen/cardview_default_radius"
+                style="@style/TextAppearance.AppCompat.Display1"
+                android:textColor="@color/colorAccent"
+                android:id="@+id/pick_roast_tv"
+                />
 
         <ListView
             android:layout_width="match_parent"
@@ -24,15 +29,12 @@
             android:id="@+id/roast_list_view"
             android:clipToPadding="false"
             android:layout_gravity="fill_vertical"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:layout_marginTop="8dp"
+            android:padding="16dp"
             android:divider="@null"
             android:layout_marginBottom="56dp"
            />
 
-
+        </LinearLayout>
 
     </FrameLayout>
 
-</android.support.constraint.ConstraintLayout>

@@ -77,12 +77,11 @@ public class RoastFragment extends Fragment implements AdapterView.OnItemClickLi
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.roast_fragment, container, false);
         lv = view.findViewById(R.id.roast_list_view);
-        TextView noRoasts = view.findViewById(R.id.no_roasts_tv);
         dbOperator = new DBOperator(this.getContext());
         roastArrayList = dbOperator.getRoasts();
-        if(roastArrayList.size()>0) {
-            noRoasts.setText("");
-        }
+//        if(roastArrayList.size()>0) {
+//            noRoasts.setText("");
+//        }
         roastAdapter = new RoastAdapter(view.getContext(), roastArrayList);
         lv.setAdapter(roastAdapter);
         lv.setOnItemClickListener(this);

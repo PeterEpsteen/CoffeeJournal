@@ -1,7 +1,4 @@
-<android.support.constraint.ConstraintLayout android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,20 +6,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginBottom="56dp"
     android:fitsSystemWindows="true"
+    android:background="@color/backgroundColorBeige"
     tools:context="com.example.peter.coffeejournal.BrewFragment">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Brew Recipes"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginBottom="8dp"
-        style="@style/TextAppearance.AppCompat.Display1"
-        android:id="@+id/pick_brew_tv"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Brew Recipes"
+            android:padding="16dp"
+            android:background="@color/backgroundColorBeige"
+            android:elevation="@dimen/cardview_default_radius"
+            style="@style/TextAppearance.AppCompat.Display1"
+            android:textColor="@color/colorAccent"
+            android:id="@+id/pick_brew_tv"
+            />
+
 
     <GridView
         android:layout_width="wrap_content"
@@ -30,14 +32,15 @@
         android:id="@+id/brew_grid_view"
         android:numColumns="1"
         android:horizontalSpacing="16dp"
-        android:verticalSpacing="16dp"
-        android:padding="8dp"
+        android:verticalSpacing="8dp"
+        android:padding="16dp"
         android:clipToPadding="false"
 >
+
+
 
 
     </GridView>
     </LinearLayout>
 </FrameLayout>
 
-</android.support.constraint.ConstraintLayout>
