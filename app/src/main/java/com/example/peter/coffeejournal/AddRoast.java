@@ -2,27 +2,38 @@ package com.example.peter.coffeejournal;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+import android.os.Handler;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
-
+import android.support.v7.widget.Toolbar;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+
+//TODO Refine validation and make sure there are no bugs. Seems stable for now.
+
 public class AddRoast extends AppCompatActivity implements View.OnClickListener {
 
-    Button addButton, addStepButton, addBeansButton;
+    Button addButton, addStepButton, addBeansButton, resetButton;
+    FloatingActionButton timerButton;
     Roast roast;
     String roastName, roastDate;
     EditText roastNameEdit, roastDateEdit;
@@ -30,6 +41,29 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener 
     LinearLayout stepsContainer, beansContainer;
     List<LinearLayout> beanRowLinearLayoutList;
     List<LinearLayout> stepsRowLinearLayoutList;
+    CollapsingToolbarLayout collapsingToolbarLayout;
+    String timerText;
+    int seconds, minutes;
+    long startTime = 0;
+    boolean isTimerOn = false;
+    private Toolbar mToolBar;
+
+    //runs without a timer by reposting this handler at the end of the runnable
+    Handler timerHandler = new Handler();
+    Runnable timerRunnable = new Runnable() {
+
+        @Override
+        public void run() {
+            long millis = System.currentTimeMillis() - startTime;
+            seconds = (int) (millis / 1000);
+            minutes = seconds / 60;
+            seconds = seconds % 60;
+
+            collapsingToolbarLayout.setTitle(String.format("%02dm %02ds", minutes, seconds));
+
+            timerHandler.postDelayed(this, 500);
+        }
+    };
 
 
     @Override
@@ -43,14 +77,59 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener 
         addStepButton = findViewById(R.id.add_step_row_button);
         addBeansButton = findViewById(R.id.add_bean_row_button);
         stepsContainer = findViewById(R.id.steps_linear_layout);
+        TextView stepTv = stepsContainer.findViewById(R.id.time_edit_text);
+        stepTv.setText("00:00");
         beansContainer = findViewById(R.id.beans_linear_layout);
+        resetButton = findViewById(R.id.reset_roast_button);
         LinearLayout firstStepRow = stepsContainer.findViewById(R.id.first_steps_row);
         LinearLayout firstBeanRow = beansContainer.findViewById(R.id.first_bean_row);
         beanRowLinearLayoutList.add(firstBeanRow);
         stepsRowLinearLayoutList.add(firstStepRow);
         addBeansButton.setOnClickListener(this);
+        resetButton.setOnClickListener(this);
         addStepButton.setOnClickListener(this);
         addButton.setOnClickListener(this);
+        collapsingToolbarLayout = findViewById(R.id.main_collapsing);
+        collapsingToolbarLayout.setTitle("00m 00s");
+        collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.TextAppearance_AppCompat_Display3);
+        collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.backgroundDefaultWhite));
+        collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.TextAppearance_AppCompat_Display1);
+        collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.backgroundDefaultWhite));
+
+        mToolBar = findViewById(R.id.main_toolbar);
+        setSupportActionBar(mToolBar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+
+        timerButton = findViewById(R.id.timer_floating_button);
+        timerButton.setScaleType(ImageView.ScaleType.FIT_CENTER);
+
+        timerButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                FloatingActionButton b = (FloatingActionButton) v;
+                if (isTimerOn) {
+                    timerHandler.removeCallbacks(timerRunnable);
+                    isTimerOn = false;
+                    b.setImageResource(R.drawable.ic_play_arrow);
+                }
+                else {
+                    startTime = System.currentTimeMillis();
+                    timerHandler.postDelayed(timerRunnable, 0);
+                    isTimerOn = true;
+                    b.setImageResource(R.drawable.ic_stop);
+                }
+//                Button b = (Button) v;
+//                if (b.getText().equals("stop")) {
+//                    b.setText("start");
+//                } else {
+
+//                    tool.setText("stop");
+                }
+        });
+
     }
 
     public boolean validateInput() {
@@ -74,17 +153,27 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener 
                 addRoast();
                 break;
             case (R.id.add_bean_row_button):
-                LinearLayout beanRow = (LinearLayout) inflater.inflate(R.layout.add_beans_row, null, false);
+                CardView beanRow = (CardView) inflater.inflate(R.layout.add_beans_row, null, false);
                 beansContainer.addView(beanRow);
-                beanRowLinearLayoutList.add(beanRow);
+                LinearLayout beanRowLinear = beanRow.findViewById(R.id.bean_row_linear_layout);
+                beanRowLinearLayoutList.add(beanRowLinear);
                 Log.i("Row", "Adding bean row...");
                 break;
             case (R.id.add_step_row_button):
-                LinearLayout stepRow = (LinearLayout) inflater.inflate(R.layout.add_tempature_row, null, false);
+                CardView stepRow = (CardView) inflater.inflate(R.layout.add_tempature_row, null, false);
                 stepsContainer.addView(stepRow);
-                stepsRowLinearLayoutList.add(stepRow);
+                TextView timeStepTv = stepRow.findViewById(R.id.time_edit_text);
+                timeStepTv.setText(String.format("%02d:%02d", minutes, seconds));
+                LinearLayout stepRowLinear = stepRow.findViewById(R.id.add_step_linear);
+                stepsRowLinearLayoutList.add(stepRowLinear);
                 Log.i("Row", "Adding temp row...");
                 break;
+            case (R.id.reset_roast_button) :
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
+                break;
+
 
         }
     }
@@ -112,10 +201,18 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener 
                 Bean newBean = new Bean(beanName, beanWeight);
                 roast.addToBeanList(newBean);
             }
-            else {
+
+            else if (beanWeightString.equals("")) {
+                Log.i("Bean", "Adding bean name: " + beanName);
+                int beanWeight = -1;
+                Bean newBean = new Bean(beanName, beanWeight);
+                roast.addToBeanList(newBean);
+            }
+
+            else if (roast.getBeanList().size() < 1) {
                 Context context = getApplicationContext();
                 int duration = Toast.LENGTH_LONG;
-                    CharSequence text = "Please at least one bean row.";
+                    CharSequence text = "Please enter at least one bean row.";
                     Toast toast = Toast.makeText(context, text, duration);
                     toast.show();
                     return roast;
@@ -152,5 +249,11 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener 
         finish();
 
         return roast;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        timerHandler.removeCallbacks(timerRunnable);
     }
 }

@@ -1,286 +1,348 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/lightGrey">
+    android:background="@color/lightGrey"
+    >
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/main.appbar"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:elevation="8dp"
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/main.collapsing"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimary"
+            app:expandedTitleMarginEnd="64dp"
+            app:expandedTitleMarginStart="48dp"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="00:00"-->
+            <!--style="@style/TextAppearance.AppCompat.Display3"-->
+            <!--android:layout_gravity="center"/>-->
+
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="48dp"
+                android:text="Duration: "
+                android:textColor="@color/backgroundDefaultWhite" />
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/main.toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?android:actionBarSize"
+                android:fitsSystemWindows="true"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:orientation="vertical"
-        android:background="@color/lightGrey"
+        android:layout_height="match_parent"
+        android:layout_gravity="fill_vertical"
+        android:layout_weight="1"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:clipToPadding="false"
         >
 
-        <android.support.v7.widget.CardView
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="@dimen/cardview_default_radius"
-            android:elevation="@dimen/cardview_default_elevation"
-            app:cardUseCompatPadding="true">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingBottom="8dp"
-                android:paddingTop="8dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            style="@style/TextAppearance.AppCompat.Title"
-            android:text="Roast name" />
-
-        <EditText
-            android:id="@+id/roast_name_edit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            style="@style/Base.V12.Widget.AppCompat.EditText"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:inputType="text"
-            android:singleLine="true" />
-
-            </LinearLayout>
-
-        </android.support.v7.widget.CardView>
-
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="@dimen/cardview_default_radius"
-            android:elevation="@dimen/cardview_default_radius"
-            app:cardUseCompatPadding="true"
-            >
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingBottom="8dp">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/beans_linear_layout"
+            android:layout_margin="8dp"
+            android:background="@color/lightGrey"
             android:orientation="vertical"
-            android:padding="8dp">
+            android:paddingBottom="56dp">
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 style="@style/TextAppearance.AppCompat.Title"
-                android:text="Beans"/>
-
-
-            <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:id="@+id/first_bean_row">
-
-            <EditText
-                android:layout_width="0dp"
-                android:layout_height="56dp"
-                android:layout_weight="3"
-                android:textSize="14sp"
-                android:inputType="text"
-                android:singleLine="true"
-                android:ellipsize="end"
-                android:hint="Bean Name"
-                android:id="@+id/bean_name_edit_text"
-                />
-            <EditText
-                android:layout_width="0dp"
-                android:layout_height="56dp"
-                android:layout_weight="2"
-                android:textSize="14sp"
-                android:inputType="number"
-                android:id="@+id/bean_weight_edit_text"
-                android:hint="Weight"/>
-        </LinearLayout>
-
-
-
-        </LinearLayout>
-            <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="New Row"
-                android:layout_gravity="end"
-                android:id="@+id/add_bean_row_button"
-                android:backgroundTint="@color/colorAccent"
-                android:textColor="@color/common_google_signin_btn_text_dark"
-                />
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="16dp"
+                android:text="Roast name" />
 
-            </LinearLayout>
-
-        </android.support.v7.widget.CardView>
-
-
-
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardCornerRadius="@dimen/cardview_default_radius"
-            android:elevation="@dimen/cardview_default_radius"
-            app:cardUseCompatPadding="true"
-            >
-            <LinearLayout
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingBottom="8dp"
-                android:paddingTop="8dp">
+                android:elevation="@dimen/cardview_default_elevation"
+                app:cardCornerRadius="@dimen/cardview_default_radius"
+                app:cardUseCompatPadding="true"
+                android:layout_marginBottom="16dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    style="@style/TextAppearance.AppCompat.Title"
-                    android:layout_marginLeft="8dp"
-                    android:text="Steps"/>
-
-        <LinearLayout
-            android:id="@+id/steps_linear_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="8dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/first_steps_row"
-                android:orientation="horizontal">
-
-
-                <EditText
-                    android:layout_width="0dp"
-                    android:layout_height="56dp"
-                    android:layout_weight="1"
-                    android:hint="Time"
-                    android:inputType="time"
-                    android:id="@+id/time_edit_text"
-                    android:textSize="14sp" />
-
-                <EditText
-                    android:layout_width="0dp"
-                    android:layout_height="56dp"
-                    android:layout_weight="1"
-                    android:inputType="number"
-                    android:id="@+id/temp_edit_text"
-                    android:hint="Tempature"
-                    android:textSize="14sp" />
-
-                <EditText
-                    android:layout_width="0dp"
-                    android:layout_height="56dp"
-                    android:layout_weight="1"
-                    android:inputType="textMultiLine"
-                    android:id="@+id/comments_edit_text"
-                    android:hint="Comments"
-                    android:textSize="14sp" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="New Row"
-                    android:layout_gravity="end"
-                    android:elevation="6dp"
-                    android:id="@+id/add_step_row_button"
-                    android:backgroundTint="@color/colorAccent"
-                    android:textColor="@color/common_google_signin_btn_text_dark"
-                    />
-
-            </LinearLayout>
-        </android.support.v7.widget.CardView>
-
-
-
-        <android.support.v7.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardUseCompatPadding="true"
-            android:elevation="@dimen/cardview_default_radius"
-            app:cardCornerRadius="@dimen/cardview_default_radius"
-            android:padding="8dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="8dp"
-                >
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Tasting Notes"
-                    style="@style/TextAppearance.AppCompat.Title"/>
+                    android:layout_margin="16dp"
+                    android:orientation="vertical"
+                    >
 
-                <EditText
-            android:id="@+id/tasting_notes_edit"
-            android:layout_width="match_parent"
-            android:layout_margin="8dp"
-            android:layout_height="wrap_content"
-            android:inputType="textMultiLine"
-            android:minLines="6"
-            android:textSize="14sp"
-            android:background="@android:color/transparent"
-            android:gravity="start|top"
-            android:hint="Notes"/>
+
+                    <EditText
+                        android:id="@+id/roast_name_edit"
+                        style="@style/Base.V12.Widget.AppCompat.EditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Name"
+                        android:inputType="text"
+                        android:singleLine="true" />
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:text="Beans" />
+            <LinearLayout
+                android:id="@+id/beans_linear_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingBottom="8dp"
+                >
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="@dimen/cardview_default_radius"
+                app:cardCornerRadius="@dimen/cardview_default_radius"
+                app:cardUseCompatPadding="true">
+
+
+
+
+                    <LinearLayout
+                        android:id="@+id/first_bean_row"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_margin="16dp">
+
+                        <EditText
+                            android:id="@+id/bean_name_edit_text"
+                            android:layout_width="0dp"
+                            android:layout_height="56dp"
+                            android:layout_weight="3"
+                            android:ellipsize="end"
+                            android:hint="Bean Name"
+                            android:inputType="text"
+                            android:singleLine="true"
+                            android:textSize="14sp" />
+
+                        <EditText
+                            android:id="@+id/bean_weight_edit_text"
+                            android:layout_width="0dp"
+                            android:layout_height="56dp"
+                            android:layout_weight="2"
+                            android:hint="Weight"
+                            android:inputType="number"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+
+            </android.support.v7.widget.CardView>
+
             </LinearLayout>
-        </android.support.v7.widget.CardView>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/colorAccent">
-        <!--<Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Start Roast"
-            android:id="@+id/start_add_roast_button"/>-->
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
+            <Button
+                android:id="@+id/add_bean_row_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:backgroundTint="@color/colorAccent"
+                android:text="New Row"
+                android:textColor="@color/common_google_signin_btn_text_dark" />
 
-        <Button
-            android:id="@+id/add_roast_button"
-            android:layout_width="match_parent"
-            android:layout_height="64dp"
-            style="@style/TextAppearance.AppCompat.Title"
-            android:textColor="@color/common_google_signin_btn_text_dark"
-            android:backgroundTint="@color/colorAccent"
-            android:text="Add Roast"
-            android:layout_marginBottom="8dp"
-            />
+            <TextView
+                style="@style/TextAppearance.AppCompat.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:text="Steps" />
+
+            <LinearLayout
+                android:id="@+id/steps_linear_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="@dimen/cardview_default_radius"
+                app:cardCornerRadius="@dimen/cardview_default_radius"
+                app:cardUseCompatPadding="true">
+
+
+                        <LinearLayout
+                            android:id="@+id/first_steps_row"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_margin="16dp">
+
+
+                            <EditText
+                                android:id="@+id/time_edit_text"
+                                android:layout_width="0dp"
+                                android:layout_height="56dp"
+                                android:layout_weight="1"
+                                android:hint="Time"
+                                android:inputType="time"
+                                android:textSize="14sp" />
+
+                            <EditText
+                                android:id="@+id/temp_edit_text"
+                                android:layout_width="0dp"
+                                android:layout_height="56dp"
+                                android:layout_weight="1"
+                                android:hint="Tempature"
+                                android:inputType="number"
+                                android:textSize="14sp" />
+
+                            <EditText
+                                android:id="@+id/comments_edit_text"
+                                android:layout_width="0dp"
+                                android:layout_height="56dp"
+                                android:layout_weight="1"
+                                android:hint="Comments"
+                                android:inputType="textMultiLine"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/add_step_row_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:backgroundTint="@color/colorAccent"
+                android:elevation="6dp"
+                android:text="New Row"
+                android:textColor="@color/common_google_signin_btn_text_dark" />
+
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tasting Notes" />
+
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="@dimen/cardview_default_radius"
+                android:padding="8dp"
+                app:cardCornerRadius="@dimen/cardview_default_radius"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
+
+                    <EditText
+                        android:id="@+id/tasting_notes_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:background="@android:color/transparent"
+                        android:gravity="start|top"
+                        android:hint="Notes"
+                        android:inputType="textMultiLine"
+                        android:minLines="6"
+                        android:textSize="14sp" />
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:backgroundTint="@color/colorAccent"
+              >
+                <!--<Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Start Roast"
+                    android:id="@+id/start_add_roast_button"/>-->
+
+                <Button
+                    android:id="@+id/reset_roast_button"
+                    style="@style/TextAppearance.AppCompat.Button"
+                    android:layout_width="120dp"
+                    android:layout_height="64dp"
+                    android:text="Reset" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:id="@+id/add_roast_button"
+                    style="@style/TextAppearance.AppCompat.Button"
+                    android:layout_width="120dp"
+                    android:layout_height="64dp"
+                    android:layout_marginBottom="8dp"
+                    android:backgroundTint="@color/colorAccent"
+                    android:text="Add Roast"
+                    android:textColor="@color/common_google_signin_btn_text_dark" />
+            </LinearLayout>
+
+
         </LinearLayout>
-
-
-
-    </LinearLayout>
-
 
 
     </android.support.v4.widget.NestedScrollView>
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/timer_floating_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_horizontal_margin"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_play_arrow"
+        app:fabSize="normal"
+        app:layout_anchor="@id/main.appbar"
+        app:layout_anchorGravity="bottom|right|end" />
+
     <!--<android.support.design.widget.FloatingActionButton-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginBottom="16dp"-->
-        <!--android:layout_marginRight="16dp"-->
-        <!--android:layout_gravity="bottom|end"-->
-        <!--app:srcCompat="@android:drawable/ic_input_add"-->
-        <!--android:tint="#ffffff"/>-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginBottom="16dp"-->
+    <!--android:layout_marginRight="16dp"-->
+    <!--android:layout_gravity="bottom|end"-->
+    <!--app:srcCompat="@android:drawable/ic_input_add"-->
+    <!--android:tint="#ffffff"/>-->
 
 </android.support.design.widget.CoordinatorLayout>
