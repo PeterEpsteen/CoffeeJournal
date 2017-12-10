@@ -10,13 +10,25 @@
     android:layout_marginBottom="56dp"
     android:fitsSystemWindows="true"
     tools:context="com.example.peter.coffeejournal.BrewFragment">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Brew Recipes"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginBottom="8dp"
+        style="@style/TextAppearance.AppCompat.Display1"
+        android:id="@+id/pick_brew_tv"/>
 
     <GridView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/brew_grid_view"
-        android:columnWidth="160dp"
-        android:numColumns="auto_fit"
+        android:numColumns="1"
         android:horizontalSpacing="16dp"
         android:verticalSpacing="16dp"
         android:padding="8dp"
@@ -25,7 +37,7 @@
 
 
     </GridView>
-
+    </LinearLayout>
 </FrameLayout>
 
 </android.support.constraint.ConstraintLayout>

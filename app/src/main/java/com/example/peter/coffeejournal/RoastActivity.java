@@ -1,5 +1,6 @@
 package com.example.peter.coffeejournal;
 
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -21,18 +22,23 @@ public class RoastActivity extends AppCompatActivity {
     LinearLayout roastContainer;
     List<RoastStep> steps;
     List<Bean> beans;
+    CollapsingToolbarLayout collapsingToolbarLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_roast);
-        roastContainer = findViewById(R.id.roast_container);
         brewName = getIntent().getExtras().getString("Name");
         brewDate = getIntent().getExtras().getString("Date");
-        ActionBar ab = getSupportActionBar();
-        try {
-            ab.setTitle(brewName);
-        } catch (NullPointerException e){}
+
+        collapsingToolbarLayout = findViewById(R.id.main_collapsing);
+        collapsingToolbarLayout.setTitle(brewName);
+        collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.TextAppearance_AppCompat_Headline);
+        collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.backgroundDefaultWhite));
+        collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.TextAppearance_AppCompat_Widget_ActionBar_Title);
+        collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.backgroundDefaultWhite));
+        roastContainer = findViewById(R.id.roast_container);
+
         LayoutInflater inflater = getLayoutInflater();
         db = new DBOperator(this);
         roast = db.getRoast(brewName, brewDate);
@@ -41,10 +47,9 @@ public class RoastActivity extends AppCompatActivity {
         int count = 1;
         TextView beanTv = (TextView) inflater.inflate(R.layout.generic_text_view, roastContainer, false);
         beanTv.setText("Beans");
-//        roastContainer.addView(beanTv);
+        roastContainer.addView(beanTv);
         CardView beansCv = (CardView) inflater.inflate(R.layout.generic_card_view, roastContainer, false);
         LinearLayout beansCvContainer = beansCv.findViewById(R.id.card_view_container);
-        beansCvContainer.addView(beanTv);
         LinearLayout topBeanRow = (LinearLayout) inflater.inflate(R.layout.bean_row, roastContainer, false);
         TextView topBeanNumbTv = topBeanRow.findViewById(R.id.bean_number_text_view);
         topBeanNumbTv.setText("");
@@ -72,10 +77,9 @@ public class RoastActivity extends AppCompatActivity {
         count = 1;
         TextView stepTv = (TextView) inflater.inflate(R.layout.generic_text_view, roastContainer, false);
         stepTv.setText("Steps");
-//        roastContainer.addView(stepTv);
+        roastContainer.addView(stepTv);
         CardView stepsCv = (CardView) inflater.inflate(R.layout.generic_card_view, roastContainer, false);
         LinearLayout stepsCvContainer = stepsCv.findViewById(R.id.card_view_container);
-        stepsCvContainer.addView(stepTv);
         LinearLayout topStepRow = (LinearLayout) inflater.inflate(R.layout.step_row, roastContainer, false);
         TextView topStepNumbTv = topStepRow.findViewById(R.id.step_number_text_view);
         topStepNumbTv.setText("");
@@ -105,8 +109,8 @@ public class RoastActivity extends AppCompatActivity {
         roastContainer.addView(stepsCv);
         TextView notesTitleTv = (TextView) inflater.inflate(R.layout.generic_text_view, roastContainer, false);
         notesTitleTv.setText("Tasting Notes");
+        roastContainer.addView(notesTitleTv);
         CardView notesCv = (CardView) inflater.inflate(R.layout.generic_card_view, roastContainer, false);
-        notesCv.addView(notesTitleTv);
         LinearLayout tastingLayout = (LinearLayout) inflater.inflate(R.layout.roast_tasting_notes_linear_layout, roastContainer, false);
         TextView notesTv = tastingLayout.findViewById(R.id.tasting_notes_text_view);
         notesTv.setText(roast.getNotes());
