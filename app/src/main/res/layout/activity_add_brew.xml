@@ -1,286 +1,427 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/main.appbar"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:elevation="8dp"
+        android:fitsSystemWindows="true"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/main.collapsing"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimary"
+            app:expandedTitleMarginEnd="64dp"
+            app:expandedTitleMarginStart="48dp"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="00:00"-->
+            <!--style="@style/TextAppearance.AppCompat.Display3"-->
+            <!--android:layout_gravity="center"/>-->
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/main.toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?android:actionBarSize"
+                android:fitsSystemWindows="true"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="fill_vertical"
+        android:layout_weight="1"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:clipToPadding="false"
+        >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_margin="16dp"
+        android:orientation="vertical"
+        android:paddingBottom="56dp">
 
+        <TextView
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="24dp"
+            android:text="Brew Info" />
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="@dimen/cardview_default_elevation"
+            app:cardCornerRadius="@dimen/cardview_default_radius"
+            app:cardUseCompatPadding="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/recipe_name_tv"
+                    style="@style/TextAppearance.AppCompat.Subhead"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text= "Name"
+
+                    />
+
+                <EditText
+                    android:id="@+id/recipe_name_edit"
+                    style="@style/TextAppearance.AppCompat.Subhead"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="wrap_content"
+                    android:hint="My new brew"
+                    android:inputType="text"
+                    android:singleLine="true" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp">
+
+                <TextView
+                    android:id="@+id/brew_method_text_view"
+                    style="@style/TextAppearance.AppCompat.Subhead"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:text="Method" />
+
+                <Spinner
+                    android:id="@+id/brew_method_spinner"
+                    style="?android:spinnerStyle"
+                    android:layout_width="0dp"
+                    android:layout_weight="2"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:tag="Title" />
+
+            </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/grind_tv"
+                        style="@style/TextAppearance.AppCompat.Subhead"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Grind" />
+
+                    <EditText
+                        android:id="@+id/grind_edit"
+                        style="@style/TextAppearance.AppCompat.Subhead"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"
+                        android:singleLine="true" />
+
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+
+
+        </android.support.v7.widget.CardView>
+
+        <TextView
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="24dp"
+            android:text="Measurements" />
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="@dimen/cardview_default_elevation"
+            app:cardCornerRadius="@dimen/cardview_default_radius"
+            app:cardUseCompatPadding="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="8dp"
+                    android:gravity="end">
+                    <TextView
+                        android:id="@+id/metric_tv"
+                        style="@style/TextAppearance.AppCompat.Subhead"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Units:" />
+
+
+                    <TextView
+                        android:id="@+id/grams_tv"
+                        style="@style/TextAppearance.AppCompat.Subhead"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Grams" />
+
+                    <android.support.v7.widget.SwitchCompat
+                        android:id="@+id/metric_edit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:padding="8dp"
+                        android:textOff="0"
+                        android:textOn="1" />
+
+                    <TextView
+                        android:id="@+id/ounces_tv"
+                        style="@style/TextAppearance.AppCompat.Subhead"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ounces" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="8dp"
+                    android:gravity="end">
+
+
+
+                    <TextView
+                        android:id="@+id/coffee_units_text_view"
+                        style="@style/TextAppearance.AppCompat.Subhead"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Coffee" />
+
+
+                    <EditText
+                        android:id="@+id/coffee_amount_edit"
+                        style="@style/TextAppearance.AppCompat.Subhead"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_height="wrap_content"
+                        android:hint="100"
+                        android:inputType="number"
+                        android:singleLine="true" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="8dp"
+                    >
+                    <TextView
+                        android:id="@+id/water_units_text_view"
+                        style="@style/TextAppearance.AppCompat.Subhead"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Water" />
+
+
+                    <EditText
+                        android:id="@+id/water_amount_edit"
+                        style="@style/TextAppearance.AppCompat.Subhead"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_height="wrap_content"
+                        android:inputType="number"
+                        android:hint="500"
+                        android:singleLine="true" />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+        </android.support.v7.widget.CardView>
+
+        <TextView
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="24dp"
+            android:text="Timing" />
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="@dimen/cardview_default_elevation"
+            app:cardCornerRadius="@dimen/cardview_default_radius"
+            app:cardUseCompatPadding="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="8dp"
+                    android:gravity="end">
+                    <TextView
+                        android:id="@+id/bloom_time_tv"
+                        style="@style/TextAppearance.AppCompat.Subhead"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Bloom time" />
+                    <EditText
+                        android:id="@+id/bloom_time_edit"
+                        style="@style/TextAppearance.AppCompat.Subhead"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_height="wrap_content"
+                        android:inputType="time"
+                        android:singleLine="true" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="8dp"
+                    android:gravity="end">
+
+
+
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="8dp"
+                    >
+
+                    <TextView
+                        android:id="@+id/brew_time_tv"
+                        style="@style/TextAppearance.AppCompat.Subhead"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Brew time" />
+
+                    <EditText
+                        android:id="@+id/brew_time_edit"
+                        style="@style/TextAppearance.AppCompat.Subhead"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_height="wrap_content"
+                        android:inputType="time"
+                        android:singleLine="true" />
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+        </android.support.v7.widget.CardView>
+
+
+
+        <TextView
+            android:id="@+id/notes_tv"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="24dp"
+            android:text="Notes or Steps" />
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="@dimen/cardview_default_elevation"
+        app:cardCornerRadius="@dimen/cardview_default_radius"
+        app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:orientation="vertical">
+        <EditText
+            android:id="@+id/notes_edit"
+            style="@style/TextAppearance.AppCompat.Subhead"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:lines="4" />
+    </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+
+
+        <Button
+            android:id="@+id/add_brew_button"
+            style="@style/TextAppearance.AppCompat.Button"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="16dp"
+            android:backgroundTint="@color/colorAccent"
+            android:text="Add Brew!"
+            android:textColor="@color/common_google_signin_btn_text_dark" />
 
 
     </LinearLayout>
 
 
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.example.peter.coffeejournal.AddBrew">
-    <TextView
-        android:layout_width="0dp"
-        app:layout_constraintHorizontal_weight="2"
-        android:layout_height="wrap_content"
-        android:text="Recipe name:"
-        style="@style/TextAppearance.AppCompat.Body1"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/recipe_name_edit"
-        android:layout_marginTop="24dp"
-        android:layout_marginLeft="16dp"
-        android:id="@+id/recipe_name_tv"
-        />
-
-    <EditText
-        android:layout_width="0dp"
-        app:layout_constraintHorizontal_weight="3"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/recipe_name_tv"
-        android:id="@+id/recipe_name_edit"
-        android:singleLine="true"
-        app:layout_constraintBaseline_toBaselineOf="@id/recipe_name_tv"
-        android:inputType="text"
-        android:background="@drawable/text_input_box"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/recipe_name_tv"
-        android:layout_marginRight="16dp"
-        android:layout_marginBottom="8dp"/>
-    <TextView
-        android:layout_width="0dp"
-        app:layout_constraintHorizontal_weight="2"
-        android:layout_height="wrap_content"
-        app:layout_constraintRight_toLeftOf="@id/brew_method_spinner"
-        android:layout_marginTop="24dp"
-        android:text="Brew Method:"
-        app:layout_constraintTop_toBottomOf="@id/recipe_name_edit"
-        android:layout_marginLeft="16dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:id="@+id/brew_method_text_view"/>
-
-    <Spinner
-        android:layout_height="wrap_content"
-        android:layout_width="0dp"
-        app:layout_constraintHorizontal_weight="3"
-        app:layout_constraintLeft_toRightOf="@id/brew_method_text_view"
-        app:layout_constraintRight_toRightOf="parent"
-        android:id="@+id/brew_method_spinner"
-        app:layout_constraintTop_toTopOf="@id/brew_method_text_view"
-        android:tag="Title"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        />
-
-    <TextView
-        android:layout_width="0dp"
-        app:layout_constraintHorizontal_weight="2"
-        android:layout_height="wrap_content"
-        android:text="Amount of Coffee:"
-        android:layout_marginTop="24dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/coffee_amount_edit"
-        app:layout_constraintTop_toBottomOf="@id/brew_method_text_view"
-        android:layout_marginLeft="16dp"
-        android:id="@+id/coffee_units_text_view"
-         />
-
-    <EditText
-        android:layout_width="0dp"
-        app:layout_constraintHorizontal_weight="3"
-        android:layout_height="wrap_content"
-        app:layout_constraintLeft_toRightOf="@+id/coffee_units_text_view"
-        android:id="@+id/coffee_amount_edit"
-        android:singleLine="true"
-        android:inputType="number"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBaseline_toBaselineOf="@id/coffee_units_text_view"
-        android:layout_marginRight="16dp"/>
-
-    <TextView
-        android:layout_width="0dp"
-        app:layout_constraintHorizontal_weight="2"
-        android:layout_height="wrap_content"
-        android:text="Amount of Water:"
-        android:id="@+id/water_units_text_view"
-        android:layout_marginTop="24dp"
-        android:layout_marginLeft="16dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/coffee_amount_edit"
-        app:layout_constraintRight_toLeftOf="@id/water_amount_edit"
-        />
-    <EditText
-        android:layout_width="0dp"
-        app:layout_constraintHorizontal_weight="3"
-        android:layout_height="wrap_content"
-        android:id="@+id/water_amount_edit"
-        android:singleLine="true"
-        android:inputType="number"
-        android:layout_marginRight="16dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/water_units_text_view"
-        app:layout_constraintBaseline_toBaselineOf="@id/water_units_text_view"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        app:layout_constraintHorizontal_weight="2"
-        android:layout_height="wrap_content"
-        android:text="Units"
-        android:layout_margin="16dp"
-        android:id="@+id/metric_tv"
-        app:layout_constraintTop_toBottomOf="@id/water_amount_edit"
-        app:layout_constraintLeft_toLeftOf="parent"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Grams"
-        android:id="@+id/grams_tv"
-        app:layout_constraintLeft_toLeftOf="@id/water_amount_edit"
-        app:layout_constraintBaseline_toBaselineOf="@id/metric_tv"/>
-
-    <android.support.v7.widget.SwitchCompat
-        android:layout_width="wrap_content"
-        android:padding="8dp"
-        app:switchMinWidth="56dp"
-        android:gravity="center_vertical"
-        android:layout_height="wrap_content"
-        android:textOn="1"
-        android:textOff="0"
-        app:showText="false"
-        app:switchTextAppearance="@style/TextAppearance.AppCompat.Button"
-        android:layout_marginRight="16dp"
-        app:layout_constraintLeft_toRightOf="@id/grams_tv"
-        app:layout_constraintBaseline_toBaselineOf="@id/metric_tv"
-        android:id="@+id/metric_edit" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Ounces"
-        android:id="@+id/ounces_tv"
-        app:layout_constraintLeft_toRightOf="@id/metric_edit"
-        app:layout_constraintBaseline_toBaselineOf="@id/metric_edit"/>
-
-    <TextView
-        android:layout_width="0dp"
-        app:layout_constraintHorizontal_weight="2"
-        android:layout_height="wrap_content"
-        android:text="Bloom time:"
-        app:layout_constraintRight_toLeftOf="@id/bloom_time_edit"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/metric_tv"
-        android:layout_marginTop="24dp"
-        android:layout_marginLeft="16dp"
-        android:id="@+id/bloom_time_tv"
-        android:textSize="16sp"
-        />
-
-    <EditText
-        android:layout_width="0dp"
-        app:layout_constraintHorizontal_weight="3"
-        android:layout_height="wrap_content"
-        app:layout_constraintLeft_toRightOf="@+id/bloom_time_tv"
-        app:layout_constraintBaseline_toBaselineOf="@+id/bloom_time_tv"
-        android:id="@+id/bloom_time_edit"
-        android:singleLine="true"
-        android:inputType="time"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginRight="16dp"
-        android:textSize="16dp"/>
-
-    <TextView
-        android:layout_width="0dp"
-        app:layout_constraintHorizontal_weight="2"
-        android:layout_height="wrap_content"
-        android:text="Grind Setting:"
-        app:layout_constraintRight_toLeftOf="@id/grind_edit"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/bloom_time_tv"
-        android:layout_marginTop="24dp"
-        android:layout_marginLeft="16dp"
-        android:id="@+id/grind_tv"
-        android:textSize="16sp"
-        />
-
-    <EditText
-        android:layout_width="0dp"
-        app:layout_constraintHorizontal_weight="3"
-        android:layout_height="wrap_content"
-        app:layout_constraintLeft_toRightOf="@+id/grind_tv"
-        app:layout_constraintBaseline_toBaselineOf="@+id/grind_tv"
-        android:id="@+id/grind_edit"
-        android:singleLine="true"
-        android:inputType="text"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginRight="16dp"
-        android:textSize="16dp"/>
-    <TextView
-        android:layout_width="0dp"
-        app:layout_constraintHorizontal_weight="2"
-        app:layout_constraintRight_toLeftOf="@id/brew_time_edit"
-        android:layout_height="wrap_content"
-        android:text="Brew time"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/grind_tv"
-        android:layout_marginTop="24dp"
-        android:layout_marginLeft="16dp"
-        android:id="@+id/brew_time_tv"
-        android:textSize="16sp"
-        />
-
-    <EditText
-        android:layout_width="0dp"
-        app:layout_constraintHorizontal_weight="3"
-        android:layout_height="wrap_content"
-        app:layout_constraintLeft_toRightOf="@+id/brew_time_tv"
-        app:layout_constraintBaseline_toBaselineOf="@+id/brew_time_tv"
-        android:id="@+id/brew_time_edit"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginRight="16dp"
-        android:singleLine="true"
-        android:inputType="time"
-        android:textSize="16dp"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Additional Notes or Steps (optional):"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/brew_time_tv"
-        android:layout_marginTop="24dp"
-        android:layout_marginLeft="16dp"
-        android:id="@+id/notes_tv"
-        android:textSize="16sp"
-        />
-
-    <EditText
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/notes_tv"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:id="@+id/notes_edit"
-        app:layout_constraintRight_toRightOf="parent"
-        android:singleLine="true"
-        android:layout_marginRight="16dp"
-        android:layout_marginLeft="8dp"
-        android:textSize="16dp"/>
-
-    <Button
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/add_brew_button"
-        android:text="Add Brew!"
-        app:layout_constraintTop_toBottomOf="@id/notes_edit"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        style="@style/TextAppearance.AppCompat.Button"
-        android:textColor="@color/common_google_signin_btn_text_dark"
-        android:layout_margin="16dp"
-        android:backgroundTint="@color/colorAccent"
-        android:padding="16dp"
-        />
-
-<!-- TODO: MAKE THIS BETTER, find design closer to finished product and start with that -->
-
-</android.support.constraint.ConstraintLayout>
-</ScrollView>
+    <!-- TODO: MAKE THIS BETTER, find design closer to finished product and start with that -->
+    </android.support.v4.widget.NestedScrollView>
+</android.support.design.widget.CoordinatorLayout>

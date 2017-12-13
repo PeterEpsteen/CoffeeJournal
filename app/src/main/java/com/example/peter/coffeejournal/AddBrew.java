@@ -2,6 +2,7 @@ package com.example.peter.coffeejournal;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SwitchCompat;
@@ -15,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 public class AddBrew extends AppCompatActivity implements View.OnClickListener {
 
@@ -31,6 +33,13 @@ public class AddBrew extends AppCompatActivity implements View.OnClickListener {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_brew);
+
+        android.support.v7.widget.Toolbar mtoolbar = findViewById(R.id.main_toolbar);
+        setSupportActionBar(mtoolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("Create a Brew");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         Button btn = findViewById(R.id.add_brew_button);
         btn.setOnClickListener(this);

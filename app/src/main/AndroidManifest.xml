@@ -23,8 +23,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddBrew" />
-        <activity android:name=".AddRoast" />
+        <activity android:name=".AddBrew"
+            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".AddRoast"
+            android:parentActivityName=".MainActivity"/>
         <activity
             android:name=".BrewRecipeActivity"
             android:windowSoftInputMode="stateHidden"
