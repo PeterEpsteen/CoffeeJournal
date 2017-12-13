@@ -37,7 +37,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="8dp"
                 android:layout_marginLeft="48dp"
                 android:text="Duration: "
                 android:textColor="@color/backgroundDefaultWhite" />
@@ -74,6 +74,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
                 android:text="Roast name" />
 
             <android.support.v7.widget.CardView
@@ -110,6 +111,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
+                android:layout_marginBottom="8dp"
                 android:text="Beans" />
             <LinearLayout
                 android:id="@+id/beans_linear_layout"
@@ -177,6 +179,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
+                android:layout_marginBottom="8dp"
                 android:text="Steps" />
 
             <LinearLayout
@@ -187,52 +190,135 @@
                 >
 
 
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:elevation="@dimen/cardview_default_radius"
-                app:cardCornerRadius="@dimen/cardview_default_radius"
-                app:cardUseCompatPadding="true">
+                <android.support.v7.widget.CardView android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:elevation="@dimen/cardview_default_elevation"
+                    app:cardCornerRadius="@dimen/cardview_default_radius"
+                    app:cardUseCompatPadding="true"
+                    xmlns:android="http://schemas.android.com/apk/res/android">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:id="@+id/first_steps_row">
 
-
-                        <LinearLayout
-                            android:id="@+id/first_steps_row"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:layout_margin="16dp">
-
-
+                        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                            android:orientation="horizontal" android:layout_width="match_parent"
+                            android:layout_margin="16dp"
+                            android:layout_height="match_parent">
                             <EditText
+                                android:layout_width="0dp"
+                                android:layout_height="56dp"
+                                android:layout_weight="1"
                                 android:id="@+id/time_edit_text"
-                                android:layout_width="0dp"
-                                android:layout_height="56dp"
-                                android:layout_weight="1"
-                                android:hint="Time"
+                                android:gravity="bottom"
+                                style="@style/TextAppearance.AppCompat.Body1"
+                                android:singleLine="true"
                                 android:inputType="time"
-                                android:textSize="14sp" />
-
+                                android:backgroundTint="@color/common_google_signin_btn_text_dark_disabled"
+                                android:hint="Time"/>
                             <EditText
-                                android:id="@+id/temp_edit_text"
                                 android:layout_width="0dp"
                                 android:layout_height="56dp"
                                 android:layout_weight="1"
-                                android:hint="Tempature"
+                                android:backgroundTint="@color/common_google_signin_btn_text_dark_disabled"
+                                android:singleLine="true"
+                                android:gravity="bottom"
+                                style="@style/TextAppearance.AppCompat.Body1"
                                 android:inputType="number"
-                                android:textSize="14sp" />
-
+                                android:id="@+id/temp_edit_text"
+                                android:hint="Temp"/>
                             <EditText
-                                android:id="@+id/comments_edit_text"
                                 android:layout_width="0dp"
-                                android:layout_height="56dp"
-                                android:layout_weight="1"
-                                android:hint="Comments"
+                                android:layout_weight="2"
+                                android:backgroundTint="@color/common_google_signin_btn_text_dark_disabled"
                                 android:inputType="textMultiLine"
-                                android:textSize="14sp" />
+                                android:gravity="bottom"
+                                style="@style/TextAppearance.AppCompat.Body1"
+                                android:id="@+id/comments_edit_text"
+                                android:layout_height="56dp"
+                                android:hint="Comments"/>
+                            <Button
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:background="@drawable/drop_icon"
+                                android:layout_gravity="end|bottom"
+                                android:onClick="expandCard"
+                                android:id="@+id/expand_roast_step_button"
+                                />
 
                         </LinearLayout>
 
-            </android.support.v7.widget.CardView>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginRight="8dp"
+                            android:layout_marginBottom="16dp"
+                            android:orientation="vertical"
+                            android:id="@+id/expanded_step_row">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Mark step as key event:"
+                            style="@style/TextAppearance.AppCompat.Body1"
+                            android:layout_marginLeft="16dp"
+                            android:layout_marginBottom="8dp"/>
+
+                        <RadioGroup
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="16dp">
+
+                            <android.support.v7.widget.AppCompatRadioButton
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="16dp"
+                                android:text="Roast Start"/>
+
+                            <android.support.v7.widget.AppCompatRadioButton
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="16dp"
+                                android:text="First Crack Start"/>
+
+                            <android.support.v7.widget.AppCompatRadioButton
+                                android:layout_width="wrap_content"
+                                android:layout_marginLeft="16dp"
+                                android:layout_height="wrap_content"
+                                android:text="First Crack End"/>
+                            <android.support.v7.widget.AppCompatRadioButton
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="16dp"
+                                android:text="Second Crack Start"/>
+
+                            <android.support.v7.widget.AppCompatRadioButton
+                                android:layout_width="wrap_content"
+                                android:layout_marginLeft="16dp"
+                                android:layout_height="wrap_content"
+                                android:text="Second Crack End"/>
+
+                            <android.support.v7.widget.AppCompatRadioButton
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="16dp"
+                                android:text="Roast End"/>
+
+                        </RadioGroup>
+
+                    </LinearLayout>
+
+
+
+
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+
 
 
             </LinearLayout>
@@ -252,6 +338,8 @@
                 style="@style/TextAppearance.AppCompat.Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginBottom="8dp"
                 android:text="Tasting Notes" />
 
 
@@ -298,11 +386,12 @@
                     android:id="@+id/start_add_roast_button"/>-->
 
                 <Button
-                    android:id="@+id/reset_roast_button"
                     style="@style/TextAppearance.AppCompat.Button"
-                    android:background="@color/backgroundDefaultWhite"
                     android:layout_width="120dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="56dp"
+                    android:id="@+id/reset_roast_button"
+                    android:backgroundTint="@color/backgroundDefaultWhite"
+                    android:textColor="@color/colorAccent"
                     android:text="Reset" />
 
                 <View
@@ -314,7 +403,7 @@
                     android:id="@+id/add_roast_button"
                     style="@style/TextAppearance.AppCompat.Button"
                     android:layout_width="120dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="56dp"
                     android:backgroundTint="@color/colorAccent"
                     android:text="Add Roast"
                     android:textColor="@color/common_google_signin_btn_text_dark" />

@@ -41,12 +41,5 @@
             android:layout_weight="1"
             />
 
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:scaleType="centerCrop"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/more_icon"
-            />
     </LinearLayout>
 </android.support.v7.widget.CardView>

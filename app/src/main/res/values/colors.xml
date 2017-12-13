@@ -7,7 +7,7 @@
     <color name="colorForeground">#ececec</color>
     <color name="colorTextDark">#2C104C</color>
     <color name="colorTextLight">#adadad</color>
-    <color name="backgroundDefaultWhite">#FAFAFA</color>
+    <color name="backgroundDefaultWhite">#FBFBF8</color>
     <color name="backgroundColorBeige">#edebdb</color>
     <color name="dividerColor">#cecece</color>
     <color name="lightBrown">#d7ccc8</color>

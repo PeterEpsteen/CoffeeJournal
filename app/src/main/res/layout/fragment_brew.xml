@@ -33,7 +33,7 @@
         android:numColumns="1"
         android:horizontalSpacing="16dp"
         android:verticalSpacing="8dp"
-        android:padding="16dp"
+        android:padding="24dp"
         android:clipToPadding="false"
 >
 

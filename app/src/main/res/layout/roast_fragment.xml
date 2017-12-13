@@ -29,7 +29,7 @@
             android:id="@+id/roast_list_view"
             android:clipToPadding="false"
             android:layout_gravity="fill_vertical"
-            android:padding="16dp"
+            android:padding="24dp"
             android:divider="@null"
             android:layout_marginBottom="56dp"
            />

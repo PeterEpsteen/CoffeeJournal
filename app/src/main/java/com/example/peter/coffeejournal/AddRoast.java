@@ -14,6 +14,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewParent;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -266,5 +268,19 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener 
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void expandCard(View view) {
+        Button moreButton = (Button) view;
+        View parent = (View) view.getParent().getParent();
+        LinearLayout expanded = parent.findViewById(R.id.expanded_step_row);
+        float deg = (moreButton.getRotation() == 180F) ? 0F : 180F;
+        moreButton.animate().rotation(deg).setInterpolator(new AccelerateDecelerateInterpolator());
+        if (expanded.getVisibility() == View.GONE){
+            expanded.setVisibility(View.VISIBLE);
+        }
+        else {
+            expanded.setVisibility(View.GONE);
+        }
     }
 }

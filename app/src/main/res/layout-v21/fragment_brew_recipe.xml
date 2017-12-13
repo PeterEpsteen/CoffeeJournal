@@ -5,23 +5,34 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:elevation="2dp"
-        app:cardCornerRadius="@dimen/cardview_default_radius">
+
 
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:scrollbarAlwaysDrawVerticalTrack="true"
+            android:verticalScrollbarPosition="right"
+            android:scrollbarFadeDuration="0"
+            android:fadeScrollbars="false">
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
+                android:paddingTop="16dp"
                 android:layout_height="match_parent"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:id="@+id/brew_notes_fragment_container"
                 android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView"
+                    style="@style/TextAppearance.AppCompat.Title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="0dp"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:text="Volume" />
 
                 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                     android:id="@+id/slider_linear_layout"
@@ -35,15 +46,7 @@
                     android:paddingRight="16dp"
                     android:paddingTop="8dp">
 
-                    <TextView
-                        android:id="@+id/textView"
-                        style="@style/TextAppearance.AppCompat.Title"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="0dp"
-                        android:layout_marginTop="8dp"
-                        android:gravity="center"
-                        android:text="Volume" />
+
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -56,9 +59,9 @@
                             style="@style/TextAppearance.AppCompat.Display1"
                             android:layout_width="46dp"
                             android:layout_height="46dp"
-                            android:layout_margin="0dp"
+                            android:layout_margin="8dp"
                             android:gravity="center"
-                            android:background="@color/backgroundColorBeige"
+                            android:background="@color/backgroundDefaultWhite"
                             android:includeFontPadding="false"
                             android:text="-"
                             android:textAlignment="center"
@@ -70,19 +73,20 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:layout_margin="8dp"
-                            android:padding="16dp"
+                            android:padding="8dp"
                             android:layout_weight="1"
                             android:backgroundTint="@color/colorAccent"
                             android:max="3000"
+                            android:thumb="@drawable/custom_thumb"
                             />
 
                         <Button
                             android:id="@+id/plus_volume_button"
                             style="@style/TextAppearance.AppCompat.Display1"
                             android:layout_width="48dp"
-                            android:background="@color/backgroundColorBeige"
+                            android:background="@color/backgroundDefaultWhite"
                             android:layout_height="48dp"
+                            android:layout_margin="8dp"
                             android:gravity="center"
                             android:includeFontPadding="false"
                             android:text="+"
@@ -94,10 +98,7 @@
 
                 </LinearLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/dividerColor" />
+
 
                 <!-- Dummy item for focus at startup -->
                 <LinearLayout
@@ -118,13 +119,18 @@
                     android:layout_gravity="center"
                     android:layout_marginBottom="16dp"
                     android:text="Strength" />
-
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="@dimen/cardview_default_radius"
+                android:layout_marginBottom="24dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
+                android:elevation="@dimen/cardview_default_elevation"
+                android:backgroundTint="@color/backgroundDefaultWhite">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="24dp"
-                    android:layout_marginLeft="24dp"
-                    android:layout_marginRight="24dp"
                     android:gravity="center"
                     android:orientation="horizontal">
 
@@ -132,55 +138,76 @@
                         android:id="@+id/light_toggle_button"
                         style="@android:style/Widget.Material.Light.Button.Toggle"
                         android:layout_width="0dp"
-                        android:layout_height="48dp"
-                        android:layout_margin="0dp"
+                        android:layout_height="56dp"
                         android:layout_weight="1"
-                        android:background="@color/backgroundColorBeige"
+                        android:background="@color/backgroundDefaultWhite"
                         android:textOff="Light"
                         android:textOn="Light"
-
                         />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/my_divider"
+                        android:backgroundTint="@color/backgroundColorBeige"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"/>
 
                     <ToggleButton
                         android:id="@+id/regular_toggle_button"
                         style="@android:style/Widget.Material.Light.Button.Toggle"
                         android:layout_width="0dp"
-                        android:layout_height="48dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
+                        android:layout_height="56dp"
                         android:layout_weight="1"
-                        android:background="@color/backgroundColorBeige"
+                        android:background="@color/backgroundDefaultWhite"
                         android:textOff="Regular"
                         android:textOn="Regular" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/my_divider"
+                        android:backgroundTint="@color/backgroundColorBeige" />
 
 
                     <ToggleButton
                         android:id="@+id/strong_toggle_button"
                         style="@android:style/Widget.Material.Light.Button.Toggle"
                         android:layout_width="0dp"
-                        android:layout_height="48dp"
-                        android:background="@color/backgroundColorBeige"
-                        android:layout_margin="0dp"
+                        android:layout_height="56dp"
+                        android:background="@color/backgroundDefaultWhite"
                         android:layout_weight="1"
                         android:textOff="Strong"
                         android:textOn="Strong" />
 
 
                 </LinearLayout>
+            </android.support.v7.widget.CardView>
 
-                <View
+                <TextView
+                    android:id="@+id/units_label"
+                    style="@style/TextAppearance.AppCompat.Title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_gravity="center"
+                    android:text="Units" />
+
+                <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="@color/dividerColor" />
+                    android:layout_margin="16dp"
+                    android:background="@color/backgroundDefaultWhite"
+                    android:layout_height = "wrap_content"
+                    app:cardCornerRadius="@dimen/cardview_default_radius"
+                    android:elevation="@dimen/cardview_default_elevation">
 
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginTop="16dp"
                     android:layout_weight="1"
                     android:clipToPadding="false"
+                    android:layout_margin="8dp"
                     android:gravity="center"
                     android:orientation="horizontal">
 
@@ -188,6 +215,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:padding="8dp"
                         android:orientation="vertical">
 
                         <TextView
@@ -196,7 +224,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginBottom="8dp"
-                            android:text="Water Units" />
+                            android:text="Water" />
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -212,7 +240,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:layout_marginRight="8dp"
-                                android:text="Grams" />
+                                android:text="G" />
 
                             <android.support.v7.widget.SwitchCompat
                                 android:id="@+id/water_units_switch"
@@ -229,12 +257,18 @@
                                 android:layout_gravity="center"
                                 android:layout_marginLeft="8dp"
                                 android:gravity="center"
-                                android:text="Ounces" />
+                                android:text="Oz" />
 
                         </LinearLayout>
 
 
                     </LinearLayout>
+
+                    <View
+                        android:layout_width="2dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/my_divider"
+                        android:backgroundTint="@color/backgroundColorBeige"/>
 
 
                     <LinearLayout
@@ -249,7 +283,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
                             android:layout_marginBottom="8dp"
-                            android:text="Coffee Units" />
+                            android:text="Coffee" />
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -265,7 +299,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:layout_marginRight="8dp"
-                                android:text="Grams" />
+                                android:text="G" />
 
                             <android.support.v7.widget.SwitchCompat
                                 android:id="@+id/coffee_units_switch"
@@ -282,42 +316,43 @@
                                 android:layout_gravity="center"
                                 android:layout_marginLeft="8dp"
                                 android:gravity="center"
-                                android:text="Ounces" />
+                                android:text="Oz" />
 
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
+            </android.support.v7.widget.CardView>
 
 
-                <LinearLayout
+
+
+            <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:clipToPadding="false"
-                    android:layout_marginTop="24dp"
-                    android:layout_margin="24dp">
+                    android:layout_margin="16dp"
+                    >
 
                     <Button
                         android:id="@+id/reset_button"
                         style="@style/TextAppearance.AppCompat.Title"
-                        android:layout_width="120dp"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="56dp"
                         android:layout_marginBottom="8dp"
+                        android:layout_marginRight="8dp"
                         android:text="Reset"
-                        android:backgroundTint="@color/backgroundColorBeige"
+                        android:backgroundTint="@color/backgroundDefaultWhite"
                         android:textColor="@color/colorAccent"
-                        />
-
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
                         />
 
                     <Button
                         android:id="@+id/start_button"
                         style="@style/TextAppearance.AppCompat.Title"
-                        android:layout_width="120dp"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
                         android:layout_height="56dp"
+                        android:layout_marginLeft="8dp"
                         android:layout_marginBottom="8dp"
                         android:backgroundTint="@color/colorAccent"
                         android:text="Start"
@@ -329,5 +364,4 @@
 
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
-    </android.support.v7.widget.CardView>
 </FrameLayout>
