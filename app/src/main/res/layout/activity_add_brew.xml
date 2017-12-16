@@ -47,6 +47,7 @@
         android:layout_weight="1"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:clipToPadding="false"
+        android:id="@+id/nested_scrollview"
         >
 
     <LinearLayout
@@ -79,7 +80,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:gravity="center">
 
                 <TextView
                     android:id="@+id/recipe_name_tv"
@@ -88,18 +90,27 @@
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:text= "Name"
-
                     />
 
-                <EditText
-                    android:id="@+id/recipe_name_edit"
-                    style="@style/TextAppearance.AppCompat.Subhead"
+                <android.support.design.widget.TextInputLayout
                     android:layout_width="0dp"
                     android:layout_weight="2"
                     android:layout_height="wrap_content"
-                    android:hint="My new brew"
-                    android:inputType="text"
-                    android:singleLine="true" />
+                    android:id="@+id/name_text_input_layout">
+                    <EditText
+                        android:id="@+id/recipe_name_edit"
+                        style="@style/TextAppearance.AppCompat.Subhead"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="New brew name"
+                        android:inputType="text"
+                        android:singleLine="true" />
+
+
+                </android.support.design.widget.TextInputLayout>
+
+
+
             </LinearLayout>
 
             <LinearLayout
@@ -130,7 +141,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:gravity="center">
                     <TextView
                         android:id="@+id/grind_tv"
                         style="@style/TextAppearance.AppCompat.Subhead"
@@ -139,14 +151,24 @@
                         android:layout_height="wrap_content"
                         android:text="Grind" />
 
-                    <EditText
-                        android:id="@+id/grind_edit"
-                        style="@style/TextAppearance.AppCompat.Subhead"
+                    <android.support.design.widget.TextInputLayout
                         android:layout_width="0dp"
-                        android:layout_weight="2"
                         android:layout_height="wrap_content"
-                        android:inputType="text"
-                        android:singleLine="true" />
+                        android:layout_weight="2"
+                        android:id="@+id/grind_setting_textinput">
+
+                        <EditText
+                            android:id="@+id/grind_edit"
+                            style="@style/TextAppearance.AppCompat.Subhead"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="text"
+                            android:singleLine="true"
+                            android:hint="Grind setting"/>
+
+
+                    </android.support.design.widget.TextInputLayout>
+
 
                 </LinearLayout>
 
@@ -223,7 +245,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_marginBottom="8dp"
-                    android:gravity="end">
+                    android:gravity="center">
 
 
 
@@ -231,20 +253,34 @@
                         android:id="@+id/coffee_units_text_view"
                         style="@style/TextAppearance.AppCompat.Subhead"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
+                        android:layout_weight="3"
                         android:layout_height="wrap_content"
-                        android:text="Coffee" />
+                        android:text="Coffee weight" />
 
 
-                    <EditText
-                        android:id="@+id/coffee_amount_edit"
-                        style="@style/TextAppearance.AppCompat.Subhead"
+                    <android.support.design.widget.TextInputLayout
                         android:layout_width="0dp"
                         android:layout_weight="2"
                         android:layout_height="wrap_content"
-                        android:hint="100"
-                        android:inputType="number"
+                        android:id="@+id/coffee_weight_textinput">
+                    <EditText
+                        android:id="@+id/coffee_amount_edit"
+                        style="@style/TextAppearance.AppCompat.Subhead"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Example 0.86"
+                        android:inputType="numberDecimal"
                         android:singleLine="true" />
+
+                    </android.support.design.widget.TextInputLayout>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        style="@style/TextAppearance.AppCompat.Body1"
+                        android:layout_marginRight="8dp"
+                        android:id="@+id/dynamic_coffee_units_text_view"
+                        android:text="G"/>
 
                 </LinearLayout>
 
@@ -253,25 +289,44 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_marginBottom="8dp"
+                    android:gravity="center"
                     >
                     <TextView
                         android:id="@+id/water_units_text_view"
-                        style="@style/TextAppearance.AppCompat.Subhead"
+                        style="@style/TextAppearance.AppCompat.Body1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_weight="3"
                         android:text="Water" />
 
 
-                    <EditText
-                        android:id="@+id/water_amount_edit"
-                        style="@style/TextAppearance.AppCompat.Subhead"
+                    <android.support.design.widget.TextInputLayout
                         android:layout_width="0dp"
                         android:layout_weight="2"
                         android:layout_height="wrap_content"
-                        android:inputType="number"
-                        android:hint="500"
+                        android:id="@+id/water_weight_textinput">
+                    <EditText
+                        android:id="@+id/water_amount_edit"
+                        style="@style/TextAppearance.AppCompat.Body1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal"
+                        android:hint="Example: 16"
                         android:singleLine="true" />
+
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        style="@style/TextAppearance.AppCompat.Body1"
+                        android:layout_marginRight="8dp"
+                        android:id="@+id/dynamic_water_units_text_view"
+                        android:text="G"/>
+
+
 
                 </LinearLayout>
 
@@ -307,7 +362,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_marginBottom="8dp"
-                    android:gravity="end">
+                    android:gravity="center">
                     <TextView
                         android:id="@+id/bloom_time_tv"
                         style="@style/TextAppearance.AppCompat.Subhead"
@@ -315,35 +370,33 @@
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:text="Bloom time" />
-                    <EditText
-                        android:id="@+id/bloom_time_edit"
-                        style="@style/TextAppearance.AppCompat.Subhead"
+
+                    <android.support.design.widget.TextInputLayout
                         android:layout_width="0dp"
                         android:layout_weight="2"
                         android:layout_height="wrap_content"
-                        android:inputType="time"
-                        android:singleLine="true" />
+                        android:id="@+id/bloom_time_textinput">
+                        <EditText
+                            android:id="@+id/bloom_time_edit"
+                            style="@style/TextAppearance.AppCompat.Subhead"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="time"
+                            android:hint="Example 0:30"
+                            android:singleLine="true" />
+
+
+                    </android.support.design.widget.TextInputLayout>
 
                 </LinearLayout>
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_marginBottom="8dp"
-                    android:gravity="end">
-
-
-
-
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="8dp"
+                    android:gravity="center"
                     >
 
                     <TextView
@@ -354,15 +407,21 @@
                         android:layout_height="wrap_content"
                         android:text="Brew time" />
 
-                    <EditText
-                        android:id="@+id/brew_time_edit"
-                        style="@style/TextAppearance.AppCompat.Subhead"
+                    <android.support.design.widget.TextInputLayout
                         android:layout_width="0dp"
                         android:layout_weight="2"
                         android:layout_height="wrap_content"
-                        android:inputType="time"
-                        android:singleLine="true" />
+                        android:id="@+id/brew_time_textinput">
 
+                    <EditText
+                        android:id="@+id/brew_time_edit"
+                        style="@style/TextAppearance.AppCompat.Subhead"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="time"
+                        android:hint="Example: 1:45"
+                        android:singleLine="true" />
+                    </android.support.design.widget.TextInputLayout>
 
                 </LinearLayout>
 
@@ -410,8 +469,11 @@
         <Button
             android:id="@+id/add_brew_button"
             style="@style/TextAppearance.AppCompat.Button"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_marginRight="64dp"
+            android:layout_marginLeft="64dp"
+            android:layout_height="72dp"
             android:layout_gravity="center"
             android:layout_margin="16dp"
             android:backgroundTint="@color/colorAccent"

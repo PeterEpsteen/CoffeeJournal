@@ -2,6 +2,8 @@ package com.example.peter.coffeejournal;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.design.widget.TextInputLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,13 +12,18 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
+
+import org.w3c.dom.Text;
 
 public class AddBrew extends AppCompatActivity implements View.OnClickListener {
 
@@ -25,6 +32,21 @@ public class AddBrew extends AppCompatActivity implements View.OnClickListener {
     int ratio, brewTime, bloomTime, metric, icon;
     DBOperator db;
     double waterUnits, coffeeUnits;
+    SwitchCompat metricEdit;
+    TextView dynamicWaterUnitsTv, dynamicCoffeeUnitsTv;
+    NestedScrollView nsv;
+    EditText nameEdit;
+    EditText grindEdit;
+    EditText notesEdit;
+    EditText coffeeEdit;
+    EditText waterEdit;
+    EditText brewTimeEdit;
+    EditText bloomTimeEdit;
+    TextInputLayout nameTI;
+    TextInputLayout coffeeWeightTI;
+    TextInputLayout waterWeightTI;
+    TextView nameTextView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +63,41 @@ public class AddBrew extends AppCompatActivity implements View.OnClickListener {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        nsv = findViewById(R.id.nested_scrollview);
         Button btn = findViewById(R.id.add_brew_button);
         btn.setOnClickListener(this);
+
+        //Initialize all settings for BrewRecipe obj
+        //Get all edit texts
+         nameEdit = findViewById(R.id.recipe_name_edit);
+         grindEdit = findViewById(R.id.grind_edit);
+         notesEdit = findViewById(R.id.notes_edit);
+         coffeeEdit = findViewById(R.id.coffee_amount_edit);
+         waterEdit = findViewById(R.id.water_amount_edit);
+         brewTimeEdit = findViewById(R.id.brew_time_edit);
+         bloomTimeEdit = findViewById(R.id.bloom_time_edit);
+         nameTI = findViewById(R.id.name_text_input_layout);
+         coffeeWeightTI = findViewById(R.id.coffee_weight_textinput);
+         waterWeightTI = findViewById(R.id.water_weight_textinput);
+        nameTextView = findViewById(R.id.recipe_name_tv);
+
+         dynamicWaterUnitsTv = findViewById(R.id.dynamic_water_units_text_view);
+        dynamicCoffeeUnitsTv = findViewById(R.id.dynamic_coffee_units_text_view);
+        metricEdit = findViewById(R.id.metric_edit);
+        metricEdit.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    dynamicCoffeeUnitsTv.setText("Oz");
+                    dynamicWaterUnitsTv.setText("Oz");
+                }
+
+                else {
+                    dynamicWaterUnitsTv.setText("G");
+                    dynamicCoffeeUnitsTv.setText("G");
+                }
+            }
+        });
 
         Spinner spinner = findViewById(R.id.brew_method_spinner);
 // Create an ArrayAdapter using the string array and a default spinner layout
@@ -69,16 +124,8 @@ public class AddBrew extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        //Initialize all settings for BrewRecipe obj
-        //Get all edit texts
-        EditText nameEdit = findViewById(R.id.recipe_name_edit);
-        EditText grindEdit = findViewById(R.id.grind_edit);
-        EditText notesEdit = findViewById(R.id.notes_edit);
-        SwitchCompat metricEdit = findViewById(R.id.metric_edit);
-        EditText coffeeEdit = findViewById(R.id.coffee_amount_edit);
-        EditText waterEdit = findViewById(R.id.water_amount_edit);
-        EditText brewTimeEdit = findViewById(R.id.brew_time_edit);
-        EditText bloomTimeEdit = findViewById(R.id.bloom_time_edit);
+
+
 
         Context context = getApplicationContext();
         int duration = Toast.LENGTH_LONG;
@@ -86,9 +133,18 @@ public class AddBrew extends AppCompatActivity implements View.OnClickListener {
         name = nameEdit.getText().toString();
 
         if(name.equals("")) {
-            CharSequence text = "Please enter a valid brew name.";
-            Toast toast = Toast.makeText(context, text, duration);
-            toast.show();
+            //Request focus to text view and pop keyboard up
+            nsv.scrollTo(0,0);
+            nameEdit.requestFocus();
+            nameTI.setError("Brew name required!");
+            nameEdit.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    InputMethodManager keyboard = (InputMethodManager)
+                            getSystemService(Context.INPUT_METHOD_SERVICE);
+                    keyboard.showSoftInput(nameEdit, 0);
+                }
+            },200);
         }
         else {
             //Spinner selection is handled in onItemSelected above
@@ -101,15 +157,29 @@ public class AddBrew extends AppCompatActivity implements View.OnClickListener {
             String coffeeUnitsString = coffeeEdit.getText().toString();
             String waterUnitsString = waterEdit.getText().toString();
             if(coffeeUnitsString.equals("")) {
-                CharSequence text = "Please enter amount of coffee.";
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
+                coffeeWeightTI.setError("Coffee weight required!");
+                coffeeEdit.requestFocus();
+                coffeeEdit.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        InputMethodManager keyboard = (InputMethodManager)
+                                getSystemService(Context.INPUT_METHOD_SERVICE);
+                        keyboard.showSoftInput(coffeeEdit, 0);
+                    }
+                },200);
                 return;
             }
             if(waterUnitsString.equals("")) {
-                CharSequence text = "Please enter amount of water.";
-                Toast toast = Toast.makeText(context, text, duration);
-                toast.show();
+                waterEdit.requestFocus();
+                waterWeightTI.setError("Water weight required!");
+                waterEdit.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        InputMethodManager keyboard = (InputMethodManager)
+                                getSystemService(Context.INPUT_METHOD_SERVICE);
+                        keyboard.showSoftInput(waterEdit, 0);
+                    }
+                },200);
                 return;
             }
 
@@ -117,6 +187,7 @@ public class AddBrew extends AppCompatActivity implements View.OnClickListener {
             waterUnits = Double.parseDouble(waterEdit.getText().toString());
             brewTime = 0;
             String timeString = brewTimeEdit.getText().toString();
+
             if(!timeString.equals("")) {
                 String[] array1 = timeString.split(":");
                 if (array1.length > 1 && !array1[0].equals("")) {

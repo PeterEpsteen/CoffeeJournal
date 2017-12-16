@@ -70,10 +70,10 @@ public class BrewRecipe {
     public int getIcon() {
         switch (brewMethod) {
             case "Pour Over":
-                icon = R.drawable.pour_over;
+                icon = R.drawable.pour_over_circle;
                 break;
             case "French Press":
-                icon = R.drawable.french_press;
+                icon = R.drawable.french_press_circle;
                 break;
             case "Chemex":
                 icon = R.drawable.chemex;
@@ -88,7 +88,7 @@ public class BrewRecipe {
                 icon = R.drawable.moka;
                 break;
             default:
-                icon = R.drawable.pour_over;
+                icon = R.drawable.pour_over_circle;
                 break;
 
         }
