@@ -65,7 +65,7 @@
                             android:includeFontPadding="false"
                             android:text="-"
                             android:textAlignment="center"
-                            android:textColor="@color/colorAccent"
+                            android:textColor="@color/colorTextDark"
                              />
 
                         <SeekBar
@@ -75,7 +75,8 @@
                             android:layout_gravity="center"
                             android:padding="8dp"
                             android:layout_weight="1"
-                            android:backgroundTint="@color/colorAccent"
+                            android:backgroundTint="@color/colorPrimary"
+                            android:progressTint="@color/colorPrimary"
                             android:max="3000"
                             android:thumb="@drawable/custom_thumb"
                             />
@@ -91,7 +92,7 @@
                             android:includeFontPadding="false"
                             android:text="+"
                             android:textAlignment="center"
-                            android:textColor="@color/colorAccent" />
+                            android:textColor="@color/colorTextDark" />
 
 
                     </LinearLayout>
@@ -343,7 +344,7 @@
                         android:layout_marginRight="8dp"
                         android:text="Reset"
                         android:backgroundTint="@color/backgroundDefaultWhite"
-                        android:textColor="@color/colorAccent"
+                        android:textColor="@color/colorTextDark"
                         />
 
                     <Button

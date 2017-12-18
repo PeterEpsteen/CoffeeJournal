@@ -23,6 +23,7 @@ import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -92,6 +93,9 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemLongClic
             String brewName = tv.getText().toString();
             switch (item.getItemId()) {
                 case R.id.menu_edit:
+                    Intent myIntent = new Intent(getContext(), AddBrew.class);
+                    myIntent.putExtra("Brew Name", brewName);
+                    startActivityForResult(myIntent, 1);
                     return true;
                 case R.id.menu_delete:
                     Log.i("Info", "You would be deleting this brew: " + brewName);
@@ -162,6 +166,10 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemLongClic
         void onFragmentInteraction(Uri uri);
     }
 
-
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        getActivity().finish();
+        startActivity(getActivity().getIntent());
+    }
 }

@@ -309,9 +309,30 @@ public class DBOperator extends SQLiteOpenHelper {
         cv.put(BLOOM_TIME, br.getBloomTime());
         cv.put(BREW_TIME, br.getBrewTime());
         cv.put(TEMP, "200");  //NOT SURE
-        return db.insert(BREW_TABLE_NAME, null, cv);
+        long returnLong = db.insert(BREW_TABLE_NAME, null, cv);
+        db.close();
+        return returnLong;
 
 
+    }
+
+    public long update(BrewRecipe br) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(NAME, br.getName());
+        cv.put(BREW_METHOD, br.getBrewMethod());
+        cv.put(COFFEE_UNITS, br.getCoffeeUnits());
+        cv.put(WATER_UNITS, br.getWaterUnits());
+        cv.put(METRIC, br.getMetric());
+        cv.put(NOTES, br.getNotes());
+        cv.put(GRIND, br.getGrind());
+        cv.put(BLOOM_TIME, br.getBloomTime());
+        cv.put(BREW_TIME, br.getBrewTime());
+        cv.put(TEMP, "200");  //NOT SURE
+        String whereClause = NAME + " = '" + br.getName() + "'";
+        long returnLong = db.update(BREW_TABLE_NAME, cv, whereClause, null);
+        db.close();
+        return returnLong;
     }
 
     public long insert(Roast roast) {
@@ -348,7 +369,7 @@ public class DBOperator extends SQLiteOpenHelper {
             cv.put(TEMP, step.getTemp());
             cv.put(NOTES, step.getComment());
             cv.put(ROAST_ID, roastID);
-            db.insert(ROAST_STEPS_TABLE_NAME, null, cv);
+            returnVal = db.insert(ROAST_STEPS_TABLE_NAME, null, cv);
             Log.i("Insert", "Inserted " + step.getTime());
         }
 

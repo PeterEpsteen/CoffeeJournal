@@ -70,7 +70,8 @@
                             android:layout_gravity="center"
                             android:layout_margin="8dp"
                             android:layout_weight="1"
-                            android:backgroundTint="@color/colorAccent"
+                            android:backgroundTint="@color/colorPrimary"
+                            android:progressTint="@color/colorPrimary"
                             android:max="3000"
                             android:progress="1000" />
 

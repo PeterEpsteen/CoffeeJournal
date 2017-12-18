@@ -8,6 +8,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SwitchCompat;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -25,10 +27,12 @@ import android.widget.Toolbar;
 
 import org.w3c.dom.Text;
 
+import java.util.regex.Pattern;
+
 public class AddBrew extends AppCompatActivity implements View.OnClickListener {
 
     BrewRecipe br;
-    String name, brewMethod, grind, notes;
+    String name, brewMethod, grind, notes, editBrewName;
     int ratio, brewTime, bloomTime, metric, icon;
     DBOperator db;
     double waterUnits, coffeeUnits;
@@ -40,8 +44,8 @@ public class AddBrew extends AppCompatActivity implements View.OnClickListener {
     EditText notesEdit;
     EditText coffeeEdit;
     EditText waterEdit;
-    EditText brewTimeEdit;
-    EditText bloomTimeEdit;
+    EditText brewTimeEditMinutes, brewTimeEditSeconds;
+    EditText bloomTimeEditMinutes, bloomTimeEditSeconds;
     TextInputLayout nameTI;
     TextInputLayout coffeeWeightTI;
     TextInputLayout waterWeightTI;
@@ -55,6 +59,8 @@ public class AddBrew extends AppCompatActivity implements View.OnClickListener {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_brew);
+        Intent myIntent = getIntent();
+        editBrewName = myIntent.getStringExtra("Brew Name");
 
         android.support.v7.widget.Toolbar mtoolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(mtoolbar);
@@ -74,9 +80,50 @@ public class AddBrew extends AppCompatActivity implements View.OnClickListener {
          notesEdit = findViewById(R.id.notes_edit);
          coffeeEdit = findViewById(R.id.coffee_amount_edit);
          waterEdit = findViewById(R.id.water_amount_edit);
-         brewTimeEdit = findViewById(R.id.brew_time_edit);
-         bloomTimeEdit = findViewById(R.id.bloom_time_edit);
-         nameTI = findViewById(R.id.name_text_input_layout);
+         brewTimeEditMinutes = findViewById(R.id.brew_time_edit_minutes);
+        brewTimeEditSeconds = findViewById(R.id.brew_time_edit_seconds);
+        bloomTimeEditMinutes = findViewById(R.id.bloom_time_edit_minutes);
+        bloomTimeEditSeconds = findViewById(R.id.bloom_time_edit_seconds);
+
+        bloomTimeEditMinutes.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (bloomTimeEditMinutes.getText().toString().length() == 2) {
+                    bloomTimeEditSeconds.requestFocus();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        brewTimeEditMinutes.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(brewTimeEditMinutes.getText().toString().length() == 2) {
+                    brewTimeEditSeconds.requestFocus();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        nameTI = findViewById(R.id.name_text_input_layout);
          coffeeWeightTI = findViewById(R.id.coffee_weight_textinput);
          waterWeightTI = findViewById(R.id.water_weight_textinput);
         nameTextView = findViewById(R.id.recipe_name_tv);
@@ -120,12 +167,64 @@ public class AddBrew extends AppCompatActivity implements View.OnClickListener {
 
             }
         });
+
+        if (editBrewName != null) {
+            actionBar.setTitle("Edit Brew");
+            btn.setText("Save Edit");
+            DBOperator dbOperator = new DBOperator(this);
+            BrewRecipe editBrew = dbOperator.getBrewRecipe(editBrewName);
+            nameEdit.setText(editBrew.getName());
+            grindEdit.setText(editBrew.getGrind());
+            notesEdit.setText(editBrew.getNotes());
+            coffeeEdit.setText(String.valueOf(editBrew.getCoffeeUnits()));
+            waterEdit.setText(String.valueOf(editBrew.getWaterUnits()));
+            if(!editBrew.isMetric()) {
+                metricEdit.setChecked(true);
+            }
+            int brewTimeInt = editBrew.getBrewTime();
+            int mins = brewTimeInt/60;
+            int secs = brewTimeInt % 60;
+            brewTimeEditSeconds.setText(Integer.toString(secs));
+            brewTimeEditMinutes.setText(Integer.toString(mins));
+            int bloomTimeInt = editBrew.getBloomTime();
+            int minsBloom = bloomTimeInt/60;
+            int secsBloom = bloomTimeInt % 60;
+            bloomTimeEditMinutes.setText(Integer.toString(minsBloom));
+            bloomTimeEditSeconds.setText(Integer.toString(secsBloom));
+            String method = editBrew.getBrewMethod();
+            switch (method) {
+                case "Pour Over":
+                    spinner.setSelection(0);
+                    break;
+                case "Aeropress":
+                    spinner.setSelection(1);
+                    break;
+                case "French Press":
+                    spinner.setSelection(2);
+                    break;
+                case "Chemex":
+                    spinner.setSelection(3);
+                    break;
+                case "Espresso":
+                    spinner.setSelection(4);
+                    break;
+                case "Moka Pot":
+                    spinner.setSelection(5);
+                    break;
+                case "Other":
+                    spinner.setSelection(6);
+                    break;
+            }
+
+        }
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(View v) {insertBrew();}
 
+    public void insertBrew() {
 
+        Log.i("DB", "Attempting to insert Brew");
 
         Context context = getApplicationContext();
         int duration = Toast.LENGTH_LONG;
@@ -185,43 +284,84 @@ public class AddBrew extends AppCompatActivity implements View.OnClickListener {
 
             coffeeUnits = Double.parseDouble(coffeeEdit.getText().toString());
             waterUnits = Double.parseDouble(waterEdit.getText().toString());
-            brewTime = 0;
-            String timeString = brewTimeEdit.getText().toString();
 
-            if(!timeString.equals("")) {
-                String[] array1 = timeString.split(":");
-                if (array1.length > 1 && !array1[0].equals("")) {
-                    brewTime = Integer.parseInt(array1[0]) * 60 + Integer.parseInt(array1[1]);
-                } else if (array1.length > 1 && array1[0].equals("")) {
-                    bloomTime = Integer.parseInt(array1[1]);
-                } else {
-                    brewTime = Integer.parseInt(array1[0]);
-                }
+            brewTime = 0;
+            String brewTimeStringSecs = brewTimeEditSeconds.getText().toString();
+            String brewTimeStringMins = brewTimeEditMinutes.getText().toString();
+            int brewmins = 0;
+            int brewsecs = 0;
+
+            if(!brewTimeStringMins.equals("")) {
+                brewmins = Integer.parseInt(brewTimeStringMins);
             }
+
+            if(!brewTimeStringSecs.equals("")) {
+                brewsecs = Integer.parseInt(brewTimeStringSecs);
+            }
+
+            brewTime = (brewmins * 60) + brewsecs;
 
             bloomTime = 0;
-            String bloomTimeString = bloomTimeEdit.getText().toString();
-            if (!bloomTimeString.equals("")) {
-                String[] array2 = bloomTimeString.split(":");
-                if (array2.length > 1 && !array2[0].equals("")) {
-                    bloomTime = Integer.parseInt(array2[0]) * 60 + Integer.parseInt(array2[1]);
-                } else if (array2.length > 1 && array2[0].equals("")) {
-                    bloomTime = Integer.parseInt(array2[1]);
-                } else {
-                    bloomTime = Integer.parseInt(array2[0]);
-                }
+            String bloomTimeStringSecs = bloomTimeEditSeconds.getText().toString();
+            String bloomTimeStringMins = bloomTimeEditMinutes.getText().toString();
+            int bloommins = 0;
+            int bloomsecs = 0;
+
+            if(!bloomTimeStringMins.equals("")) {
+                bloommins = Integer.parseInt(bloomTimeStringMins);
             }
+
+            if(!bloomTimeStringSecs.equals("")) {
+                bloomsecs = Integer.parseInt(bloomTimeStringSecs);
+            }
+
+            bloomTime = (bloommins * 60) + bloomsecs;
+
+
+
+
 
             //Create brewRecipe, open db and insert
             br = new BrewRecipe(name, brewMethod, grind, notes, coffeeUnits, waterUnits, metric, brewTime, bloomTime);
             db = new DBOperator(this);
+
+            Toast myToast = Toast.makeText(getApplicationContext(), "Error inserting or updating", duration);
+
+
+            if (editBrewName == null) {
             long rows = db.insert(br);
             if (rows != -1)
                 Log.i("db", "Sucessfully inserted rows: " + rows);
-            Intent myIntent = new Intent(this, MainActivity.class);
-            startActivity(myIntent);
             finish();
+            }
+
+            if (editBrewName != null && !editBrewName.equals(name)) {
+                long rows = db.insert(br);
+                if (rows != -1)
+                    Log.i("db", "Sucessfully inserted rows: " + rows);
+                else
+                    myToast.show();
+
+                finish();
+            }
+
+            else {
+                long rows = db.update(br);
+                if (rows != -1) {
+                    Log.i("db", "Sucessfully inserted rows: " + rows);
+                    finish();
+                }
+                else {
+                    myToast.show();
+                }
+            }
+            db.close();
 
         }
+
     }
+
+    private static final String TIME24HOURS_PATTERN = "([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]";
+
+
 }

@@ -57,7 +57,6 @@ public class RoastAdapter extends BaseAdapter {
 
         Roast roast = new Roast();
         roast = roastList.get(position);
-        Log.i("Brew", "Name " + position + ": " + roast.getName());
         roastNameTv.setText(roast.getName());
         dateAddedTv.setText(roast.getDate());
 

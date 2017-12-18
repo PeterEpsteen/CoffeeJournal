@@ -22,7 +22,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -39,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements BrewFragment.OnFr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mDBOperator = new DBOperator(this);
 
         mSectionsPageAdapter = new SectionsPageAdapter(getSupportFragmentManager());
         mViewPager = findViewById(R.id.container);
@@ -87,6 +90,67 @@ public class MainActivity extends AppCompatActivity implements BrewFragment.OnFr
     @Override
     public void onFragmentInteraction2(Uri uri) {
 
+    }
+
+
+    public void showMenu(View view) {
+        PopupMenu popup = new PopupMenu(this, view);
+        popup.inflate(R.menu.brew_menu);
+        popup.show();
+        View v = (View) view.getParent();
+        TextView tv = v.findViewById(R.id.brew_title_text_view);
+        String brewName = tv.getText().toString();
+        popup.setOnMenuItemClickListener(new myMenuClickListener(brewName));
+    }
+
+
+    public void deleteBrew(String brewName) {
+        boolean returnB = mDBOperator.deleteBrew(brewName);
+        if (returnB) {
+            recreate();
+        }
+
+    }
+
+    public void editBrew(String brewName) {
+        Intent myIntent = new Intent(this, AddBrew.class);
+        myIntent.putExtra("Brew Name", brewName);
+        startActivityForResult(myIntent, 1);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+            Intent refresh = new Intent(this, MainActivity.class);
+            startActivity(refresh);
+            this.finish();
+    }
+
+
+
+    class myMenuClickListener implements PopupMenu.OnMenuItemClickListener {
+        String brewName;
+
+        public myMenuClickListener(String brewName) {
+            this.brewName = brewName;
+        }
+
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+            // Handle item selection
+
+            switch (item.getItemId()) {
+                case R.id.menu_delete:
+                    deleteBrew(brewName);
+                    return true;
+                case R.id.menu_edit:
+                    editBrew(brewName);
+                    return true;
+                default:
+                    return false;
+            }
+        }
     }
 }
 

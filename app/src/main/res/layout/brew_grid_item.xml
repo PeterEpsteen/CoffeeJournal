@@ -8,31 +8,32 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 <LinearLayout android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="16dp"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:gravity="center"
+    android:layout_margin="8dp"
+    android:descendantFocusability="blocksDescendants"
     >
 
     <ImageView
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
         android:scaleType="centerCrop"
         android:id="@+id/brew_method_icon_image_view"
         android:src="@drawable/pour_over_circle"
         />
 
     <LinearLayout android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:layout_marginLeft="16dp"
+        android:layout_width="0dp"
+        android:layout_weight="1"
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical">
 
     <TextView
         style="@style/TextAppearance.AppCompat.Headline"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/brew_title_text_view"
-        android:text="Testing"
+        android:text="Test"
         android:textAlignment="viewStart"
         />
 
@@ -50,20 +51,16 @@
 
 
 </LinearLayout>
-    <View
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        />
 
-    <ImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:scaleType="centerCrop"
-        android:layout_gravity="center_vertical"
-        android:tint="@color/colorPrimary"
+    <ImageButton
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:padding="8dp"
         android:src="@drawable/more_icon"
-        />
+        android:background="@color/backgroundDefaultWhite"
+        android:scaleType="centerCrop"
+        android:onClick="showMenu"
+        android:focusableInTouchMode="true"/>
 
 
 </LinearLayout>

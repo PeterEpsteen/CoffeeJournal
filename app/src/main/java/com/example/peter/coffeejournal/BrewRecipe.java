@@ -76,16 +76,16 @@ public class BrewRecipe {
                 icon = R.drawable.french_press_circle;
                 break;
             case "Chemex":
-                icon = R.drawable.chemex;
+                icon = R.drawable.chemex_circle;
                 break;
             case "Aeropress":
-                icon = R.drawable.aeropress;
+                icon = R.drawable.aeropress_circle;
                 break;
             case "Espresso":
-                icon = R.drawable.espresso_icon;
+                icon = R.drawable.espresso_circle;
                 break;
             case "Moka Pot":
-                icon = R.drawable.moka;
+                icon = R.drawable.moka_circle;
                 break;
             default:
                 icon = R.drawable.pour_over_circle;
@@ -94,6 +94,7 @@ public class BrewRecipe {
         }
         return icon;
     }
+
 
 
     public void setBloomTime(int bloomTime) {

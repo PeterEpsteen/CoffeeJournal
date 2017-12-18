@@ -262,13 +262,16 @@
                         android:layout_width="0dp"
                         android:layout_weight="2"
                         android:layout_height="wrap_content"
-                        android:id="@+id/coffee_weight_textinput">
+                        android:id="@+id/coffee_weight_textinput"
+                        android:layout_marginBottom="8dp">
                     <EditText
                         android:id="@+id/coffee_amount_edit"
                         style="@style/TextAppearance.AppCompat.Subhead"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Example 0.86"
+                        android:layout_marginRight="8dp"
+                        android:maxLength="5"
+                        android:gravity="end"
                         android:inputType="numberDecimal"
                         android:singleLine="true" />
 
@@ -304,14 +307,17 @@
                         android:layout_width="0dp"
                         android:layout_weight="2"
                         android:layout_height="wrap_content"
-                        android:id="@+id/water_weight_textinput">
+                        android:id="@+id/water_weight_textinput"
+                        android:layout_marginBottom="8dp">
                     <EditText
                         android:id="@+id/water_amount_edit"
                         style="@style/TextAppearance.AppCompat.Body1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginRight="8dp"
+                        android:gravity="end"
+                        android:maxLength="5"
                         android:inputType="numberDecimal"
-                        android:hint="Example: 16"
                         android:singleLine="true" />
 
 
@@ -367,26 +373,55 @@
                         android:id="@+id/bloom_time_tv"
                         style="@style/TextAppearance.AppCompat.Subhead"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="Bloom time" />
-
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="0dp"
                         android:layout_weight="2"
                         android:layout_height="wrap_content"
-                        android:id="@+id/bloom_time_textinput">
+                        android:text="Bloom time" />
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_height="wrap_content">
+
                         <EditText
-                            android:id="@+id/bloom_time_edit"
+                            android:id="@+id/bloom_time_edit_minutes"
                             style="@style/TextAppearance.AppCompat.Subhead"
-                            android:layout_width="match_parent"
+                            android:minWidth="56dp"
+                            android:layout_width="wrap_content"
+                            android:gravity="end"
                             android:layout_height="wrap_content"
-                            android:inputType="time"
-                            android:hint="Example 0:30"
-                            android:singleLine="true" />
+                            android:layout_marginRight="8dp"
+                            android:inputType="number"
+                            android:maxLength="2"
+                            android:singleLine="true"
+                            android:layout_marginBottom="8dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="m"
+                        android:gravity="center"/>
 
 
-                    </android.support.design.widget.TextInputLayout>
+                        <EditText
+                            android:id="@+id/bloom_time_edit_seconds"
+                            style="@style/TextAppearance.AppCompat.Subhead"
+                            android:minWidth="56dp"
+                            android:layout_width="wrap_content"
+                            android:gravity="end"
+                            android:layout_marginRight="8dp"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:maxLength="2"
+                            android:singleLine="true"
+                            android:layout_marginBottom="8dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="s"
+                        android:gravity="center"/>
+
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -403,25 +438,56 @@
                         android:id="@+id/brew_time_tv"
                         style="@style/TextAppearance.AppCompat.Subhead"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
+                        android:layout_weight="2"
                         android:layout_height="wrap_content"
                         android:text="Brew time" />
 
-                    <android.support.design.widget.TextInputLayout
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_weight="2"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/brew_time_textinput">
+                        android:layout_height="wrap_content">
 
-                    <EditText
-                        android:id="@+id/brew_time_edit"
-                        style="@style/TextAppearance.AppCompat.Subhead"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="time"
-                        android:hint="Example: 1:45"
-                        android:singleLine="true" />
-                    </android.support.design.widget.TextInputLayout>
+                        <EditText
+                            android:id="@+id/brew_time_edit_minutes"
+                            style="@style/TextAppearance.AppCompat.Subhead"
+                            android:minWidth="56dp"
+                            android:layout_width="wrap_content"
+                            android:gravity="end"
+                            android:layout_marginRight="8dp"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:maxLength="2"
+                            android:singleLine="true"
+                            android:layout_marginBottom="8dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="m"
+                            android:gravity="center"/>
+
+
+                        <EditText
+                            android:id="@+id/brew_time_edit_seconds"
+                            style="@style/TextAppearance.AppCompat.Subhead"
+                            android:minWidth="56dp"
+                            android:layout_width="wrap_content"
+                            android:layout_marginRight="8dp"
+                            android:gravity="end"
+                            android:layout_height="wrap_content"
+                            android:inputType="number"
+                            android:singleLine="true"
+                            android:maxLength="2"
+                            android:layout_marginBottom="8dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="s"
+                            android:gravity="center"/>
+
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
@@ -459,7 +525,10 @@
             style="@style/TextAppearance.AppCompat.Subhead"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:lines="4" />
+            android:lines="4"
+            android:hint="Add notes or instructions relating to the brew here"
+            android:gravity="bottom"
+            />
     </LinearLayout>
 
     </android.support.v7.widget.CardView>
