@@ -23,21 +23,28 @@ import android.widget.GridLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.PopupMenu;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 
-public class BrewFragment extends Fragment implements AdapterView.OnItemLongClickListener, AdapterView.OnItemClickListener {
+public class BrewFragment extends Fragment implements AdapterView.OnItemLongClickListener, AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener {
 
 
     private OnFragmentInteractionListener mListener;
     private FloatingActionButton addBrewButton;
     private GridView gv;
+    private ListView lv;
     private DBOperator mDBOperator;
     private BrewAdapter ba;
     private ArrayList<BrewRecipe> brewRecipeArrayList;
+    private String sortByCurrent;
+    private Spinner sortSpinner;
 
     public BrewFragment() {
         // Required empty public constructor
@@ -65,16 +72,21 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemLongClic
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_brew, container, false);
-        gv = rootView.findViewById(R.id.brew_grid_view);
+        lv = rootView.findViewById(R.id.brew_list_view);
         mDBOperator = new DBOperator(this.getContext());
         brewRecipeArrayList = mDBOperator.getBrewRecipes();
         ba = new BrewAdapter(rootView.getContext(), brewRecipeArrayList);
-        gv.setAdapter(ba);
-        gv.setOnItemClickListener(this);
-        registerForContextMenu(gv);
+        sortByCurrent = "Name";
+        sortBrewsBy(sortByCurrent);
+        lv.setOnItemClickListener(this);
+        registerForContextMenu(lv);
+        sortSpinner = rootView.findViewById(R.id.sort_by_spinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.brew_sort_array, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sortSpinner.setAdapter(adapter);
+        sortSpinner.setOnItemSelectedListener(this);
         return rootView;
-
-
 
     }
 
@@ -151,6 +163,19 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemLongClic
         startActivity(myIntent);
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String sortBy = parent.getItemAtPosition(position).toString();
+        if(!sortBy.equals(sortByCurrent))
+            sortBrewsBy(sortBy);
+        sortByCurrent = sortBy;
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -171,5 +196,31 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemLongClic
         super.onActivityResult(requestCode, resultCode, data);
         getActivity().finish();
         startActivity(getActivity().getIntent());
+    }
+
+    public void sortBrewsBy(String sortBy) {
+        Log.i("Sort", "Sort by called in brew fragment");
+        switch (sortBy) {
+            case "Name":
+                Collections.sort(brewRecipeArrayList, new Comparator<BrewRecipe>() {
+                    @Override
+                    public int compare(BrewRecipe o1, BrewRecipe o2) {
+                        return o1.getName().compareTo(o2.getName());
+                    }
+                });
+                break;
+            case "Method":
+                Collections.sort(brewRecipeArrayList, new Comparator<BrewRecipe>() {
+                    @Override
+                    public int compare(BrewRecipe o1, BrewRecipe o2) {
+                        return o1.getBrewMethod().compareTo(o2.getBrewMethod());
+                    }
+                });
+                break;
+
+        }
+
+        lv.setAdapter(ba);
+        ba.notifyDataSetChanged();
     }
 }

@@ -12,36 +12,58 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <TextView
+        android:orientation="vertical"
+       >
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/backgroundDefaultWhite"
+            android:orientation="horizontal"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:elevation="4dp"
+            >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="Brew Recipes"
-            android:padding="16dp"
-            android:background="@color/backgroundColorBeige"
-            android:elevation="@dimen/cardview_default_radius"
             style="@style/TextAppearance.AppCompat.Display1"
             android:textColor="@color/colorTextDark"
             android:id="@+id/pick_brew_tv"
             />
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="0dp"/>
+            <Spinner
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginRight="16dp"
+                android:id="@+id/sort_by_spinner"
+                android:gravity="end|center_vertical"
+                android:background="@drawable/sort_by_icon"
+                />
+
+        </LinearLayout>
 
 
-    <GridView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/brew_grid_view"
-        android:numColumns="1"
-        android:horizontalSpacing="32dp"
-        android:verticalSpacing="16dp"
-        android:layout_marginBottom="56dp"
-        android:padding="16dp"
-        android:clipToPadding="false"
->
-
-
-
-
-    </GridView>
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/brew_list_view"
+            android:layout_gravity="fill_vertical"
+            android:divider="@null"
+            android:dividerHeight="8dp"
+        android:paddingTop="16dp"
+        android:paddingRight="16dp"
+        android:paddingLeft="16dp"
+        android:paddingBottom="40dp"
+        android:clipToPadding="false">
+    </ListView>
     </LinearLayout>
 </FrameLayout>
 

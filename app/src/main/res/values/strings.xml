@@ -45,6 +45,12 @@
         <item>-1</item>
     </string-array>
 
+    <string-array name="brew_sort_array">
+        <item>Name</item>
+        <item>Method</item>
+        <item>Date Added</item>
+    </string-array>
+
     <!-- Example settings for Data & Sync -->
     <string name="pref_header_data_sync">Data &amp; sync</string>
 
