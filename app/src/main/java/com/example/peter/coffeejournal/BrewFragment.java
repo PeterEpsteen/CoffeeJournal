@@ -1,13 +1,21 @@
 package com.example.peter.coffeejournal;
 
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.preference.PreferenceManager;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -28,30 +36,39 @@ import android.widget.PopupMenu;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 
 public class BrewFragment extends Fragment implements AdapterView.OnItemLongClickListener, AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener {
 
 
+    private static final String LIST_STATE_KEY = "key";
+    private static final String BREW_RECIPE_LIST_KEY = "key2" ;
+    private static final String BREW_RECIPE_PREFERENCE_KEY = "brewListKey";
     private OnFragmentInteractionListener mListener;
     private FloatingActionButton addBrewButton;
-    private GridView gv;
-    private ListView lv;
+    private RecyclerView rv;
     private DBOperator mDBOperator;
     private BrewAdapter ba;
     private ArrayList<BrewRecipe> brewRecipeArrayList;
     private String sortByCurrent;
     private Spinner sortSpinner;
+    private ItemTouchHelper itemTouchHelper;
+    LinearLayoutManager llm;
+    private Parcelable mListState;
 
     public BrewFragment() {
         // Required empty public constructor
     }
 
 
-    // TODO: Rename and change types and number of parameters
     public static BrewFragment newInstance(String param1, String param2) {
         BrewFragment fragment = new BrewFragment();
         Bundle args = new Bundle();
@@ -68,18 +85,75 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemLongClic
     }
 
     @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null) {
+            Parcelable savedRecyclerLayoutState = savedInstanceState.getParcelable(LIST_STATE_KEY);
+            rv.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
+            brewRecipeArrayList = savedInstanceState.getParcelableArrayList(BREW_RECIPE_LIST_KEY);
+            ba.setBrewList(brewRecipeArrayList);
+        }
+
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // TODO ROAST LISTS RECYCLERVIEW + SORT
+
+
+
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_brew, container, false);
-        lv = rootView.findViewById(R.id.brew_list_view);
+        rv = rootView.findViewById(R.id.brew_recycler_view);
+        llm = new LinearLayoutManager(getActivity());
+        rv.setLayoutManager(llm);
         mDBOperator = new DBOperator(this.getContext());
-        brewRecipeArrayList = mDBOperator.getBrewRecipes();
+        if (brewRecipeArrayList == null) {
+            brewRecipeArrayList = mDBOperator.getBrewRecipes();
+        }
+        Gson gson = new Gson();
+        SharedPreferences appSharedPrefs = PreferenceManager
+                .getDefaultSharedPreferences(this.getActivity().getApplicationContext());
+        String json = appSharedPrefs.getString(BREW_RECIPE_PREFERENCE_KEY, "");
+        if (json.isEmpty()){
+             Log.i("Shared Pref", "No shared preferences");
+        }
+        else {
+             Log.i("Shared Pref", "Loading shared preferences");
+             Type type = new TypeToken<List<BrewRecipe>>(){}.getType();
+             brewRecipeArrayList = gson.fromJson(json, type);
+         }
         ba = new BrewAdapter(rootView.getContext(), brewRecipeArrayList);
-        sortByCurrent = "Name";
-        sortBrewsBy(sortByCurrent);
-        lv.setOnItemClickListener(this);
-        registerForContextMenu(lv);
+        rv.setAdapter(ba);
+
+        //handle drog drop
+        ItemTouchHelper.Callback ithCallback = new ItemTouchHelper.Callback() {
+            //and in your imlpementaion of
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                // get the viewHolder's and target's positions in your adapter data, swap them
+                Collections.swap(brewRecipeArrayList, viewHolder.getAdapterPosition(), target.getAdapterPosition());
+                // and notify the adapter that its dataset has changed
+                ba.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+                return true;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                //TODO
+            }
+
+            //defines the enabled move directions in each state (idle, swiping, dragging).
+            @Override
+            public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                return makeFlag(ItemTouchHelper.ACTION_STATE_DRAG,
+                        ItemTouchHelper.DOWN | ItemTouchHelper.UP );
+            }
+        };
+        ItemTouchHelper ith = new ItemTouchHelper(ithCallback);
+        ith.attachToRecyclerView(rv);
+
+
         sortSpinner = rootView.findViewById(R.id.sort_by_spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
                 R.array.brew_sort_array, android.R.layout.simple_spinner_item);
@@ -89,6 +163,8 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemLongClic
         return rootView;
 
     }
+
+
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
@@ -123,7 +199,26 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemLongClic
         return false;
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        SharedPreferences appSharedPrefs = PreferenceManager
+                .getDefaultSharedPreferences(this.getActivity().getApplicationContext());
+        SharedPreferences.Editor prefsEditor = appSharedPrefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(ba.getBrewList());
+        prefsEditor.putString(BREW_RECIPE_PREFERENCE_KEY, json);
+        prefsEditor.apply();
+    }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        mListState = llm.onSaveInstanceState();
+        outState.putParcelable(LIST_STATE_KEY, mListState);
+        outState.putParcelableArrayList(BREW_RECIPE_LIST_KEY, ba.getBrewList());
+    }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
@@ -201,7 +296,7 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemLongClic
     public void sortBrewsBy(String sortBy) {
         Log.i("Sort", "Sort by called in brew fragment");
         switch (sortBy) {
-            case "Name":
+            case "By Name":
                 Collections.sort(brewRecipeArrayList, new Comparator<BrewRecipe>() {
                     @Override
                     public int compare(BrewRecipe o1, BrewRecipe o2) {
@@ -209,7 +304,7 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemLongClic
                     }
                 });
                 break;
-            case "Method":
+            case "By Method":
                 Collections.sort(brewRecipeArrayList, new Comparator<BrewRecipe>() {
                     @Override
                     public int compare(BrewRecipe o1, BrewRecipe o2) {
@@ -219,8 +314,7 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemLongClic
                 break;
 
         }
-
-        lv.setAdapter(ba);
         ba.notifyDataSetChanged();
+
     }
 }

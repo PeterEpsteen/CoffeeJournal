@@ -46,9 +46,9 @@
     </string-array>
 
     <string-array name="brew_sort_array">
-        <item>Name</item>
-        <item>Method</item>
-        <item>Date Added</item>
+        <item>""</item>
+        <item>By Name</item>
+        <item>By Method</item>
     </string-array>
 
     <!-- Example settings for Data & Sync -->

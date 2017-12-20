@@ -1,10 +1,13 @@
 package com.example.peter.coffeejournal;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by peter on 11/5/17.
  */
 
-public class BrewRecipe {
+public class BrewRecipe implements Parcelable {
 
     String name, brewMethod, grind, notes;
     int metric, brewTime, bloomTime, icon;
@@ -25,6 +28,52 @@ public class BrewRecipe {
         this.brewTime = brewTime;
         this.bloomTime = bloomTime;
         this.icon = getIcon();
+    }
+
+    public BrewRecipe(Parcel in){
+        // the order needs to be the same as in writeToParcel() method
+        this.name = in.readString();
+        this.brewMethod = in.readString();
+        this.grind = in.readString();
+        this.notes = in.readString();
+        this.coffeeUnits = in.readDouble();
+        this.waterUnits = in.readDouble();
+        this.metric = in.readInt();
+        this.brewTime = in.readInt();
+        this.bloomTime = in.readInt();
+        this.icon = getIcon();
+    }
+
+    public static final Creator<BrewRecipe> CREATOR = new Creator<BrewRecipe>() {
+        @Override
+        public BrewRecipe createFromParcel(Parcel in) {
+            return new BrewRecipe(in);
+        }
+
+        @Override
+        public BrewRecipe[] newArray(int size) {
+            return new BrewRecipe[size];
+        }
+    };
+
+    //Parcable overrides
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeString(brewMethod);
+        dest.writeString(grind);
+        dest.writeString(notes);
+        dest.writeInt(metric);
+        dest.writeInt(brewTime);
+        dest.writeInt(bloomTime);
+        dest.writeInt(icon);
+        dest.writeDouble(coffeeUnits);
+        dest.writeDouble(waterUnits);
     }
 
 
@@ -136,4 +185,6 @@ public class BrewRecipe {
     public void setIcon(int icon) {
         this.icon = icon;
     }
+
+
 }
