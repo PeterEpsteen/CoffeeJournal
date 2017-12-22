@@ -3,13 +3,15 @@ package com.example.peter.coffeejournal;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Date;
+
 /**
  * Created by peter on 11/5/17.
  */
 
 public class BrewRecipe implements Parcelable {
 
-    String name, brewMethod, grind, notes;
+    String name, brewMethod, grind, notes, dateAdded;
     int metric, brewTime, bloomTime, icon;
     double coffeeUnits, waterUnits;
 
@@ -28,6 +30,8 @@ public class BrewRecipe implements Parcelable {
         this.brewTime = brewTime;
         this.bloomTime = bloomTime;
         this.icon = getIcon();
+        Date date = new Date();
+        dateAdded = date.toString();
     }
 
     public BrewRecipe(Parcel in){
@@ -41,6 +45,7 @@ public class BrewRecipe implements Parcelable {
         this.metric = in.readInt();
         this.brewTime = in.readInt();
         this.bloomTime = in.readInt();
+        this.dateAdded = in.readString();
         this.icon = getIcon();
     }
 
@@ -74,9 +79,16 @@ public class BrewRecipe implements Parcelable {
         dest.writeInt(icon);
         dest.writeDouble(coffeeUnits);
         dest.writeDouble(waterUnits);
+        dest.writeString(dateAdded);
     }
 
+    public String getDateAdded() {
+        return dateAdded;
+    }
 
+    public void setDateAdded(String dateAdded) {
+        this.dateAdded = dateAdded;
+    }
 
 
     //GET AND SET METHODS

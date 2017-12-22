@@ -61,7 +61,7 @@
         android:src="@drawable/more_icon"
         android:background="@color/backgroundDefaultWhite"
         android:scaleType="centerCrop"
-        android:onClick="showMenu"
+        android:id="@+id/brew_context_menu_button"
         android:focusableInTouchMode="true"/>
 
 

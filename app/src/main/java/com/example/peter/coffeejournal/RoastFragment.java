@@ -2,10 +2,17 @@ package com.example.peter.coffeejournal;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -14,12 +21,22 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.google.android.gms.plus.PlusOneButton;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 public class RoastFragment extends Fragment implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
@@ -27,16 +44,24 @@ public class RoastFragment extends Fragment implements AdapterView.OnItemClickLi
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String ROAST_PREFERNCE_KEY = "roast_key";
+    private static final String LIST_STATE_KEY_ROAST = "key12342";
+    private static final String ROAST_LIST_KEY = "key2234" ;
     // The request code must be 0 or greater.
     // The URL to +1.  Must be a valid URL.
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     private PlusOneButton mPlusOneButton;
-    ListView lv;
-    RoastAdapter roastAdapter;
-    DBOperator dbOperator;
-    ArrayList<Roast> roastArrayList;
+    private ListView lv;
+    private RoastAdapter roastAdapter;
+    private DBOperator dbOperator;
+    private ArrayList<Roast> roastArrayList;
+    private RecyclerView rvRoast;
+    private LinearLayoutManager linearLayoutManager;
+    private SharedPreferences appSharedPrefs;
+    private ImageButton sortByButton;
+
 
     private OnFragmentInteractionListener mListener;
 
@@ -62,6 +87,7 @@ public class RoastFragment extends Fragment implements AdapterView.OnItemClickLi
         return fragment;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +95,10 @@ public class RoastFragment extends Fragment implements AdapterView.OnItemClickLi
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        roastArrayList = new ArrayList<Roast>();
+        roastAdapter = new RoastAdapter(getContext(), roastArrayList);
+        dbOperator = new DBOperator(getContext());
+        new LoadRoasts(getContext(), roastAdapter, roastArrayList, "initialize").execute();
     }
 
     @Override
@@ -76,27 +106,102 @@ public class RoastFragment extends Fragment implements AdapterView.OnItemClickLi
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.roast_fragment, container, false);
-        lv = view.findViewById(R.id.roast_list_view);
-        dbOperator = new DBOperator(this.getContext());
-        roastArrayList = dbOperator.getRoasts();
-//        if(roastArrayList.size()>0) {
-//            noRoasts.setText("");
-//        }
-        roastAdapter = new RoastAdapter(view.getContext(), roastArrayList);
-        lv.setAdapter(roastAdapter);
-        lv.setOnItemClickListener(this);
-        registerForContextMenu(lv);
-        Log.i("Brew", roastArrayList.toString());
+        rvRoast = view.findViewById(R.id.roast_recycler_view);
+        linearLayoutManager = new LinearLayoutManager(getActivity());
+        rvRoast.setLayoutManager(linearLayoutManager);
+        rvRoast.setAdapter(roastAdapter);
+        if (savedInstanceState != null) {
+            Log.i("Brew Order", "Setting to last saved order");
+            Parcelable savedRecyclerLayoutState = savedInstanceState.getParcelable(LIST_STATE_KEY_ROAST);
+            rvRoast.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
+            roastArrayList = savedInstanceState.getParcelableArrayList(ROAST_LIST_KEY);
+            roastAdapter = new RoastAdapter(view.getContext(), roastArrayList);
+        }
+        rvRoast.setAdapter(roastAdapter);
+
+
+        initializeTouchHelper();
+
+        sortByButton = view.findViewById(R.id.sort_button);
+        sortByButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showSortMenu();
+            }
+        });
 
         //Find the +1 button
 
         return view;
     }
 
+    public void showSortMenu() {
+        //creating a popup menu
+        PopupMenu popup = new PopupMenu(getContext(), sortByButton);
+        //inflating menu from xml resource
+        popup.inflate(R.menu.sort_roast_menu);
+        //adding click listener
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.sort_by_name:
+                        sortBrewsBy("By Name");
+                        return true;
+                    case R.id.sort_by_date:
+                        sortBrewsBy("By Date");
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
+        //displaying the popup
+        popup.show();
+    }
+
+    public void sortBrewsBy(String sortBy) {
+
+
+    }
+
+    public void initializeTouchHelper() {
+        ItemTouchHelper.Callback touchHelper = new ItemTouchHelper.Callback() {
+
+            @Override
+            public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                return makeFlag(ItemTouchHelper.ACTION_STATE_DRAG, ItemTouchHelper.DOWN | ItemTouchHelper.UP);
+            }
+
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                Collections.swap(roastArrayList, viewHolder.getAdapterPosition(), target.getAdapterPosition());
+                roastAdapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+                return true;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+
+            }
+        };
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(touchHelper);
+        itemTouchHelper.attachToRecyclerView(rvRoast);
+
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Parcelable mListState = linearLayoutManager.onSaveInstanceState();
+        outState.putParcelable(LIST_STATE_KEY_ROAST, mListState);
+        outState.putParcelableArrayList(ROAST_LIST_KEY, roastAdapter.getRoastList());
+    }
+
     @Override
     public void onResume() {
         super.onResume();
-
+        new LoadRoasts(getContext(), roastAdapter, roastArrayList, "checkDBChanged");
         // Refresh the state of the +1 button each time the activity receives focus.
     }
 
@@ -105,6 +210,18 @@ public class RoastFragment extends Fragment implements AdapterView.OnItemClickLi
         if (mListener != null) {
             mListener.onFragmentInteraction2(uri);
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        SharedPreferences appSharedPrefs = PreferenceManager
+                .getDefaultSharedPreferences(this.getActivity().getApplicationContext());
+        SharedPreferences.Editor prefsEditor = appSharedPrefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(roastAdapter.getRoastList());
+        prefsEditor.putString(ROAST_PREFERNCE_KEY, json);
+        prefsEditor.apply();
     }
 
     @Override
@@ -124,17 +241,7 @@ public class RoastFragment extends Fragment implements AdapterView.OnItemClickLi
         mListener = null;
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        TextView tv = view.findViewById(R.id.roast_name_text_view);
-        String roastName = tv.getText().toString();
-        TextView tv1 = view.findViewById(R.id.date_added_text_view);
-        String date = tv1.getText().toString();
-        Intent myIntent = new Intent(view.getContext(), RoastActivity.class);
-        myIntent.putExtra("Name", roastName);
-        myIntent.putExtra("Date", date);
-        startActivity(myIntent);
-    }
+
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo){
@@ -143,31 +250,15 @@ public class RoastFragment extends Fragment implements AdapterView.OnItemClickLi
         inflater.inflate(R.menu.context_menu, menu);
     }
 
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        if (getUserVisibleHint()) {
-            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-            TextView tv = info.targetView.findViewById(R.id.roast_name_text_view);
-            String roastName = tv.getText().toString();
-            switch (item.getItemId()) {
-                case R.id.menu_edit:
-                    return true;
-                case R.id.menu_delete:
-                    Log.i("Roast", "Deleting roast: " + roastName);
-                    dbOperator.deleteRoast(roastName);
-                    FragmentTransaction ft = getFragmentManager().beginTransaction();
-                    ft.detach(this).attach(this).commit();
-                    return true;
-                default:
-                    return super.onContextItemSelected(item);
-            }
-        }
-        return false;
-    }
 
     @Override
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
         return false;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
     }
 
     /**
@@ -185,4 +276,109 @@ public class RoastFragment extends Fragment implements AdapterView.OnItemClickLi
         void onFragmentInteraction2(Uri uri);
     }
 
+    private static class LoadRoasts extends AsyncTask<Void, Void, ArrayList<Roast>> {
+        private Context context;
+        private RoastAdapter roastAdapter;
+        private ArrayList<Roast> roastArrayList;
+        private DBOperator dbOperator;
+        private SharedPreferences appSharedPrefs;
+        private String methodString;
+
+        public LoadRoasts(Context context, RoastAdapter roastAdapter, ArrayList<Roast> roastArrayList, String methodString) {
+            this.context = context;
+            this.roastAdapter = roastAdapter;
+            this.roastArrayList = roastArrayList;
+            this.methodString = methodString;
+            dbOperator = new DBOperator(context);
+            appSharedPrefs = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+        }
+
+        protected void initialize() {
+            ArrayList<Roast> roasts = new ArrayList<Roast>();
+            roasts = dbOperator.getRoasts();
+            Gson gson = new Gson();
+            appSharedPrefs = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+            String json = appSharedPrefs.getString(ROAST_PREFERNCE_KEY, "");
+            if(json.isEmpty()){
+                Log.i("Shared Pref", "No shared preferences for roast list order");
+            }
+            else {
+                Log.i("Shared Pref", "Loading shared preferences for roast list order");
+                Type type = new TypeToken<List<Roast>>(){}.getType();
+                roastArrayList = gson.fromJson(json, type);
+            }
+            if (roastArrayList.size() != roasts.size()) {
+                roastArrayList = roasts;
+            }
+        }
+
+        protected void checkDBChanged() {
+            ArrayList<Roast> dbRoasts = dbOperator.getRoasts();
+            if (dbRoasts.size() != roastArrayList.size()) {
+                roastArrayList = dbRoasts;
+            }
+        }
+
+        protected void sortBy(String sortBy) {
+            Log.i("Sort", "Sort by called in brew fragment");
+            switch (sortBy) {
+                case "Name":
+                    Collections.sort(roastArrayList, new Comparator<Roast>() {
+                        @Override
+                        public int compare(Roast o1, Roast o2) {
+                            return o1.getName().compareToIgnoreCase(o2.getName());
+                        }
+                    });
+                    break;
+
+                case "Date":
+                    Collections.sort(roastArrayList, new Comparator<Roast>() {
+                        @Override
+                        public int compare(Roast o1, Roast o2) {
+                            int compareResult = 0;
+                            try {
+                                Date first = new SimpleDateFormat("MMM d yyyy h:mm a").parse(o1.getDate());
+                                Date end = new SimpleDateFormat("MMM d yyyy h:mm a").parse(o2.getDate());
+                                compareResult =  end.compareTo(first);
+                            }
+                            catch (ParseException e) {Log.e("Parse Error", e.toString());}
+                            return compareResult;
+                        }
+                    });
+                    break;
+
+            }
+        }
+
+
+        @Override
+        protected ArrayList<Roast> doInBackground(Void... voids) {
+            switch (methodString) {
+                case "initialize":
+                    initialize();
+                    break;
+                case "sortName":
+                    sortBy("Name");
+                    break;
+                case "sortDate":
+                    sortBy("Date");
+                    break;
+                case "checkDBChanged":
+                    checkDBChanged();
+                    break;
+            }
+            return roastArrayList;
+
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Roast> roasts) {
+            super.onPostExecute(roasts);
+            roastAdapter.setRoastList(roasts);
+        }
+    }
+
 }
+
+
+//TODO Handle config changes, preferences, and whatnot

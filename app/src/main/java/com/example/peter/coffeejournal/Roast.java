@@ -1,5 +1,9 @@
 package com.example.peter.coffeejournal;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -8,7 +12,7 @@ import java.util.List;
  * Created by peter on 11/21/17.
  */
 
-public class Roast {
+public class Roast implements Parcelable {
 
     String roastName, dateAdded, notes;
     int roastID, beanMetric, tempMetric;
@@ -19,7 +23,8 @@ public class Roast {
         roastName = "Custom";
         stepList = new ArrayList<RoastStep>();
         Date date = new Date();
-        dateAdded = date.toString();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM d yyyy h:mm a");
+        dateAdded = simpleDateFormat.format(date);
         beanMetric = 1;
         tempMetric = 0;
         beanList = new ArrayList<Bean>();
@@ -104,5 +109,38 @@ public class Roast {
     public String toString() {
         String printString = "Roast name: " + getName() + "Roast Date: " + getDate() + "\nBeans: " + getBeanList().toString() + "\nSteps: " + getStepList();
         return printString;
+    }
+
+//    public Roast(String name, String date, int tempMetric, int beanMetric) {
+//        roastName = name;
+//        dateAdded = date;
+//        this.beanMetric = beanMetric;
+//        this.tempMetric = tempMetric;
+//        beanList = new ArrayList<Bean>();
+//        stepList = new ArrayList<RoastStep>();
+//        notes = "";
+//    }
+//
+    public Roast(Parcel in){
+        this.roastName = in.readString();
+        this.dateAdded = in.readString();
+        this.tempMetric = in.readInt();
+        this.beanMetric = in.readInt();
+        beanList = new ArrayList<Bean>();
+        stepList = new ArrayList<RoastStep>();
+        notes = "";
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(roastName);
+        dest.writeString(dateAdded);
+        dest.writeInt(tempMetric);
+        dest.writeInt(beanMetric);
     }
 }

@@ -1,16 +1,21 @@
 package com.example.peter.coffeejournal;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.example.peter.coffeejournal.BrewRecipe;
@@ -26,12 +31,16 @@ public class BrewAdapter extends RecyclerView.Adapter<BrewAdapter.ViewHolder> {
     private Context mContext;
     private ArrayList<BrewRecipe> brewList;
     private LayoutInflater inflater;
+    private DBOperator dbOperator;
+    private BrewAdapter adapter;
 
     @SuppressLint("ServiceCast")
     public BrewAdapter(Context c, ArrayList<BrewRecipe> list) {
         mContext = c;
         brewList = list;
         inflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        dbOperator = new DBOperator(mContext);
+        adapter = this;
     }
 
     public ArrayList<BrewRecipe> getBrewList() {
@@ -40,17 +49,20 @@ public class BrewAdapter extends RecyclerView.Adapter<BrewAdapter.ViewHolder> {
 
     public void setBrewList(ArrayList<BrewRecipe> brewList) {
         this.brewList = brewList;
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView brewNameTv, brewMethodTv;
         public ImageView brewMethodIv;
+        ImageButton imageButton;
 
         public ViewHolder(View v) {
             super(v);
             brewNameTv = v.findViewById(R.id.brew_title_text_view);
             brewMethodTv = v.findViewById(R.id.brew_method_text_view);
             brewMethodIv = v.findViewById(R.id.brew_method_icon_image_view);
+            imageButton = v.findViewById(R.id.brew_context_menu_button);
         }
     }
 
@@ -73,13 +85,52 @@ public class BrewAdapter extends RecyclerView.Adapter<BrewAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         final String brewName = brewList.get(position).getName();
         final String brewMethod = brewList.get(position).getBrewMethod();
         final int imageID = brewList.get(position).getIcon();
         holder.brewNameTv.setText(brewName);
         holder.brewMethodIv.setImageResource(imageID);
         holder.brewMethodTv.setText(brewMethod);
+        holder.imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //creating a popup menu
+                PopupMenu popup = new PopupMenu(mContext, holder.imageButton);
+                //inflating menu from xml resource
+                popup.inflate(R.menu.brew_menu);
+                //adding click listener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.menu_delete:
+                                deleteBrew(brewName, position);
+                                return true;
+                            case R.id.menu_edit:
+                                editBrew(brewName);
+                                return true;
+                            default:
+                                return false;
+                        }
+                    }
+                });
+                //displaying the popup
+                popup.show();
+            }
+        });
+    }
+
+    public void deleteBrew(String brewName, int position) {
+        boolean returnB = dbOperator.deleteBrew(brewName);
+        brewList.remove(position);
+        adapter.notifyDataSetChanged();
+    }
+
+    public void editBrew(String brewName) {
+        Intent myIntent = new Intent(mContext, AddBrew.class);
+        myIntent.putExtra("Brew Name", brewName);
+        ((Activity)mContext).startActivityForResult(myIntent, 1);
     }
 
 

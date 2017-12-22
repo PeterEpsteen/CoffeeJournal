@@ -50,6 +50,7 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener 
     long startTime = 0;
     boolean isTimerOn = false;
     private Toolbar mToolBar;
+    private String editRoastName, editRoastDate;
 
     //runs without a timer by reposting this handler at the end of the runnable
     Handler timerHandler = new Handler();
@@ -73,6 +74,11 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_roast);
+        Intent intent = getIntent();
+        editRoastName = intent.getStringExtra("Name");
+        editRoastDate = intent.getStringExtra("Date");
+        db = new DBOperator(this);
+
         beanRowLinearLayoutList = new ArrayList<LinearLayout>();
         stepsRowLinearLayoutList = new ArrayList<LinearLayout>();
         addButton = findViewById(R.id.add_roast_button);
@@ -80,14 +86,13 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener 
         addStepButton = findViewById(R.id.add_step_row_button);
         addBeansButton = findViewById(R.id.add_bean_row_button);
         stepsContainer = findViewById(R.id.steps_linear_layout);
-        TextView stepTv = stepsContainer.findViewById(R.id.time_edit_text);
-        stepTv.setText("00:00");
+
         beansContainer = findViewById(R.id.beans_linear_layout);
         resetButton = findViewById(R.id.reset_roast_button);
-        LinearLayout firstStepRow = stepsContainer.findViewById(R.id.first_steps_row);
-        LinearLayout firstBeanRow = beansContainer.findViewById(R.id.first_bean_row);
-        beanRowLinearLayoutList.add(firstBeanRow);
-        stepsRowLinearLayoutList.add(firstStepRow);
+        if (editRoastName == null) {
+            addBeanRow();
+            addStepRow();
+        }
         addBeansButton.setOnClickListener(this);
         resetButton.setOnClickListener(this);
         addStepButton.setOnClickListener(this);
@@ -98,6 +103,8 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener 
         collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.backgroundDefaultWhite));
         collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.TextAppearance_AppCompat_Display1);
         collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.backgroundDefaultWhite));
+
+        //TODO edit roast
 
         mToolBar = findViewById(R.id.main_toolbar);
         setSupportActionBar(mToolBar);
@@ -133,6 +140,23 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener 
                 }
         });
 
+        if(editRoastDate != null && editRoastName != null) {
+            Log.i("Edit", "Found roast to edit, inserting info from roast: " + editRoastName);
+            Roast editRoast = db.getRoast(editRoastName, editRoastDate);
+            if(editRoast.getName() != null) {
+                Log.i("Edit", "Roast found in db that is being edited name: " + editRoast.getName());
+                roastNameEdit.setText(editRoast.getName());
+                List<Bean> beanArrayList = editRoast.getBeanList();
+                List<RoastStep> stepArrayList = editRoast.getStepList();
+                for (Bean bean : beanArrayList) {
+                    addBeanRow(bean);
+                }
+                for (RoastStep step : stepArrayList) {
+                    addStepRow(step);
+                }
+            }
+        }
+
     }
 
     public boolean validateInput() {
@@ -149,27 +173,16 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener 
 
     @Override
     public void onClick(View v) {
-        LayoutInflater inflater = getLayoutInflater();
         switch (v.getId()) {
             case (R.id.add_roast_button):
                 if(validateInput())
                 addRoast();
                 break;
             case (R.id.add_bean_row_button):
-                CardView beanRow = (CardView) inflater.inflate(R.layout.add_beans_row, null, false);
-                beansContainer.addView(beanRow);
-                LinearLayout beanRowLinear = beanRow.findViewById(R.id.bean_row_linear_layout);
-                beanRowLinearLayoutList.add(beanRowLinear);
-                Log.i("Row", "Adding bean row...");
+                addBeanRow();
                 break;
             case (R.id.add_step_row_button):
-                CardView stepRow = (CardView) inflater.inflate(R.layout.add_tempature_row, null, false);
-                stepsContainer.addView(stepRow);
-                TextView timeStepTv = stepRow.findViewById(R.id.time_edit_text);
-                timeStepTv.setText(String.format("%02d:%02d", minutes, seconds));
-                LinearLayout stepRowLinear = stepRow.findViewById(R.id.add_step_linear);
-                stepsRowLinearLayoutList.add(stepRowLinear);
-                Log.i("Row", "Adding temp row...");
+                addStepRow();
                 break;
             case (R.id.reset_roast_button) :
                 Intent intent = getIntent();
@@ -181,75 +194,142 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener 
         }
     }
 
+    private void addStepRow() {
+        LayoutInflater inflater = getLayoutInflater();
+        CardView stepRow = (CardView) inflater.inflate(R.layout.add_tempature_row, null, false);
+        stepsContainer.addView(stepRow);
+        TextView timeStepTv = stepRow.findViewById(R.id.time_edit_text);
+        timeStepTv.setText(String.format("%02d:%02d", minutes, seconds));
+        LinearLayout stepRowLinear = stepRow.findViewById(R.id.add_step_linear);
+        stepsRowLinearLayoutList.add(stepRowLinear);
+        Log.i("Row", "Adding temp row...");
+    }
+    private void addStepRow(RoastStep step) {
+        String stepTime = step.getTime();
+        String stepComment = step.getComment();
+        String stepTemp = String.valueOf(step.getTemp());
+        LayoutInflater inflater = getLayoutInflater();
+        CardView stepRow = (CardView) inflater.inflate(R.layout.add_tempature_row, null, false);
+        EditText stepTimeEdit = stepRow.findViewById(R.id.time_edit_text);
+        stepTimeEdit.setText(stepTime);
+        EditText stepTempEdit = stepRow.findViewById(R.id.temp_edit_text);
+        stepTempEdit.setText(stepTemp);
+        EditText stepCommentEdit = stepRow.findViewById(R.id.comments_edit_text);
+        stepCommentEdit.setText(stepComment);
+        stepsContainer.addView(stepRow);
+        LinearLayout stepRowLinear = stepRow.findViewById(R.id.add_step_linear);
+        stepsRowLinearLayoutList.add(stepRowLinear);
+        Log.i("Row", "Adding temp row...");
+    }
+
+    public void addBeanRow() {
+        LayoutInflater inflater = getLayoutInflater();
+        CardView beanRow = (CardView) inflater.inflate(R.layout.add_beans_row, null, false);
+        beansContainer.addView(beanRow);
+        LinearLayout beanRowLinear = beanRow.findViewById(R.id.bean_row_linear_layout);
+        beanRowLinearLayoutList.add(beanRowLinear);
+        Log.i("Row", "Adding bean row...");
+    }
+
+    public void addBeanRow(Bean bean){
+        String beanName = bean.getBeanName();
+        int beanWeight = bean.getBeanWeight();
+        LayoutInflater inflater = getLayoutInflater();
+        CardView beanRow = (CardView) inflater.inflate(R.layout.add_beans_row, null, false);
+        EditText nameEdit = beanRow.findViewById(R.id.bean_name_edit_text);
+        nameEdit.setText(beanName);
+        EditText weightEdit = beanRow.findViewById(R.id.bean_weight_edit_text);
+        weightEdit.setText(String.valueOf(beanWeight));
+        beansContainer.addView(beanRow);
+        LinearLayout beanRowLinear = beanRow.findViewById(R.id.bean_row_linear_layout);
+        beanRowLinearLayoutList.add(beanRowLinear);
+        Log.i("Row", "Adding bean row...");
+    }
+
     public Roast addRoast() {
+
+
         //first, set date
-        DateFormat dateFormat = new SimpleDateFormat("MM/dd/YY HH:mm");
+        DateFormat dateFormat = new SimpleDateFormat("MMM d yyyy h:mm a");
         Date date = new Date();
-        roastDate = dateFormat.format(date);
-        //get name and create a new roast
         roastName = roastNameEdit.getText().toString();
-        roast = new Roast(roastName, roastDate, 1, 0);
-        //add all bean rows to roast
 
-        for (LinearLayout row : beanRowLinearLayoutList) {
-            Log.i("BeanRow", "Bean Row: " + row.toString());
-            EditText beanNameEditText = row.findViewById(R.id.bean_name_edit_text);
-            EditText beanWeightEditText = row.findViewById(R.id.bean_weight_edit_text);
-            String beanName = beanNameEditText.getText().toString();
-            String beanWeightString = beanWeightEditText.getText().toString();
+            roastDate = dateFormat.format(date);
+            //get name and create a new roast
+            roast = new Roast(roastName, roastDate, 1, 0);
+            //add all bean rows to roast
 
-            if (!beanName.equals("") && !beanWeightString.equals("")){
-                Log.i("Bean", "Adding bean name: " + beanName);
-                int beanWeight = Integer.parseInt(beanWeightString);
-                Bean newBean = new Bean(beanName, beanWeight);
-                roast.addToBeanList(newBean);
-            }
+            for (LinearLayout row : beanRowLinearLayoutList) {
+                Log.i("BeanRow", "Bean Row: " + row.toString());
+                EditText beanNameEditText = row.findViewById(R.id.bean_name_edit_text);
+                EditText beanWeightEditText = row.findViewById(R.id.bean_weight_edit_text);
+                String beanName = beanNameEditText.getText().toString();
+                String beanWeightString = beanWeightEditText.getText().toString();
 
-            else if (beanWeightString.equals("")) {
-                Log.i("Bean", "Adding bean name: " + beanName);
-                int beanWeight = -1;
-                Bean newBean = new Bean(beanName, beanWeight);
-                roast.addToBeanList(newBean);
-            }
-
-            else if (roast.getBeanList().size() < 1) {
-                Context context = getApplicationContext();
-                int duration = Toast.LENGTH_LONG;
+                if (!beanName.equals("") && !beanWeightString.equals("")) {
+                    Log.i("Bean", "Adding bean name: " + beanName);
+                    int beanWeight = Integer.parseInt(beanWeightString);
+                    Bean newBean = new Bean(beanName, beanWeight);
+                    roast.addToBeanList(newBean);
+                } else if (beanWeightString.equals("")) {
+                    Log.i("Bean", "Adding bean name: " + beanName);
+                    int beanWeight = -1;
+                    Bean newBean = new Bean(beanName, beanWeight);
+                    roast.addToBeanList(newBean);
+                } else if (roast.getBeanList().size() < 1) {
+                    Context context = getApplicationContext();
+                    int duration = Toast.LENGTH_LONG;
                     CharSequence text = "Please enter at least one bean row.";
                     Toast toast = Toast.makeText(context, text, duration);
                     toast.show();
                     return roast;
+                }
             }
-        }
 
-        //add steps to roast
-        for (LinearLayout row : stepsRowLinearLayoutList) {
-            EditText stepTimeEditText = row.findViewById(R.id.time_edit_text);
-            String stepTime = stepTimeEditText.getText().toString();
-            EditText stepTempEditText = row.findViewById(R.id.temp_edit_text);
-            EditText commentsEdit = row.findViewById(R.id.comments_edit_text);
-            String comments = commentsEdit.getText().toString();
-            String tempString = stepTempEditText.getText().toString();
-            if (!stepTime.equals("") && !tempString.equals("")){
-                Log.i("Bean", "Adding step time: " + stepTime);
-                int stepTemp = Integer.parseInt(tempString);
-                RoastStep newStep = new RoastStep(stepTime, stepTemp, comments);
-                roast.addToStepList(newStep);
+            //add steps to roast
+            for (LinearLayout row : stepsRowLinearLayoutList) {
+                EditText stepTimeEditText = row.findViewById(R.id.time_edit_text);
+                String stepTime = stepTimeEditText.getText().toString();
+                EditText stepTempEditText = row.findViewById(R.id.temp_edit_text);
+                EditText commentsEdit = row.findViewById(R.id.comments_edit_text);
+                String comments = commentsEdit.getText().toString();
+                String tempString = stepTempEditText.getText().toString();
+                if (!stepTime.equals("") && !tempString.equals("")) {
+                    Log.i("Bean", "Adding step time: " + stepTime);
+                    int stepTemp = Integer.parseInt(tempString);
+                    RoastStep newStep = new RoastStep(stepTime, stepTemp, comments);
+                    roast.addToStepList(newStep);
+                }
             }
+
+            Log.i("Roast", roast.toString());
+
+            EditText commentsEdit = findViewById(R.id.tasting_notes_edit);
+            String tastingNotes = commentsEdit.getText().toString();
+            roast.setNotes(tastingNotes);
+            db = new DBOperator(this);
+            if (editRoastName == null || !editRoastName.equals(roastName)) {
+                long rows = db.insert(roast);
+                if (rows != -1) {
+                    Log.i("db", "Sucessfully inserted rows: " + rows);
+                finish();}
+                else {
+                    Toast myToast = Toast.makeText(getApplicationContext(), "Error inserting or updating", Toast.LENGTH_LONG);
+                    finish();
+                }
+            }
+            else {
+                roast.setDateAdded(editRoastDate);
+                long rows = db.update(roast);
+                if (rows != -1) {
+                    Log.i("db", "Successfully updated roast");
+                    finish();
+                }
+                else {
+                    Toast myToast = Toast.makeText(getApplicationContext(), "Error inserting or updating", Toast.LENGTH_LONG);
+                    finish();
+                }
         }
-
-        Log.i("Roast", roast.toString());
-
-        EditText commentsEdit = findViewById(R.id.tasting_notes_edit);
-        String tastingNotes = commentsEdit.getText().toString();
-        roast.setNotes(tastingNotes);
-        db = new DBOperator(this);
-        long rows = db.insert(roast);
-        if (rows != -1)
-            Log.i("db", "Sucessfully inserted rows: " + rows);
-        Intent myIntent = new Intent(this, MainActivity.class);
-        startActivity(myIntent);
-        finish();
 
         return roast;
     }

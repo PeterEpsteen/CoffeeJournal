@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,7 +18,7 @@ import java.util.List;
 
 public class DBOperator extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 11;
+    private static final int DATABASE_VERSION = 14;
     private static final String DATABASE_NAME = "COFFEE_JOURNAL_DB";
     private static final String BREW_TABLE_NAME = "BREW_TABLE";
     private static final String ROAST_TABLE_NAME = "ROAST_TABLE";
@@ -45,7 +46,7 @@ public class DBOperator extends SQLiteOpenHelper {
 
 
     private static final String CREATE_BREW_TABLE = "create table if not exists " + BREW_TABLE_NAME + " ( " + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + NAME + " TEXT, " + BREW_METHOD + " TEXT, " +
-            WATER_UNITS + " REAL, "+ COFFEE_UNITS +" REAL, "+ METRIC + " INTEGER, " + NOTES + " TEXT, " + GRIND + " TEXT, " + BLOOM_TIME + " INTEGER, " + BREW_TIME + " INTEGER, " + TEMP + " INTEGER)";
+            WATER_UNITS + " REAL, "+ COFFEE_UNITS +" REAL, "+ METRIC + " INTEGER, " + NOTES + " TEXT, " + DATE + " TEXT, " + GRIND + " TEXT, " + BLOOM_TIME + " INTEGER, " + BREW_TIME + " INTEGER, " + TEMP + " INTEGER)";
     private static final String CREATE_ROAST_TABLE = "create table if not exists " + ROAST_TABLE_NAME + " ( " + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + NAME + " TEXT, " + NOTES + " TEXT, " + DATE + " TEXT)";
     private static final String CREATE_BEANS_TABLE = "create table if not exists " + BEANS_TABLE_NAME + " ( " + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + NAME + " TEXT, " + WEIGHT + " REAL, " + METRIC + " INTEGER, " + ROAST_ID + " INTEGER)";
     private static final String CREATE_ROAST_STEPS_TABLE = "create table if not exists " + ROAST_STEPS_TABLE_NAME + " ( " + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + STEP_TIME + " " +
@@ -68,6 +69,8 @@ public class DBOperator extends SQLiteOpenHelper {
         db.execSQL(CREATE_ROAST_STEPS_TABLE);
 
         //START ADDING BREW METHODS
+        Date date = new Date();
+        String dateAdded = date.toString();
 
         ContentValues brewMethodValues = new ContentValues();
         brewMethodValues.put(NAME, "V60");
@@ -97,6 +100,7 @@ public class DBOperator extends SQLiteOpenHelper {
         brewMethodValues.put(BLOOM_TIME, 30);
         brewMethodValues.put(BREW_TIME, 180);
         brewMethodValues.put(TEMP, 200);  //NOT SURE
+        brewMethodValues.put(DATE, dateAdded);
         db.insert(BREW_TABLE_NAME, null, brewMethodValues);
 
         brewMethodValues = new ContentValues();
@@ -142,6 +146,7 @@ public class DBOperator extends SQLiteOpenHelper {
         brewMethodValues.put(BLOOM_TIME, 30);
         brewMethodValues.put(BREW_TIME, 240);
         brewMethodValues.put(TEMP, 201);  //NOT SURE
+        brewMethodValues.put(DATE, dateAdded);
         db.insert(BREW_TABLE_NAME, null, brewMethodValues);
 
         brewMethodValues = new ContentValues();
@@ -169,6 +174,7 @@ public class DBOperator extends SQLiteOpenHelper {
         brewMethodValues.put(BLOOM_TIME, 30);
         brewMethodValues.put(BREW_TIME, 180);
         brewMethodValues.put(TEMP, 200);  //NOT SURE
+        brewMethodValues.put(DATE, dateAdded);
         db.insert(BREW_TABLE_NAME, null, brewMethodValues);
 
         brewMethodValues = new ContentValues();
@@ -201,6 +207,7 @@ public class DBOperator extends SQLiteOpenHelper {
         brewMethodValues.put(BLOOM_TIME, 30);
         brewMethodValues.put(BREW_TIME, 180);
         brewMethodValues.put(TEMP, 200);  //NOT SURE
+        brewMethodValues.put(DATE, dateAdded);
         db.insert(BREW_TABLE_NAME, null, brewMethodValues);
 
         brewMethodValues = new ContentValues();
@@ -244,6 +251,7 @@ public class DBOperator extends SQLiteOpenHelper {
         brewMethodValues.put(BLOOM_TIME, 30);
         brewMethodValues.put(BREW_TIME, 180);
         brewMethodValues.put(TEMP, 200);  //NOT SURE
+        brewMethodValues.put(DATE, dateAdded);
         db.insert(BREW_TABLE_NAME, null, brewMethodValues);
 
         brewMethodValues = new ContentValues();
@@ -278,6 +286,7 @@ public class DBOperator extends SQLiteOpenHelper {
         brewMethodValues.put(BLOOM_TIME, 30);
         brewMethodValues.put(BREW_TIME, 180);
         brewMethodValues.put(TEMP, 200);  //NOT SURE
+        brewMethodValues.put(DATE, dateAdded);
         db.insert(BREW_TABLE_NAME, null, brewMethodValues);
 
         //db.close();
@@ -309,10 +318,10 @@ public class DBOperator extends SQLiteOpenHelper {
         cv.put(BLOOM_TIME, br.getBloomTime());
         cv.put(BREW_TIME, br.getBrewTime());
         cv.put(TEMP, "200");  //NOT SURE
+        cv.put(DATE, br.getDateAdded());
         long returnLong = db.insert(BREW_TABLE_NAME, null, cv);
         db.close();
         return returnLong;
-
 
     }
 
@@ -330,6 +339,18 @@ public class DBOperator extends SQLiteOpenHelper {
         cv.put(BREW_TIME, br.getBrewTime());
         cv.put(TEMP, "200");  //NOT SURE
         String whereClause = NAME + " = '" + br.getName() + "'";
+        long returnLong = db.update(BREW_TABLE_NAME, cv, whereClause, null);
+        db.close();
+        return returnLong;
+    }
+
+    public long update(Roast r) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(NAME, r.getName());
+        cv.put(NOTES, r.getNotes());
+        cv.put(DATE, r.getDate());
+        String whereClause = NAME + " = '" + r.getName() + "' AND " + DATE + " = '" + r.getDate() + "'";
         long returnLong = db.update(BREW_TABLE_NAME, cv, whereClause, null);
         db.close();
         return returnLong;
@@ -416,6 +437,7 @@ public class DBOperator extends SQLiteOpenHelper {
         if (data.moveToFirst()){
             roast.setNotes(data.getString(data.getColumnIndex(NOTES)));
             roastID = data.getInt(data.getColumnIndex(ID));
+            roast.setRoastName(name);
         }
         data.close();
         //Get all beans associated with roast
@@ -464,9 +486,11 @@ public class DBOperator extends SQLiteOpenHelper {
                 double waterUnits = data.getDouble(data.getColumnIndex(WATER_UNITS));
                 int brewTime = data.getInt(data.getColumnIndex(BREW_TIME));
                 int bloomTime = data.getInt(data.getColumnIndex(BLOOM_TIME));
+                String dateAdded = data.getString(data.getColumnIndex(DATE));
 
                 BrewRecipe br = new BrewRecipe(name, brewMethod, grind, notes, coffeeUnits, waterUnits, metric,
                         brewTime, bloomTime);
+                br.setDateAdded(dateAdded);
 
                 recipes.add(br);
             }
@@ -486,9 +510,9 @@ public class DBOperator extends SQLiteOpenHelper {
     }
 
 
-    public boolean deleteRoast(String roastName) {
+    public boolean deleteRoast(String roastName, String dateString) {
         SQLiteDatabase db = this.getWritableDatabase();
-        boolean success = db.delete(ROAST_TABLE_NAME, NAME + " = '" + roastName + "'", null) > 0;
+        boolean success = db.delete(ROAST_TABLE_NAME, NAME + " = '" + roastName + "' AND " + DATE + " = '" + dateString + "'", null) > 0;
         db.close();
         return success;
     }

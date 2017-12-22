@@ -9,30 +9,58 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Roasts"
-                android:padding="16dp"
-                android:background="@color/backgroundColorBeige"
-                android:elevation="@dimen/cardview_default_radius"
-                style="@style/TextAppearance.AppCompat.Display1"
-                android:textColor="@color/colorAccent"
-                android:id="@+id/pick_roast_tv"
-                />
+                android:background="@color/backgroundDefaultWhite"
+                android:orientation="horizontal"
+                android:paddingTop="16dp"
+                android:paddingBottom="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:elevation="3dp"
+                >
 
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/roast_list_view"
-            android:clipToPadding="false"
-            android:layout_gravity="fill_vertical"
-            android:padding="16dp"
-            android:divider="@null"
-            android:layout_marginBottom="56dp"
-           />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Roasts"
+                    style="@style/TextAppearance.AppCompat.Display1"
+                    android:textColor="@color/colorTextDark"
+                    android:id="@+id/pick_brew_tv"
+                    />
+                <View
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="0dp"/>
+                <ImageButton
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:padding="8dp"
+                    android:id="@+id/sort_button"
+                    android:scaleType="centerCrop"
+                    android:background="@color/backgroundDefaultWhite"
+                    android:src="@drawable/sort_by_icon"
+                    android:focusableInTouchMode="true"/>
+
+
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/roast_recycler_view"
+                android:layout_gravity="fill_vertical"
+                android:divider="@null"
+                android:dividerHeight="8dp"
+                android:paddingTop="16dp"
+                android:paddingRight="16dp"
+                android:paddingLeft="16dp"
+                android:paddingBottom="40dp"
+                android:clipToPadding="false">
+            </android.support.v7.widget.RecyclerView>
 
         </LinearLayout>
 

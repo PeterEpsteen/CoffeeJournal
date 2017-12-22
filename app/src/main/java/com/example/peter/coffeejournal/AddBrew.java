@@ -170,47 +170,53 @@ public class AddBrew extends AppCompatActivity implements View.OnClickListener {
             btn.setText("Save Edit");
             DBOperator dbOperator = new DBOperator(this);
             BrewRecipe editBrew = dbOperator.getBrewRecipe(editBrewName);
-            nameEdit.setText(editBrew.getName());
-            grindEdit.setText(editBrew.getGrind());
-            notesEdit.setText(editBrew.getNotes());
-            coffeeEdit.setText(String.valueOf(editBrew.getCoffeeUnits()));
-            waterEdit.setText(String.valueOf(editBrew.getWaterUnits()));
-            if(!editBrew.isMetric()) {
-                metricEdit.setChecked(true);
+            if (editBrew.getBrewMethod() != null) {
+                nameEdit.setText(editBrew.getName());
+                grindEdit.setText(editBrew.getGrind());
+                notesEdit.setText(editBrew.getNotes());
+                coffeeEdit.setText(String.valueOf(editBrew.getCoffeeUnits()));
+                waterEdit.setText(String.valueOf(editBrew.getWaterUnits()));
+                if (!editBrew.isMetric()) {
+                    metricEdit.setChecked(true);
+                }
+                int brewTimeInt = editBrew.getBrewTime();
+                int mins = brewTimeInt / 60;
+                int secs = brewTimeInt % 60;
+                brewTimeEditSeconds.setText(Integer.toString(secs));
+                brewTimeEditMinutes.setText(Integer.toString(mins));
+                int bloomTimeInt = editBrew.getBloomTime();
+                int minsBloom = bloomTimeInt / 60;
+                int secsBloom = bloomTimeInt % 60;
+                bloomTimeEditMinutes.setText(Integer.toString(minsBloom));
+                bloomTimeEditSeconds.setText(Integer.toString(secsBloom));
+                String method = editBrew.getBrewMethod();
+                switch (method) {
+                    case "Pour Over":
+                        spinner.setSelection(0);
+                        break;
+                    case "Aeropress":
+                        spinner.setSelection(1);
+                        break;
+                    case "French Press":
+                        spinner.setSelection(2);
+                        break;
+                    case "Chemex":
+                        spinner.setSelection(3);
+                        break;
+                    case "Espresso":
+                        spinner.setSelection(4);
+                        break;
+                    case "Moka Pot":
+                        spinner.setSelection(5);
+                        break;
+                    case "Other":
+                        spinner.setSelection(6);
+                        break;
+                }
             }
-            int brewTimeInt = editBrew.getBrewTime();
-            int mins = brewTimeInt/60;
-            int secs = brewTimeInt % 60;
-            brewTimeEditSeconds.setText(Integer.toString(secs));
-            brewTimeEditMinutes.setText(Integer.toString(mins));
-            int bloomTimeInt = editBrew.getBloomTime();
-            int minsBloom = bloomTimeInt/60;
-            int secsBloom = bloomTimeInt % 60;
-            bloomTimeEditMinutes.setText(Integer.toString(minsBloom));
-            bloomTimeEditSeconds.setText(Integer.toString(secsBloom));
-            String method = editBrew.getBrewMethod();
-            switch (method) {
-                case "Pour Over":
-                    spinner.setSelection(0);
-                    break;
-                case "Aeropress":
-                    spinner.setSelection(1);
-                    break;
-                case "French Press":
-                    spinner.setSelection(2);
-                    break;
-                case "Chemex":
-                    spinner.setSelection(3);
-                    break;
-                case "Espresso":
-                    spinner.setSelection(4);
-                    break;
-                case "Moka Pot":
-                    spinner.setSelection(5);
-                    break;
-                case "Other":
-                    spinner.setSelection(6);
-                    break;
+            else {
+                Toast myToast = Toast.makeText(getApplicationContext(), "No Roast Found", Toast.LENGTH_LONG);
+                myToast.show();
             }
 
         }

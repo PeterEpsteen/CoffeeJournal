@@ -29,6 +29,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -40,9 +41,12 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 
@@ -59,10 +63,9 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemLongClic
     private BrewAdapter ba;
     private ArrayList<BrewRecipe> brewRecipeArrayList;
     private String sortByCurrent;
-    private Spinner sortSpinner;
     private ItemTouchHelper itemTouchHelper;
+    private ImageButton imageButton;
     LinearLayoutManager llm;
-    private Parcelable mListState;
 
     public BrewFragment() {
         // Required empty public constructor
@@ -72,14 +75,31 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemLongClic
     public static BrewFragment newInstance(String param1, String param2) {
         BrewFragment fragment = new BrewFragment();
         Bundle args = new Bundle();
-
         fragment.setArguments(args);
         return fragment;
     }
 
+    //TODO add date added field to brew, sort by date, add newest to top of last saved instance
+
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mDBOperator = new DBOperator(this.getContext());
+        ArrayList<BrewRecipe> dbBrewList = mDBOperator.getBrewRecipes();
+            Gson gson = new Gson();
+            SharedPreferences appSharedPrefs = PreferenceManager
+                    .getDefaultSharedPreferences(this.getActivity().getApplicationContext());
+            String json = appSharedPrefs.getString(BREW_RECIPE_PREFERENCE_KEY, "");
+            if (json.isEmpty()) {
+                Log.i("Shared Pref", "No shared preferences for brew list order");
+            } else {
+                Log.i("Shared Pref", "Loading shared preferences for brew list order");
+                Type type = new TypeToken<List<BrewRecipe>>() {
+                }.getType();
+                brewRecipeArrayList = gson.fromJson(json, type);
+            }
 
 
     }
@@ -87,14 +107,22 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemLongClic
     @Override
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
-        if (savedInstanceState != null) {
-            Parcelable savedRecyclerLayoutState = savedInstanceState.getParcelable(LIST_STATE_KEY);
-            rv.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
-            brewRecipeArrayList = savedInstanceState.getParcelableArrayList(BREW_RECIPE_LIST_KEY);
-            ba.setBrewList(brewRecipeArrayList);
-        }
 
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ArrayList<BrewRecipe> dbBrewList = mDBOperator.getBrewRecipes();
+        if (dbBrewList.size() != brewRecipeArrayList.size()){
+            Log.i("Brew List", "Change in DB detected, reordering list");
+            brewRecipeArrayList = dbBrewList;
+            sortBrewsBy("By Date");
+            ba.setBrewList(brewRecipeArrayList);
+        }
+    }
+
+    //TODO HANDLE ARRAYLIST in onCreate instead of onResume
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -108,22 +136,15 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemLongClic
         rv = rootView.findViewById(R.id.brew_recycler_view);
         llm = new LinearLayoutManager(getActivity());
         rv.setLayoutManager(llm);
-        mDBOperator = new DBOperator(this.getContext());
-        if (brewRecipeArrayList == null) {
-            brewRecipeArrayList = mDBOperator.getBrewRecipes();
+//in oncreate        mDBOperator = new DBOperator(this.getContext());
+        ArrayList<BrewRecipe> dbBrewList = mDBOperator.getBrewRecipes();
+        if (savedInstanceState != null && brewRecipeArrayList.size() == dbBrewList.size()) {
+            Log.i("Brew Order", "Setting to last saved order");
+            Parcelable savedRecyclerLayoutState = savedInstanceState.getParcelable(LIST_STATE_KEY);
+            rv.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
+            brewRecipeArrayList = savedInstanceState.getParcelableArrayList(BREW_RECIPE_LIST_KEY);
         }
-        Gson gson = new Gson();
-        SharedPreferences appSharedPrefs = PreferenceManager
-                .getDefaultSharedPreferences(this.getActivity().getApplicationContext());
-        String json = appSharedPrefs.getString(BREW_RECIPE_PREFERENCE_KEY, "");
-        if (json.isEmpty()){
-             Log.i("Shared Pref", "No shared preferences");
-        }
-        else {
-             Log.i("Shared Pref", "Loading shared preferences");
-             Type type = new TypeToken<List<BrewRecipe>>(){}.getType();
-             brewRecipeArrayList = gson.fromJson(json, type);
-         }
+
         ba = new BrewAdapter(rootView.getContext(), brewRecipeArrayList);
         rv.setAdapter(ba);
 
@@ -153,15 +174,46 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemLongClic
         ItemTouchHelper ith = new ItemTouchHelper(ithCallback);
         ith.attachToRecyclerView(rv);
 
+        imageButton = rootView.findViewById(R.id.sort_button);
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showSortMenu();
+            }
+        });
 
-        sortSpinner = rootView.findViewById(R.id.sort_by_spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(),
-                R.array.brew_sort_array, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        sortSpinner.setAdapter(adapter);
-        sortSpinner.setOnItemSelectedListener(this);
+
+
         return rootView;
 
+    }
+
+    public void showSortMenu() {
+        //creating a popup menu
+        PopupMenu popup = new PopupMenu(getContext(), imageButton);
+        //inflating menu from xml resource
+        popup.inflate(R.menu.sort_menu);
+        //adding click listener
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.sort_by_name:
+                        sortBrewsBy("By Name");
+                        return true;
+                    case R.id.sort_by_method:
+                        sortBrewsBy("By Method");
+                        return true;
+                    case R.id.sort_by_date:
+                        sortBrewsBy("By Date");
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
+        //displaying the popup
+        popup.show();
     }
 
 
@@ -175,7 +227,6 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemLongClic
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        if (getUserVisibleHint()) {
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
             TextView tv = info.targetView.findViewById(R.id.brew_title_text_view);
             String brewName = tv.getText().toString();
@@ -195,8 +246,6 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemLongClic
                     return super.onContextItemSelected(item);
 
             }
-        }
-        return false;
     }
 
     @Override
@@ -211,11 +260,11 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemLongClic
         prefsEditor.apply();
     }
 
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
-        mListState = llm.onSaveInstanceState();
+        Parcelable mListState = llm.onSaveInstanceState();
         outState.putParcelable(LIST_STATE_KEY, mListState);
         outState.putParcelableArrayList(BREW_RECIPE_LIST_KEY, ba.getBrewList());
     }
@@ -300,7 +349,7 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemLongClic
                 Collections.sort(brewRecipeArrayList, new Comparator<BrewRecipe>() {
                     @Override
                     public int compare(BrewRecipe o1, BrewRecipe o2) {
-                        return o1.getName().compareTo(o2.getName());
+                        return o1.getName().compareToIgnoreCase(o2.getName());
                     }
                 });
                 break;
@@ -308,7 +357,22 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemLongClic
                 Collections.sort(brewRecipeArrayList, new Comparator<BrewRecipe>() {
                     @Override
                     public int compare(BrewRecipe o1, BrewRecipe o2) {
-                        return o1.getBrewMethod().compareTo(o2.getBrewMethod());
+                        return o1.getBrewMethod().compareToIgnoreCase(o2.getBrewMethod());
+                    }
+                });
+                break;
+            case "By Date":
+                Collections.sort(brewRecipeArrayList, new Comparator<BrewRecipe>() {
+                    @Override
+                    public int compare(BrewRecipe o1, BrewRecipe o2) {
+                        int compareResult = 0;
+                        try {
+                            Date first = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").parse(o1.getDateAdded());
+                            Date end = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").parse(o2.getDateAdded());
+                            compareResult =  end.compareTo(first);
+                        }
+                        catch (ParseException e) {Log.e("Parse Error", e.toString());}
+                        return compareResult;
                     }
                 });
                 break;
@@ -316,5 +380,17 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemLongClic
         }
         ba.notifyDataSetChanged();
 
+    }
+
+    public class myMenuClickListener implements PopupMenu.OnMenuItemClickListener {
+        String roastName;
+        public myMenuClickListener(String roastName) {
+            this.roastName = roastName;
+        }
+
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+            return false;
+        }
     }
 }
