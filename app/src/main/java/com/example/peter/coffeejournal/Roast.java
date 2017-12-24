@@ -41,6 +41,18 @@ public class Roast implements Parcelable {
         notes = "";
     }
 
+    public static final Creator<Roast> CREATOR = new Creator<Roast>() {
+        @Override
+        public Roast createFromParcel(Parcel in) {
+            return new Roast(in);
+        }
+
+        @Override
+        public Roast[] newArray(int size) {
+            return new Roast[size];
+        }
+    };
+
     public int getID() {
         return roastID;
     }

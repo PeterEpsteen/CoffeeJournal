@@ -85,10 +85,11 @@ public class BrewAdapter extends RecyclerView.Adapter<BrewAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
-        final String brewName = brewList.get(position).getName();
-        final String brewMethod = brewList.get(position).getBrewMethod();
-        final int imageID = brewList.get(position).getIcon();
+    public void onBindViewHolder(final ViewHolder holder, int position) {
+        final String brewName = brewList.get(holder.getAdapterPosition()).getName();
+        final String brewMethod = brewList.get(holder.getAdapterPosition()).getBrewMethod();
+        final String brewDate = brewList.get(holder.getAdapterPosition()).getDateAdded();
+        final int imageID = brewList.get(holder.getAdapterPosition()).getIcon();
         holder.brewNameTv.setText(brewName);
         holder.brewMethodIv.setImageResource(imageID);
         holder.brewMethodTv.setText(brewMethod);
@@ -105,10 +106,10 @@ public class BrewAdapter extends RecyclerView.Adapter<BrewAdapter.ViewHolder> {
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.menu_delete:
-                                deleteBrew(brewName, position);
+                                deleteBrew(brewName, holder.getAdapterPosition());
                                 return true;
                             case R.id.menu_edit:
-                                editBrew(brewName);
+                                editBrew(brewName, brewDate);
                                 return true;
                             default:
                                 return false;
@@ -127,9 +128,10 @@ public class BrewAdapter extends RecyclerView.Adapter<BrewAdapter.ViewHolder> {
         adapter.notifyDataSetChanged();
     }
 
-    public void editBrew(String brewName) {
+    public void editBrew(String brewName, String brewDate) {
         Intent myIntent = new Intent(mContext, AddBrew.class);
         myIntent.putExtra("Brew Name", brewName);
+        myIntent.putExtra("Brew Date", brewDate);
         ((Activity)mContext).startActivityForResult(myIntent, 1);
     }
 

@@ -1,5 +1,6 @@
 package com.example.peter.coffeejournal;
 
+import android.content.Intent;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -118,4 +119,12 @@ public class RoastActivity extends AppCompatActivity {
         roastContainer.addView(notesCv);
 
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent i = new Intent(this, MainActivity.class);
+        startActivity(i);
+    }
+
 }

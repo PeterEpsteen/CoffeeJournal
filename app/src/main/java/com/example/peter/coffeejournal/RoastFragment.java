@@ -87,6 +87,14 @@ public class RoastFragment extends Fragment implements AdapterView.OnItemClickLi
         return fragment;
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            Log.i("SetVisible", "Set user visible called on Roast Fragment");
+            new LoadRoasts("checkDBChanged").execute();
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -98,8 +106,12 @@ public class RoastFragment extends Fragment implements AdapterView.OnItemClickLi
         roastArrayList = new ArrayList<Roast>();
         roastAdapter = new RoastAdapter(getContext(), roastArrayList);
         dbOperator = new DBOperator(getContext());
-        new LoadRoasts(getContext(), roastAdapter, roastArrayList, "initialize").execute();
+        new LoadRoasts("initialize").execute();
     }
+
+
+    //TODO come back to right fragment after editing/adding
+    //TODO editing doesnt work and beans display -1 under weight when none is entered
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -146,10 +158,12 @@ public class RoastFragment extends Fragment implements AdapterView.OnItemClickLi
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.sort_by_name:
-                        sortBrewsBy("By Name");
+                        Log.i("Sort", "Sort name clicked");
+                        new LoadRoasts("sortName").execute();
                         return true;
                     case R.id.sort_by_date:
-                        sortBrewsBy("By Date");
+                        Log.i("Sort", "Sort date clicked");
+                        new LoadRoasts("sortDate").execute();
                         return true;
                     default:
                         return false;
@@ -160,9 +174,11 @@ public class RoastFragment extends Fragment implements AdapterView.OnItemClickLi
         popup.show();
     }
 
-    public void sortBrewsBy(String sortBy) {
 
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.i("Result", "On Activity result called in fragment");
     }
 
     public void initializeTouchHelper() {
@@ -201,7 +217,7 @@ public class RoastFragment extends Fragment implements AdapterView.OnItemClickLi
     @Override
     public void onResume() {
         super.onResume();
-        new LoadRoasts(getContext(), roastAdapter, roastArrayList, "checkDBChanged");
+
         // Refresh the state of the +1 button each time the activity receives focus.
     }
 
@@ -276,28 +292,23 @@ public class RoastFragment extends Fragment implements AdapterView.OnItemClickLi
         void onFragmentInteraction2(Uri uri);
     }
 
-    private static class LoadRoasts extends AsyncTask<Void, Void, ArrayList<Roast>> {
-        private Context context;
-        private RoastAdapter roastAdapter;
-        private ArrayList<Roast> roastArrayList;
+    private class LoadRoasts extends AsyncTask<Void, Void, ArrayList<Roast>> {
+
         private DBOperator dbOperator;
         private SharedPreferences appSharedPrefs;
         private String methodString;
 
-        public LoadRoasts(Context context, RoastAdapter roastAdapter, ArrayList<Roast> roastArrayList, String methodString) {
-            this.context = context;
-            this.roastAdapter = roastAdapter;
-            this.roastArrayList = roastArrayList;
+        public LoadRoasts(String methodString) {
             this.methodString = methodString;
-            dbOperator = new DBOperator(context);
-            appSharedPrefs = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+            dbOperator = new DBOperator(getContext());
+            appSharedPrefs = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext());
         }
 
         protected void initialize() {
             ArrayList<Roast> roasts = new ArrayList<Roast>();
             roasts = dbOperator.getRoasts();
             Gson gson = new Gson();
-            appSharedPrefs = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+            appSharedPrefs = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext());
             String json = appSharedPrefs.getString(ROAST_PREFERNCE_KEY, "");
             if(json.isEmpty()){
                 Log.i("Shared Pref", "No shared preferences for roast list order");
@@ -313,6 +324,7 @@ public class RoastFragment extends Fragment implements AdapterView.OnItemClickLi
         }
 
         protected void checkDBChanged() {
+            Log.i("Load Roasts", "Checking if db changed...");
             ArrayList<Roast> dbRoasts = dbOperator.getRoasts();
             if (dbRoasts.size() != roastArrayList.size()) {
                 roastArrayList = dbRoasts;
@@ -374,7 +386,8 @@ public class RoastFragment extends Fragment implements AdapterView.OnItemClickLi
         @Override
         protected void onPostExecute(ArrayList<Roast> roasts) {
             super.onPostExecute(roasts);
-            roastAdapter.setRoastList(roasts);
+            roastAdapter.setRoastList(roastArrayList);
+            roastAdapter.notifyDataSetChanged();
         }
     }
 

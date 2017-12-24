@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
@@ -50,7 +51,7 @@ import java.util.Date;
 import java.util.List;
 
 
-public class BrewFragment extends Fragment implements AdapterView.OnItemLongClickListener, AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener {
+public class BrewFragment extends Fragment implements AdapterView.OnItemClickListener {
 
 
     private static final String LIST_STATE_KEY = "key";
@@ -59,6 +60,7 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemLongClic
     private OnFragmentInteractionListener mListener;
     private FloatingActionButton addBrewButton;
     private RecyclerView rv;
+    private boolean isViewShown;
     private DBOperator mDBOperator;
     private BrewAdapter ba;
     private ArrayList<BrewRecipe> brewRecipeArrayList;
@@ -87,21 +89,9 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemLongClic
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mDBOperator = new DBOperator(this.getContext());
-        ArrayList<BrewRecipe> dbBrewList = mDBOperator.getBrewRecipes();
-            Gson gson = new Gson();
-            SharedPreferences appSharedPrefs = PreferenceManager
-                    .getDefaultSharedPreferences(this.getActivity().getApplicationContext());
-            String json = appSharedPrefs.getString(BREW_RECIPE_PREFERENCE_KEY, "");
-            if (json.isEmpty()) {
-                Log.i("Shared Pref", "No shared preferences for brew list order");
-            } else {
-                Log.i("Shared Pref", "Loading shared preferences for brew list order");
-                Type type = new TypeToken<List<BrewRecipe>>() {
-                }.getType();
-                brewRecipeArrayList = gson.fromJson(json, type);
-            }
-
-
+        brewRecipeArrayList = new ArrayList<BrewRecipe>();
+        ba = new BrewAdapter(getContext(), brewRecipeArrayList);
+        new LoadBrews().execute("initialize");
     }
 
     @Override
@@ -113,12 +103,14 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemLongClic
     @Override
     public void onResume() {
         super.onResume();
-        ArrayList<BrewRecipe> dbBrewList = mDBOperator.getBrewRecipes();
-        if (dbBrewList.size() != brewRecipeArrayList.size()){
-            Log.i("Brew List", "Change in DB detected, reordering list");
-            brewRecipeArrayList = dbBrewList;
-            sortBrewsBy("By Date");
-            ba.setBrewList(brewRecipeArrayList);
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if(isVisibleToUser && getView()!=null) {
+            Log.i("SetVisible", "Set user visible called on Brew Fragment");
+            new LoadBrews().execute("checkDBChanged");
         }
     }
 
@@ -136,17 +128,15 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemLongClic
         rv = rootView.findViewById(R.id.brew_recycler_view);
         llm = new LinearLayoutManager(getActivity());
         rv.setLayoutManager(llm);
-//in oncreate        mDBOperator = new DBOperator(this.getContext());
-        ArrayList<BrewRecipe> dbBrewList = mDBOperator.getBrewRecipes();
-        if (savedInstanceState != null && brewRecipeArrayList.size() == dbBrewList.size()) {
+        rv.setAdapter(ba);
+        if (savedInstanceState != null) {
             Log.i("Brew Order", "Setting to last saved order");
             Parcelable savedRecyclerLayoutState = savedInstanceState.getParcelable(LIST_STATE_KEY);
             rv.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
             brewRecipeArrayList = savedInstanceState.getParcelableArrayList(BREW_RECIPE_LIST_KEY);
+            ba.setBrewList(brewRecipeArrayList);
         }
 
-        ba = new BrewAdapter(rootView.getContext(), brewRecipeArrayList);
-        rv.setAdapter(ba);
 
         //handle drog drop
         ItemTouchHelper.Callback ithCallback = new ItemTouchHelper.Callback() {
@@ -181,11 +171,10 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemLongClic
                 showSortMenu();
             }
         });
-
-
-
+        if (!isViewShown) {
+            new LoadBrews().execute("checkDBChanged");
+        }
         return rootView;
-
     }
 
     public void showSortMenu() {
@@ -199,13 +188,13 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemLongClic
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.sort_by_name:
-                        sortBrewsBy("By Name");
+                        new LoadBrews().execute("sortName");
                         return true;
                     case R.id.sort_by_method:
-                        sortBrewsBy("By Method");
+                        new LoadBrews().execute("sortMethod");
                         return true;
                     case R.id.sort_by_date:
-                        sortBrewsBy("By Date");
+                        new LoadBrews().execute("sortDate");
                         return true;
                     default:
                         return false;
@@ -251,6 +240,12 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemLongClic
     @Override
     public void onStop() {
         super.onStop();
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
         SharedPreferences appSharedPrefs = PreferenceManager
                 .getDefaultSharedPreferences(this.getActivity().getApplicationContext());
         SharedPreferences.Editor prefsEditor = appSharedPrefs.edit();
@@ -259,7 +254,6 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemLongClic
         prefsEditor.putString(BREW_RECIPE_PREFERENCE_KEY, json);
         prefsEditor.apply();
     }
-
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -293,10 +287,6 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemLongClic
         mListener = null;
     }
 
-    @Override
-    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        return false;
-    }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -307,90 +297,119 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemLongClic
         startActivity(myIntent);
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String sortBy = parent.getItemAtPosition(position).toString();
-        if(!sortBy.equals(sortByCurrent))
-            sortBrewsBy(sortBy);
-        sortByCurrent = sortBy;
-    }
 
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        getActivity().finish();
-        startActivity(getActivity().getIntent());
-    }
 
-    public void sortBrewsBy(String sortBy) {
-        Log.i("Sort", "Sort by called in brew fragment");
-        switch (sortBy) {
-            case "By Name":
-                Collections.sort(brewRecipeArrayList, new Comparator<BrewRecipe>() {
-                    @Override
-                    public int compare(BrewRecipe o1, BrewRecipe o2) {
-                        return o1.getName().compareToIgnoreCase(o2.getName());
-                    }
-                });
-                break;
-            case "By Method":
-                Collections.sort(brewRecipeArrayList, new Comparator<BrewRecipe>() {
-                    @Override
-                    public int compare(BrewRecipe o1, BrewRecipe o2) {
-                        return o1.getBrewMethod().compareToIgnoreCase(o2.getBrewMethod());
-                    }
-                });
-                break;
-            case "By Date":
-                Collections.sort(brewRecipeArrayList, new Comparator<BrewRecipe>() {
-                    @Override
-                    public int compare(BrewRecipe o1, BrewRecipe o2) {
-                        int compareResult = 0;
-                        try {
-                            Date first = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").parse(o1.getDateAdded());
-                            Date end = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").parse(o2.getDateAdded());
-                            compareResult =  end.compareTo(first);
-                        }
-                        catch (ParseException e) {Log.e("Parse Error", e.toString());}
-                        return compareResult;
-                    }
-                });
-                break;
 
-        }
-        ba.notifyDataSetChanged();
+    private class LoadBrews extends AsyncTask<String, Void, ArrayList<BrewRecipe>> {
+        private ArrayList<BrewRecipe> list;
 
-    }
-
-    public class myMenuClickListener implements PopupMenu.OnMenuItemClickListener {
-        String roastName;
-        public myMenuClickListener(String roastName) {
-            this.roastName = roastName;
+        @Override
+        protected ArrayList<BrewRecipe> doInBackground(String... params) {
+            list = brewRecipeArrayList;
+            switch (params[0]) {
+                case "checkDBChanged":
+                    list = checkDBChanged();
+                    break;
+                case "initialize":
+                    list = initialize();
+                    break;
+                case "sortName":
+                    list = sortName();
+                    break;
+                case "sortDate":
+                    list = sortDate();
+                    break;
+                case "sortMethod":
+                    list = sortMethod();
+                    break;
+            }
+            return list;
         }
 
         @Override
-        public boolean onMenuItemClick(MenuItem item) {
-            return false;
+        protected void onPostExecute(ArrayList<BrewRecipe> brewRecipes) {
+            super.onPostExecute(brewRecipes);
+            brewRecipeArrayList = brewRecipes;
+            ba.setBrewList(brewRecipes);
+        }
+
+        ArrayList<BrewRecipe> checkDBChanged(){
+            ArrayList<BrewRecipe> current = brewRecipeArrayList;
+            ArrayList<BrewRecipe> dbBrewList = mDBOperator.getBrewRecipes();
+            if(current.size() != dbBrewList.size()){
+                return dbBrewList;
+            }
+            else
+                return current;
+        }
+
+        ArrayList<BrewRecipe> initialize(){
+            ArrayList<BrewRecipe> dbBrewList = mDBOperator.getBrewRecipes();
+            Gson gson = new Gson();
+            SharedPreferences appSharedPrefs = PreferenceManager
+                    .getDefaultSharedPreferences(getActivity().getApplicationContext());
+            String json = appSharedPrefs.getString(BREW_RECIPE_PREFERENCE_KEY, "");
+            if (json.isEmpty()) {
+                Log.i("Shared Pref", "No shared preferences for brew list order");
+            } else {
+                Log.i("Shared Pref", "Loading shared preferences for brew list order");
+                Type type = new TypeToken<List<BrewRecipe>>() {
+                }.getType();
+                brewRecipeArrayList = gson.fromJson(json, type);
+            }
+            if (dbBrewList.size() != brewRecipeArrayList.size()) {
+                Log.i("Shared Pref", "Sizes dont match");
+                return dbBrewList;
+            }
+            else {
+                Log.i("Shared Pref", "Sizes match, setting to saved");
+                return brewRecipeArrayList;
+            }
+        }
+
+        ArrayList<BrewRecipe> sortName() {
+            ArrayList<BrewRecipe> currentList = ba.getBrewList();
+            Collections.sort(currentList, new Comparator<BrewRecipe>() {
+                @Override
+                public int compare(BrewRecipe o1, BrewRecipe o2) {
+                    return o1.getName().compareToIgnoreCase(o2.getName());
+                }
+            });
+            return currentList;
+        }
+
+        ArrayList<BrewRecipe> sortDate() {
+            ArrayList<BrewRecipe> currentList = ba.getBrewList();
+            Collections.sort(currentList, new Comparator<BrewRecipe>() {
+                @Override
+                public int compare(BrewRecipe o1, BrewRecipe o2) {
+                    int compareResult = 0;
+                    try {
+                        Date first = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").parse(o1.getDateAdded());
+                        Date end = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").parse(o2.getDateAdded());
+                        compareResult =  end.compareTo(first);
+                    }
+                    catch (ParseException e) {Log.e("Parse Error", e.toString());}
+                    return compareResult;
+                }
+            });
+            return currentList;
+        }
+
+        ArrayList<BrewRecipe> sortMethod() {
+            ArrayList<BrewRecipe> currentList = ba.getBrewList();
+            Collections.sort(currentList, new Comparator<BrewRecipe>() {
+                @Override
+                public int compare(BrewRecipe o1, BrewRecipe o2) {
+                    return o1.getBrewMethod().compareToIgnoreCase(o2.getBrewMethod());
+                }
+            });
+            return currentList;
         }
     }
 }

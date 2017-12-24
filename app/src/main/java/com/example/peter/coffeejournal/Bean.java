@@ -10,8 +10,8 @@ public class Bean {
     int beanWeight;
 
     public Bean() {
-        beanName = "Custom";
-        beanWeight = 500;
+        beanName = "";
+        beanWeight = 0;
     }
 
     public Bean(String name, int weight) {

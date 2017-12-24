@@ -32,7 +32,7 @@ import java.util.regex.Pattern;
 public class AddBrew extends AppCompatActivity implements View.OnClickListener {
 
     BrewRecipe br;
-    String name, brewMethod, grind, notes, editBrewName;
+    String name, brewMethod, grind, notes, editBrewName, editBrewDate;
     int ratio, brewTime, bloomTime, metric, icon;
     DBOperator db;
     double waterUnits, coffeeUnits;
@@ -61,6 +61,7 @@ public class AddBrew extends AppCompatActivity implements View.OnClickListener {
         setContentView(R.layout.activity_add_brew);
         Intent myIntent = getIntent();
         editBrewName = myIntent.getStringExtra("Brew Name");
+        editBrewDate = myIntent.getStringExtra("Brew Date");
 
         android.support.v7.widget.Toolbar mtoolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(mtoolbar);
@@ -223,6 +224,14 @@ public class AddBrew extends AppCompatActivity implements View.OnClickListener {
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent i = new Intent(this, MainActivity.class);
+        startActivity(i);
+        finish();
+    }
+
+    @Override
     public void onClick(View v) {insertBrew();}
 
     public void insertBrew() {
@@ -335,23 +344,17 @@ public class AddBrew extends AppCompatActivity implements View.OnClickListener {
             long rows = db.insert(br);
             if (rows != -1)
                 Log.i("db", "Sucessfully inserted rows: " + rows);
+                Intent i = new Intent(this, MainActivity.class);
+                startActivity(i);
             finish();
             }
 
-            if (editBrewName != null && !editBrewName.equals(name)) {
-                long rows = db.insert(br);
-                if (rows != -1)
-                    Log.i("db", "Sucessfully inserted rows: " + rows);
-                else
-                    myToast.show();
-
-                finish();
-            }
-
             else {
-                long rows = db.update(br);
+                long rows = db.update(br, editBrewName, editBrewDate);
                 if (rows != -1) {
                     Log.i("db", "Sucessfully inserted rows: " + rows);
+                    Intent i = new Intent(this, MainActivity.class);
+                    startActivity(i);
                     finish();
                 }
                 else {
@@ -363,8 +366,5 @@ public class AddBrew extends AppCompatActivity implements View.OnClickListener {
         }
 
     }
-
-    private static final String TIME24HOURS_PATTERN = "([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]";
-
 
 }

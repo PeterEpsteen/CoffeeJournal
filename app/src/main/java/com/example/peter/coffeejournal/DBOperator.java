@@ -18,7 +18,7 @@ import java.util.List;
 
 public class DBOperator extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 14;
+    private static final int DATABASE_VERSION = 16;
     private static final String DATABASE_NAME = "COFFEE_JOURNAL_DB";
     private static final String BREW_TABLE_NAME = "BREW_TABLE";
     private static final String ROAST_TABLE_NAME = "ROAST_TABLE";
@@ -48,9 +48,9 @@ public class DBOperator extends SQLiteOpenHelper {
     private static final String CREATE_BREW_TABLE = "create table if not exists " + BREW_TABLE_NAME + " ( " + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + NAME + " TEXT, " + BREW_METHOD + " TEXT, " +
             WATER_UNITS + " REAL, "+ COFFEE_UNITS +" REAL, "+ METRIC + " INTEGER, " + NOTES + " TEXT, " + DATE + " TEXT, " + GRIND + " TEXT, " + BLOOM_TIME + " INTEGER, " + BREW_TIME + " INTEGER, " + TEMP + " INTEGER)";
     private static final String CREATE_ROAST_TABLE = "create table if not exists " + ROAST_TABLE_NAME + " ( " + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + NAME + " TEXT, " + NOTES + " TEXT, " + DATE + " TEXT)";
-    private static final String CREATE_BEANS_TABLE = "create table if not exists " + BEANS_TABLE_NAME + " ( " + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + NAME + " TEXT, " + WEIGHT + " REAL, " + METRIC + " INTEGER, " + ROAST_ID + " INTEGER)";
-    private static final String CREATE_ROAST_STEPS_TABLE = "create table if not exists " + ROAST_STEPS_TABLE_NAME + " ( " + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + STEP_TIME + " " +
-            "TEXT, " + ROAST_ID + " INTEGER, " + TEMP + " INTEGER, " + NOTES + " TEXT, " + METRIC + " INTEGER)";
+    private static final String CREATE_BEANS_TABLE = "create table if not exists " + BEANS_TABLE_NAME + " ( " + NAME + " TEXT, " + WEIGHT + " REAL, " + METRIC + " INTEGER, " + ROAST_ID + " INTEGER, PRIMARY KEY(" + ROAST_ID + ", " + NAME + "))";
+    private static final String CREATE_ROAST_STEPS_TABLE = "create table if not exists " + ROAST_STEPS_TABLE_NAME + " ( " + STEP_TIME + " " +
+            "TEXT, " + ROAST_ID + " INTEGER, " + TEMP + " INTEGER, " + NOTES + " TEXT, " + METRIC + " INTEGER, PRIMARY KEY(" + ROAST_ID + ", " + STEP_TIME + "))";
 
 
     public DBOperator(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -320,28 +320,27 @@ public class DBOperator extends SQLiteOpenHelper {
         cv.put(TEMP, "200");  //NOT SURE
         cv.put(DATE, br.getDateAdded());
         long returnLong = db.insert(BREW_TABLE_NAME, null, cv);
+        if (returnLong > 0) {
+            Log.i("DB", "Succesfully inserted brew name: " + br.getName());
+        }
         db.close();
         return returnLong;
 
     }
 
-    public long update(BrewRecipe br) {
+    public long update(BrewRecipe br, String editBrewName, String editBrewDate) {
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put(NAME, br.getName());
-        cv.put(BREW_METHOD, br.getBrewMethod());
-        cv.put(COFFEE_UNITS, br.getCoffeeUnits());
-        cv.put(WATER_UNITS, br.getWaterUnits());
-        cv.put(METRIC, br.getMetric());
-        cv.put(NOTES, br.getNotes());
-        cv.put(GRIND, br.getGrind());
-        cv.put(BLOOM_TIME, br.getBloomTime());
-        cv.put(BREW_TIME, br.getBrewTime());
-        cv.put(TEMP, "200");  //NOT SURE
-        String whereClause = NAME + " = '" + br.getName() + "'";
-        long returnLong = db.update(BREW_TABLE_NAME, cv, whereClause, null);
+        long returnLong = -1;
+        String whereClause = NAME + " = '" + editBrewName + "' AND " + DATE + " = '" + editBrewDate + "'";
+        if(db.delete(BREW_TABLE_NAME, whereClause, null) > 0) {
+            Log.i("DB", "Deleted old brew name: " + editBrewName);
+        }
+        else {
+            Log.e("DB", "Error deleting old brew");
+            return -1;
+        }
         db.close();
-        return returnLong;
+        return insert(br);
     }
 
     public long update(Roast r) {
@@ -350,10 +349,107 @@ public class DBOperator extends SQLiteOpenHelper {
         cv.put(NAME, r.getName());
         cv.put(NOTES, r.getNotes());
         cv.put(DATE, r.getDate());
-        String whereClause = NAME + " = '" + r.getName() + "' AND " + DATE + " = '" + r.getDate() + "'";
-        long returnLong = db.update(BREW_TABLE_NAME, cv, whereClause, null);
+        String whereClause =  DATE + " = '" + r.getDate() + "'";
+        long returnLong = db.update(ROAST_TABLE_NAME, cv, whereClause, null);
+        int roastID = -1;
+        String roastIdQuery = "select "+ ID + " from " + ROAST_TABLE_NAME + " where " + DATE + " = '" + r.getDate() + "'";
+        Cursor data = db.rawQuery(roastIdQuery, null);
+        if (data.moveToFirst()){
+            roastID = data.getInt(data.getColumnIndex(ID));
+        }
+        if(data != null)
+            data.close();
+        Log.i("DB", "Roast ID of updated roast: " + roastID);
+        updateBeans(r, roastID);
+        //insert step rows
+        updateSteps(r, roastID);
+
+        db.close();
+
+        return returnLong;
+    }
+
+    private long updateBeans(Roast r, int roastID) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        long returnLong = -1;
+        String whereClause = ROAST_ID + " = " + roastID;
+        if(db.delete(BEANS_TABLE_NAME, whereClause, null) > 0) {
+            Log.i("DB", "Deleted old beans");
+        }
+        ContentValues cv = new ContentValues();
+        List<Bean> beanArrayList = r.getBeanList();
+        for(Bean bean : beanArrayList) {
+            cv = new ContentValues();
+            cv.put(NAME, bean.getBeanName());
+            cv.put(WEIGHT, bean.getBeanWeight());
+            cv.put(ROAST_ID, roastID);
+            returnLong = db.insert(BEANS_TABLE_NAME, null, cv);
+            Log.i("Insert", "Inserted " + bean.getBeanName() +"with roast id: " + roastID + " Return value is: " + returnLong);
+        }
         db.close();
         return returnLong;
+    }
+
+    private long updateSteps(Roast r, int roastID) {
+        ContentValues cv = new ContentValues();
+        SQLiteDatabase db = this.getWritableDatabase();
+        String whereClause = ROAST_ID + " = " + roastID;
+        if(db.delete(ROAST_STEPS_TABLE_NAME, whereClause, null) > 0) {
+            Log.i("DB", "Deleted old steps");
+        }
+        long returnLong = -1;
+        List<RoastStep> stepList = r.getStepList();
+        for(RoastStep step : stepList) {
+            cv = new ContentValues();
+            cv.put(STEP_TIME, step.getTime());
+            cv.put(TEMP, step.getTemp());
+            cv.put(NOTES, step.getComment());
+            cv.put(ROAST_ID, roastID);
+            returnLong = db.insert(ROAST_STEPS_TABLE_NAME, null, cv);
+            Log.i("Insert", "Inserted " + step.getTime());
+        }
+        db.close();
+        return returnLong;
+    }
+
+    private long insertBeans(Roast r, int roastID) {
+        //insert bean rows
+        SQLiteDatabase db = this.getWritableDatabase();
+        long returnLong = -1;
+        ContentValues cv = new ContentValues();
+        List<Bean> beanArrayList = r.getBeanList();
+        for(Bean bean : beanArrayList) {
+            cv = new ContentValues();
+            cv.put(NAME, bean.getBeanName());
+            cv.put(WEIGHT, bean.getBeanWeight());
+            cv.put(ROAST_ID, roastID);
+            returnLong = db.insert(BEANS_TABLE_NAME, null, cv);
+            Log.i("Insert", "Inserted " + bean.getBeanName() +"with roast id: " + roastID + " Return value is: " + returnLong);
+        }
+        db.close();
+        return returnLong;
+
+    }
+
+
+
+    private long insertSteps(Roast r, int roastID) {
+        ContentValues cv = new ContentValues();
+        SQLiteDatabase db = this.getWritableDatabase();
+        long returnLong = -1;
+        List<RoastStep> stepList = r.getStepList();
+        for(RoastStep step : stepList) {
+            cv = new ContentValues();
+            cv.put(STEP_TIME, step.getTime());
+            cv.put(TEMP, step.getTemp());
+            cv.put(NOTES, step.getComment());
+            cv.put(ROAST_ID, roastID);
+            returnLong = db.insert(ROAST_STEPS_TABLE_NAME, null, cv);
+            Log.i("Insert", "Inserted " + step.getTime());
+        }
+        db.close();
+        return returnLong;
+
     }
 
     public long insert(Roast roast) {
@@ -372,29 +468,11 @@ public class DBOperator extends SQLiteOpenHelper {
         }
         if(data != null)
             data.close();
-        //insert bean rows
-        List<Bean> beanArrayList = roast.getBeanList();
-        for(Bean bean : beanArrayList) {
-            cv = new ContentValues();
-            cv.put(NAME, bean.getBeanName());
-            cv.put(WEIGHT, bean.getBeanWeight());
-            cv.put(ROAST_ID, roastID);
-            returnVal = db.insert(BEANS_TABLE_NAME, null, cv);
-            Log.i("Insert", "Inserted " + bean.getBeanName() +"with roast id: " + roastID + " Return value is: " + returnVal);
-        }
-        //insert step rows
-        List<RoastStep> stepList = roast.getStepList();
-        for(RoastStep step : stepList) {
-            cv = new ContentValues();
-            cv.put(STEP_TIME, step.getTime());
-            cv.put(TEMP, step.getTemp());
-            cv.put(NOTES, step.getComment());
-            cv.put(ROAST_ID, roastID);
-            returnVal = db.insert(ROAST_STEPS_TABLE_NAME, null, cv);
-            Log.i("Insert", "Inserted " + step.getTime());
-        }
-
         db.close();
+        Log.i("DB", "Roast id of new roast: "+ roastID);
+
+        insertBeans(roast, roastID);
+        insertSteps(roast, roastID);
         return  returnVal;
     }
 

@@ -62,11 +62,13 @@ public class MainActivity extends AppCompatActivity implements BrewFragment.OnFr
                 if (current == 0) {
                     Intent intent = new Intent(v.getContext(), AddBrew.class);
                     startActivity(intent);
+                    finish();
                 }
 
                 else if (current == 1) {
                     Intent intent = new Intent(v.getContext(), AddRoast.class);
                     startActivity(intent);
+                    finish();
                 }
             }
         });
@@ -97,10 +99,7 @@ public class MainActivity extends AppCompatActivity implements BrewFragment.OnFr
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-            Intent refresh = new Intent(this, MainActivity.class);
-            startActivity(refresh);
-            this.finish();
+           Log.i("Result", "Activity result received main activity");
     }
 
 }

@@ -55,6 +55,12 @@ public class RoastAdapter extends RecyclerView.Adapter<RoastAdapter.ViewHolder> 
     }
 
     @Override
+    public long getItemId(int position) {
+        return roastList.get(position).getID();
+    }
+
+
+    @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(mContext).inflate(R.layout.roast_list_item, parent, false);
         v.setOnClickListener(new View.OnClickListener() {
@@ -68,6 +74,7 @@ public class RoastAdapter extends RecyclerView.Adapter<RoastAdapter.ViewHolder> 
                 myIntent.putExtra("Name", roastName);
                 myIntent.putExtra("Date", date);
                 v.getContext().startActivity(myIntent);
+                ((Activity)mContext).finish();
             }
         });
         ViewHolder vh = new ViewHolder(v);
@@ -85,7 +92,7 @@ public class RoastAdapter extends RecyclerView.Adapter<RoastAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(final RoastAdapter.ViewHolder holder, final int position) {
         Roast roast = new Roast();
-        roast = roastList.get(position);
+        roast = roastList.get(holder.getAdapterPosition());
         holder.roastNameTv.setText(roast.getName());
         holder.dateAddedTv.setText(roast.getDate());
         final Roast finalRoast = roast;
@@ -102,7 +109,7 @@ public class RoastAdapter extends RecyclerView.Adapter<RoastAdapter.ViewHolder> 
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.menu_delete:
-                                deleteRoast(finalRoast.getName(), finalRoast.getDate(), position);
+                                deleteRoast(finalRoast.getName(), finalRoast.getDate(), holder.getAdapterPosition());
                                 return true;
                             case R.id.menu_edit:
                                 editRoast(finalRoast.getName(), finalRoast.getDate());

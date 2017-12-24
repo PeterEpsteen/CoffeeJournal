@@ -273,7 +273,7 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener 
                     roast.addToBeanList(newBean);
                 } else if (beanWeightString.equals("")) {
                     Log.i("Bean", "Adding bean name: " + beanName);
-                    int beanWeight = -1;
+                    int beanWeight = 0;
                     Bean newBean = new Bean(beanName, beanWeight);
                     roast.addToBeanList(newBean);
                 } else if (roast.getBeanList().size() < 1) {
@@ -315,23 +315,39 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener 
                 finish();}
                 else {
                     Toast myToast = Toast.makeText(getApplicationContext(), "Error inserting or updating", Toast.LENGTH_LONG);
-                    finish();
-                }
+//                    Intent i = new Intent(this, MainActivity.class);
+//                    startActivity(i);
+                    Intent i = new Intent(this, MainActivity.class);
+                    startActivity(i);
+                    finish();                }
             }
             else {
                 roast.setDateAdded(editRoastDate);
                 long rows = db.update(roast);
-                if (rows != -1) {
+                if (rows > 0) {
                     Log.i("db", "Successfully updated roast");
-                    finish();
-                }
+                   /* Intent i = new Intent(this, MainActivity.class);
+                    startActivity(i);*/
+                    Intent i = new Intent(this, MainActivity.class);
+                    startActivity(i);
+                    finish();                }
                 else {
                     Toast myToast = Toast.makeText(getApplicationContext(), "Error inserting or updating", Toast.LENGTH_LONG);
+                    myToast.show();
+                    Intent i = new Intent(this, MainActivity.class);
+                    startActivity(i);
                     finish();
                 }
         }
 
         return roast;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent i = new Intent(this, MainActivity.class);
+        startActivity(i);
     }
 
     @Override
@@ -344,8 +360,9 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener 
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle arrow click here
         if (item.getItemId() == android.R.id.home) {
-            finish(); // close this activity and return to preview activity (if there is any)
-        }
+            Intent i = new Intent(this, MainActivity.class);
+            startActivity(i);
+            finish();        }
 
         return super.onOptionsItemSelected(item);
     }
