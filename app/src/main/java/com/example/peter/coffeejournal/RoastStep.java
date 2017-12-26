@@ -6,10 +6,15 @@ package com.example.peter.coffeejournal;
 
 public class RoastStep {
 
-    String time, comment;
-    int temp;
+    private String time, comment;
+    private int temp, specialStep;
 
-    public RoastStep(){return;}
+    final static int ROAST_START = 1;
+    final static int ROAST_END = 2;
+    final static int FIRST_CRACK_START = 3;
+    final static int FIRST_CRACK_END = 4;
+    final static int SECOND_CRACK_START = 5;
+    final static int SECOND_CRACK_END = 6;
 
     public RoastStep(String time, int temp, String comment) {
         this.comment = comment;
@@ -36,6 +41,16 @@ public class RoastStep {
     public void setTemp(int temp) {
         this.temp = temp;
     }
+
+    public void setSpecialStep(int specialStep) {
+        this.specialStep = specialStep;
+    }
+
+    public int getSpecialStep() {
+        return specialStep;
+    }
+
+
 
     public void setTime(String time) {
         this.time = time;

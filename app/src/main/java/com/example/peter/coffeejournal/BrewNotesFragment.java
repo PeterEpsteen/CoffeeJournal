@@ -29,12 +29,7 @@ public class BrewNotesFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_brew_notes, container, false);
-        notesTv = rootView.findViewById(R.id.notes_text_view);
-        grindTv = rootView.findViewById(R.id.brew_grind_notes_text_view);
-        titleTv = rootView.findViewById(R.id.brew_title_notes_text_view);
-        notesTv.setText(notes);
-        titleTv.setText(name);
-        grindTv.setText(grind);
+
         return rootView;
     }
 

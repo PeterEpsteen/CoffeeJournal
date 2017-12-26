@@ -141,7 +141,7 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
         ratio = waterUnits/coffeeUnits;
         originalRatio = ratio;
 
-        resetButton = rootView.findViewById(R.id.reset_button);
+        resetButton = getActivity().findViewById(R.id.reset_button);
         resetButton.setOnClickListener(this);
 
 
@@ -200,7 +200,7 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
 
         textTimer.setText(String.format("%02d", bloomSeconds / 60) + ":" + String.format("%02d", bloomSeconds % 60));
         barTimer = getActivity().findViewById(R.id.progressbarRL);
-        startButton = rootView.findViewById(R.id.start_button);
+        startButton = getActivity().findViewById(R.id.start_button);
         startButton.setOnClickListener(this);
 
         updateMeasurementViews();

@@ -32,6 +32,8 @@ import java.util.List;
 
 
 //TODO Refine validation and make sure there are no bugs. Seems stable for now.
+//TODO add special step adding and displaying.
+//TODO graphing roast
 
 public class AddRoast extends AppCompatActivity implements View.OnClickListener {
 
