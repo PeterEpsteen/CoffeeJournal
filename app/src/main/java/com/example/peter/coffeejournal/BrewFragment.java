@@ -163,7 +163,13 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemClickLis
         };
         ItemTouchHelper ith = new ItemTouchHelper(ithCallback);
         ith.attachToRecyclerView(rv);
-
+        TextView sortTv = rootView.findViewById(R.id.sort_text_view);
+        sortTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showSortMenu();
+            }
+        });
         imageButton = rootView.findViewById(R.id.sort_button);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,6 +180,7 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemClickLis
         if (!isViewShown) {
             new LoadBrews().execute("checkDBChanged");
         }
+
         return rootView;
     }
 
@@ -238,14 +245,8 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemClickLis
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onPause() {
+        super.onPause();
         SharedPreferences appSharedPrefs = PreferenceManager
                 .getDefaultSharedPreferences(this.getActivity().getApplicationContext());
         SharedPreferences.Editor prefsEditor = appSharedPrefs.edit();
@@ -253,6 +254,12 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemClickLis
         String json = gson.toJson(ba.getBrewList());
         prefsEditor.putString(BREW_RECIPE_PREFERENCE_KEY, json);
         prefsEditor.apply();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
     }
 
     @Override

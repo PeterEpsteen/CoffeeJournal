@@ -39,15 +39,26 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="0dp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sort"
+                android:id="@+id/sort_text_view"
+                style="@style/TextAppearance.AppCompat.Title"
+                android:layout_marginRight="-8dp"
+                android:layout_gravity="center"/>
+
+
             <ImageButton
                 android:layout_width="56dp"
                 android:layout_height="56dp"
                 android:padding="8dp"
                 android:id="@+id/sort_button"
                 android:scaleType="centerCrop"
-                android:background="@color/backgroundDefaultWhite"
+                android:background="@null"
                 android:src="@drawable/sort_by_icon"
                 android:focusableInTouchMode="true"/>
+
 
 
         </LinearLayout>

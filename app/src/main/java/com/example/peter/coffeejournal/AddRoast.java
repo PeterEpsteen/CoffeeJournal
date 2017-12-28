@@ -4,12 +4,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Handler;
+import android.speech.tts.TextToSpeech;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -24,11 +28,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
+
+import org.w3c.dom.Text;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 
 //TODO Refine validation and make sure there are no bugs. Seems stable for now.
@@ -53,6 +61,8 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener 
     boolean isTimerOn = false;
     private Toolbar mToolBar;
     private String editRoastName, editRoastDate;
+    private static final Pattern timePattern
+            = Pattern.compile("^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$");
 
     //runs without a timer by reposting this handler at the end of the runnable
     Handler timerHandler = new Handler();
@@ -200,8 +210,10 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener 
         LayoutInflater inflater = getLayoutInflater();
         CardView stepRow = (CardView) inflater.inflate(R.layout.add_tempature_row, null, false);
         stepsContainer.addView(stepRow);
-        TextView timeStepTv = stepRow.findViewById(R.id.time_edit_text);
+        TextInputLayout timeTextInput = stepRow.findViewById(R.id.time_textinputlayout);
+        EditText timeStepTv = stepRow.findViewById(R.id.time_edit_text);
         timeStepTv.setText(String.format("%02d:%02d", minutes, seconds));
+        timeStepTv.addTextChangedListener(new mTextWatcher(timeTextInput));
         LinearLayout stepRowLinear = stepRow.findViewById(R.id.add_step_linear);
         stepsRowLinearLayoutList.add(stepRowLinear);
         Log.i("Row", "Adding temp row...");
@@ -219,9 +231,44 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener 
         EditText stepCommentEdit = stepRow.findViewById(R.id.comments_edit_text);
         stepCommentEdit.setText(stepComment);
         stepsContainer.addView(stepRow);
+        TextInputLayout timeTextInput = stepRow.findViewById(R.id.time_textinputlayout);
+        stepTimeEdit.addTextChangedListener(new mTextWatcher(timeTextInput));
         LinearLayout stepRowLinear = stepRow.findViewById(R.id.add_step_linear);
         stepsRowLinearLayoutList.add(stepRowLinear);
         Log.i("Row", "Adding temp row...");
+    }
+
+    private class mTextWatcher implements TextWatcher {
+        private TextInputLayout timeTextInput;
+
+        public mTextWatcher(TextInputLayout textInputLayout) {
+            this.timeTextInput = textInputLayout;
+        }
+        private boolean isValid(CharSequence s) {
+            return timePattern.matcher(s).matches();
+        }
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            String working = s.toString();
+            boolean isValid = true;
+            if (!isValid(s)) {
+                timeTextInput.setError("Please enter valid time (00:00)");
+                timeTextInput.setErrorEnabled(true);
+            }
+            else {
+                timeTextInput.setErrorEnabled(false);
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
     }
 
     public void addBeanRow() {
@@ -363,6 +410,7 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener 
         // handle arrow click here
         if (item.getItemId() == android.R.id.home) {
             Intent i = new Intent(this, MainActivity.class);
+            i.putExtra("Page", "Roast");
             startActivity(i);
             finish();        }
 

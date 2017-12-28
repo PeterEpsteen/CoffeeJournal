@@ -90,7 +90,7 @@ public class RoastFragment extends Fragment implements AdapterView.OnItemClickLi
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser) {
+        if (isVisibleToUser && getView() != null) {
             Log.i("SetVisible", "Set user visible called on Roast Fragment");
             new LoadRoasts("checkDBChanged").execute();
         }
@@ -229,8 +229,8 @@ public class RoastFragment extends Fragment implements AdapterView.OnItemClickLi
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onPause() {
+        super.onPause();
         SharedPreferences appSharedPrefs = PreferenceManager
                 .getDefaultSharedPreferences(this.getActivity().getApplicationContext());
         SharedPreferences.Editor prefsEditor = appSharedPrefs.edit();
@@ -238,6 +238,12 @@ public class RoastFragment extends Fragment implements AdapterView.OnItemClickLi
         String json = gson.toJson(roastAdapter.getRoastList());
         prefsEditor.putString(ROAST_PREFERNCE_KEY, json);
         prefsEditor.apply();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
     }
 
     @Override

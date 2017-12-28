@@ -32,6 +32,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements BrewFragment.OnFragmentInteractionListener, RoastFragment.OnFragmentInteractionListener {
 
+    //TODO handle correct tab on back pressed
+
     private SectionsPageAdapter mSectionsPageAdapter;
     private ViewPager mViewPager;
     private FloatingActionButton addButton;
@@ -50,6 +52,8 @@ public class MainActivity extends AppCompatActivity implements BrewFragment.OnFr
 
         TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+
+
 
 
         addButton = findViewById(R.id.fab);
@@ -82,6 +86,16 @@ public class MainActivity extends AppCompatActivity implements BrewFragment.OnFr
         adapter.addFragment(new BrewFragment(), "Brew");
         adapter.addFragment(new RoastFragment(), "Roast" );
         viewPager.setAdapter(adapter);
+        Intent intent = getIntent();
+        String setCurrentPage = intent.getStringExtra("Page");
+        if (setCurrentPage != null) {
+            if (setCurrentPage.equals("Brew")){
+                mViewPager.setCurrentItem(0);
+            }
+            else if (setCurrentPage.equals("Roast")){
+                mViewPager.setCurrentItem(1);
+            }
+        }
     }
 
 
@@ -101,6 +115,8 @@ public class MainActivity extends AppCompatActivity implements BrewFragment.OnFr
         super.onActivityResult(requestCode, resultCode, data);
            Log.i("Result", "Activity result received main activity");
     }
+
+
 
 }
 

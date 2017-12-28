@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-
+<!--TODO fix elevation issues -->
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -13,59 +13,39 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="#D7CCC8">
+        android:layout_marginBottom="56dp"
+        android:background="@color/backgroundColorBeige">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/appbar2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/appbar_padding_top"
-        android:theme="@style/AppTheme.AppBarOverlay"
-        android:elevation="4dp"
-        >
-        <android.support.v7.widget.Toolbar
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appbar2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-            android:id="@+id/my_bar"
-            app:title="Test"
+            android:paddingTop="@dimen/appbar_padding_top"
+            android:theme="@style/AppTheme.AppBarOverlay"
+            android:elevation="4dp"
             >
-            <android.support.design.widget.TabLayout
-                android:id="@+id/tabs2"
-                app:tabMode="fixed"
-                android:layout_gravity="center_horizontal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+            <android.support.v7.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+                android:id="@+id/my_bar"
+                >
 
-                <android.support.design.widget.TabItem
-                    android:id="@+id/tabRecipe"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Settings" />
-
-                <android.support.design.widget.TabItem
-                    android:id="@+id/tabNotes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Notes" />
-
-
-            </android.support.design.widget.TabLayout>
-
-        </android.support.v7.widget.Toolbar>
-        
+            </android.support.v7.widget.Toolbar>
 
 
 
-    </android.support.design.widget.AppBarLayout>
+        </android.support.design.widget.AppBarLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:elevation="2dp"
+            android:id="@+id/top_measurements_container"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:background="@color/backgroundDefaultWhite"
             android:padding="16dp">
 
@@ -84,20 +64,23 @@
                     android:textAlignment="gravity"
                     android:gravity="bottom"
                     android:layout_gravity="center"
-                    style="@style/TextAppearance.AppCompat.Body1"
+                    style="@style/TextAppearance.AppCompat.Subhead"
                     />
 
                 <EditText
-                    android:inputType="numberDecimal"
-                    android:lines="1"
                     android:id="@+id/water_weight_text_view"
                     android:layout_width="wrap_content"
+                    android:padding="0dp"
                     android:layout_height="wrap_content"
                     android:text="500"
+                    android:inputType="numberDecimal"
+                    android:gravity="top"
+                    android:lines="1"
                     android:textAlignment="center"
                     android:includeFontPadding="false"
                     android:layout_gravity="center"
-                    style="@style/TextAppearance.AppCompat.Display1"
+                    style="@style/TextAppearance.AppCompat.Display2"
+                    android:backgroundTint="@color/backgroundColorBeige"
                     android:textColor="@color/colorTextDark"
                     android:textStyle="bold"
                     />
@@ -117,53 +100,54 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:layout_height="match_parent">
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:clipToPadding="false"
-                app:layout_constraintLeft_toRightOf="parent"
-                app:layout_constraintRight_toLeftOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/start_button"
-                android:layout_gravity="center"
-                android:id="@+id/timer_relative_layout">
-
-                <ProgressBar
-                    android:id="@+id/progressbarRL"
-                    android:layout_width="124dip"
-                    android:layout_height="124dip"
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:clipToPadding="false"
-                    android:indeterminate="false"
-                    android:progressDrawable="@drawable/circle"
-                    android:background="@drawable/circle_shape"
-                    style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
-                    android:max="6000"
-                    android:rotation="270"
-                    android:progress="6000" />
-                <TextView
-                    android:id="@+id/tvTimeCount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerInParent="true"
-                    android:paddingTop="8dp"
-                    android:textStyle="bold"
-                    android:text="00:00"
-                    style="@style/TextAppearance.AppCompat.Display1"
-                    android:textColor="@color/colorTextDark"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/step_tv"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="24dp"
-                    android:text="Bloom"
-                    style="@style/TextAppearance.AppCompat.Subhead"
-                    />
+                    app:layout_constraintLeft_toRightOf="parent"
+                    app:layout_constraintRight_toLeftOf="parent"
+                    app:layout_constraintBottom_toTopOf="@id/start_button"
+                    android:layout_gravity="center"
+                    android:id="@+id/timer_relative_layout">
+
+                    <ProgressBar
+                        android:id="@+id/progressbarRL"
+                        android:layout_width="124dip"
+                        android:layout_height="124dip"
+                        android:clipToPadding="false"
+                        android:indeterminate="false"
+                        android:progressDrawable="@drawable/circle"
+                        android:background="@drawable/circle_shape"
+                        android:backgroundTint="@color/backgroundDefaultWhite"
+                        style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+                        android:max="6000"
+                        android:rotation="270"
+                        android:progress="6000" />
+                    <TextView
+                        android:id="@+id/tvTimeCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerInParent="true"
+                        android:paddingTop="8dp"
+                        android:textStyle="bold"
+                        android:text="00:00"
+                        style="@style/TextAppearance.AppCompat.Display1"
+                        android:textColor="@color/colorTextDark"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/step_tv"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="24dp"
+                        android:text="Bloom"
+                        style="@style/TextAppearance.AppCompat.Subhead"
+                        />
 
 
 
 
-            </RelativeLayout>
+                </RelativeLayout>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="0dp"
@@ -180,23 +164,28 @@
                     android:id="@+id/coffee_text_view"
                     app:layout_constraintLeft_toRightOf="@id/water_text_view"
                     android:gravity="center"
-                    style="@style/TextAppearance.AppCompat.Body1"
+                    style="@style/TextAppearance.AppCompat.Subhead"
                     />
 
+
                 <EditText
-                    android:inputType="numberDecimal"
-                    android:lines="1"
                     android:id="@+id/coffee_weight_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="80"
+                    android:inputType="numberDecimal"
+                    android:gravity="top"
+                    android:padding="0dp"
+                    android:lines="1"
+                    android:backgroundTint="@color/backgroundColorBeige"
                     android:includeFontPadding="false"
-                    style="@style/TextAppearance.AppCompat.Display1"
+                    style="@style/TextAppearance.AppCompat.Display2"
                     android:textStyle="bold"
                     android:textColor="@color/colorTextDark"
                     android:layout_gravity="center"
 
                     />
+
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -210,18 +199,192 @@
 
 
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            >
+            <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/frameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
 
+        </LinearLayout>
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/container2"
+    </LinearLayout>
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingTop="8dp"
-        android:paddingRight="8dp"
-        android:paddingLeft="8dp"
-        android:paddingBottom="0dp"
-        android:clipToPadding="false"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:layout_height="wrap_content"
+        android:background="@color/backgroundDefaultWhite"
+        app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
+        app:behavior_peekHeight="64dp"
+        app:behavior_hideable="true"
+        android:id="@+id/bottom_sheet"
+        android:orientation="vertical"
+        android:elevation="8dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:layout_margin="0dp"
+            >
+            <Button
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="56dp"
+                android:background="@color/backgroundDefaultWhite"
+                android:src="@drawable/sort_by_icon"
+                android:scaleType="centerCrop"
+                android:paddingRight="32dp"
+                android:text="^ Notes"
+                android:id="@+id/show_notes_button"
+                />
+
+            <Button
+                android:id="@+id/reset_button"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:textSize="16sp"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:elevation="0dp"
+                android:layout_height="56dp"
+                android:layout_marginRight="8dp"
+                android:text="Reset"
+                android:backgroundTint="@color/backgroundDefaultWhite"
+                android:textColor="@color/colorTextDark"
+                />
+
+            <Button
+                android:id="@+id/start_button"
+                android:textSize="16sp"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:elevation="0dp"
+                android:layout_height="56dp"
+                android:layout_marginLeft="8dp"
+                android:background="@color/backgroundDefaultWhite"
+                android:text="Start"
+                android:textColor="@color/colorAccent"
+                />
+        </LinearLayout>
+        <View
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/my_divider"
+            android:backgroundTint="@color/dividerColor"/>
+        <android.support.v4.widget.NestedScrollView android:layout_height="300dp"
+            android:layout_width="match_parent"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+
+            >
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginRight="16dp"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000000"
+                    android:layout_marginTop="16dp"
+                    android:text="Title"
+                    android:layout_marginLeft="56dp"
+                    android:id="@+id/brew_title_notes_text_view"
+                    style="@style/TextAppearance.AppCompat.Display1"/>
+
+                <View
+                    android:layout_marginTop="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorTextLight"
+                    android:layout_marginBottom="16dp"
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical">
+                    <ImageView
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:layout_gravity="bottom"
+                        android:background="@drawable/coffee_grinder_icon"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        >
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Grind"
+                            style="@style/TextAppearance.AppCompat.Headline"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Course"
+                            android:layout_marginLeft="8dp" android:id="@+id/brew_grind_notes_text_view"
+                            style="@style/TextAppearance.AppCompat.Body1"/>
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
+
+                <View
+                    android:layout_marginTop="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorTextLight"
+                    android:layout_marginBottom="16dp"
+                    />
+
+                <LinearLayout
+                    android:layout_marginTop="16dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/notes_icon"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Notes"
+                        android:layout_marginLeft="16dp"
+                        style="@style/TextAppearance.AppCompat.Headline"/>
+
+                </LinearLayout>
+
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="56dp"
+
+                    android:text="@string/hello_blank_fragment"
+                    android:paddingBottom="32dp"
+                    style="@style/TextAppearance.AppCompat.Body1"
+                    android:id="@+id/notes_text_view"/>
+
+            </LinearLayout>
+
+        </android.support.v4.widget.NestedScrollView>
     </LinearLayout>
 
 

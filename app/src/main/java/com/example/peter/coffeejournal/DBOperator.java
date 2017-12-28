@@ -574,6 +574,10 @@ public class DBOperator extends SQLiteOpenHelper {
             }
 
         }
+        if (data != null) {
+            data.close();
+        }
+        db.close();
         return recipes;
     }
 

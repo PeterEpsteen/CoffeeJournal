@@ -5,286 +5,310 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <android.support.v7.widget.CardView
+
+
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="2dp"
-        app:cardCornerRadius="@dimen/cardview_default_radius">
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:verticalScrollbarPosition="right"
+        android:scrollbarFadeDuration="0"
+        android:fadeScrollbars="false">
 
-        <android.support.v4.widget.NestedScrollView
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:paddingTop="16dp"
+            android:layout_height="match_parent"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:id="@+id/brew_notes_fragment_container"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView"
+                style="@style/TextAppearance.AppCompat.Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="0dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="Volume" />
 
             <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/slider_linear_layout"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:background="@color/backgroundDefaultWhite"
-                android:id="@+id/brew_notes_fragment_container"
-                android:orientation="vertical">
-
-                <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                    android:id="@+id/slider_linear_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp"
-                    android:paddingTop="8dp">
-
-                    <TextView
-                        android:id="@+id/textView"
-                        style="@style/TextAppearance.AppCompat.Subhead"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="0dp"
-                        android:gravity="center"
-                        android:text="Volume" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:orientation="horizontal">
-
-                        <Button
-                            android:id="@+id/minus_volume_button"
-                            style="@style/TextAppearance.AppCompat.Display1"
-                            android:layout_width="46dp"
-                            android:layout_height="46dp"
-                            android:layout_margin="0dp"
-                            android:gravity="center"
-                            android:includeFontPadding="false"
-                            android:text="-"
-                            android:textAlignment="center"
-                            android:textColor="@color/common_google_signin_btn_text_dark" />
-
-                        <SeekBar
-                            android:id="@+id/scaleSeekBar"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_margin="8dp"
-                            android:layout_weight="1"
-                            android:backgroundTint="@color/colorPrimary"
-                            android:progressTint="@color/colorPrimary"
-                            android:max="3000"
-                            android:progress="1000" />
-
-                        <Button
-                            android:id="@+id/plus_volume_button"
-                            style="@style/TextAppearance.AppCompat.Display1"
-                            android:layout_width="48dp"
-                            android:layout_height="48dp"
-                            android:gravity="center"
-                            android:includeFontPadding="false"
-                            android:text="+"
-                            android:textAlignment="center"
-                            android:textColor="@color/common_google_signin_btn_text_dark" />
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="8dp">
 
 
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/strength_label"
-                    style="@style/TextAppearance.AppCompat.Subhead"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="8dp"
-                    android:text="Strength" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginLeft="24dp"
-                    android:layout_marginRight="24dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/minus_volume_button"
+                        style="@style/TextAppearance.AppCompat.Display1"
+                        android:layout_width="46dp"
+                        android:layout_height="46dp"
+                        android:layout_margin="8dp"
+                        android:gravity="center"
+                        android:background="@color/backgroundDefaultWhite"
+                        android:includeFontPadding="false"
+                        android:text="-"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorTextDark"
+                        />
+
+                    <SeekBar
+                        android:id="@+id/scaleSeekBar"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="8dp"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/colorPrimary"
+                        android:progressTint="@color/colorPrimary"
+                        android:max="3000"
+                        android:thumb="@drawable/custom_thumb"
+                        />
+
+                    <Button
+                        android:id="@+id/plus_volume_button"
+                        style="@style/TextAppearance.AppCompat.Display1"
+                        android:layout_width="48dp"
+                        android:background="@color/backgroundDefaultWhite"
+                        android:layout_height="48dp"
+                        android:layout_margin="8dp"
+                        android:gravity="center"
+                        android:includeFontPadding="false"
+                        android:text="+"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorTextDark" />
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+
+            <!-- Dummy item for focus at startup -->
+            <LinearLayout
+                android:id="@+id/dummy_focus"
+                android:orientation="vertical"
+                android:layout_width="0px"
+                android:layout_height="0px"
+                android:focusable="true"
+                android:focusableInTouchMode="true" />
+
+
+            <TextView
+                android:id="@+id/strength_label"
+                style="@style/TextAppearance.AppCompat.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="8dp"
+                android:text="Strength" />
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="@dimen/cardview_default_radius"
+                android:layout_marginBottom="8dp"
+                android:layout_marginLeft="24dp"
+                android:layout_marginRight="24dp"
+                android:elevation="@dimen/cardview_default_elevation"
+                android:backgroundTint="@color/backgroundDefaultWhite">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:gravity="center"
                     android:orientation="horizontal">
 
                     <ToggleButton
                         android:id="@+id/light_toggle_button"
                         android:layout_width="0dp"
-                        android:layout_height="48dp"
-                        android:layout_margin="0dp"
+                        android:layout_height="56dp"
                         android:layout_weight="1"
+                        android:background="@color/backgroundDefaultWhite"
                         android:textOff="Light"
                         android:textOn="Light"
-
                         />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/my_divider"
+                        android:backgroundTint="@color/backgroundColorBeige"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"/>
 
                     <ToggleButton
                         android:id="@+id/regular_toggle_button"
                         android:layout_width="0dp"
-                        android:layout_height="48dp"
-                        android:layout_marginLeft="8dp"
-                        android:layout_marginRight="8dp"
+                        android:layout_height="56dp"
                         android:layout_weight="1"
+                        android:background="@color/backgroundDefaultWhite"
                         android:textOff="Regular"
                         android:textOn="Regular" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/my_divider"
+                        android:backgroundTint="@color/backgroundColorBeige" />
 
 
                     <ToggleButton
                         android:id="@+id/strong_toggle_button"
                         android:layout_width="0dp"
-                        android:layout_height="48dp"
-                        android:layout_margin="0dp"
+                        android:layout_height="56dp"
+                        android:background="@color/backgroundDefaultWhite"
                         android:layout_weight="1"
                         android:textOff="Strong"
                         android:textOn="Strong" />
 
 
                 </LinearLayout>
+            </android.support.v7.widget.CardView>
 
+            <TextView
+                android:id="@+id/units_label"
+                style="@style/TextAppearance.AppCompat.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_gravity="center"
+                android:text="Units" />
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:clipToPadding="false"
+                android:layout_margin="8dp"
+                android:gravity="center"
+                android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
                     android:layout_weight="1"
-                    android:clipToPadding="false"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+                    android:padding="8dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/TextAppearance.AppCompat.Subhead"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="8dp"
+                        android:text="Water" />
 
                     <LinearLayout
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
 
                         <TextView
-                            style="@style/TextAppearance.AppCompat.Subhead"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginBottom="8dp"
-                            android:text="Water Units" />
-
-                        <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
+                            android:layout_marginRight="8dp"
+                            android:text="G" />
+
+                        <android.support.v7.widget.SwitchCompat
+                            android:id="@+id/water_units_switch"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:checked="false"
+                            app:switchMinWidth="48dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="8dp"
                             android:gravity="center"
-                            android:orientation="horizontal">
-
-
-                            <TextView
-                                                                style="@style/TextAppearance.AppCompat.Body1"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_marginRight="8dp"
-                                android:text="Grams" />
-
-                            <android.support.v7.widget.SwitchCompat
-                                android:id="@+id/water_units_switch"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:checked="false"
-                                app:switchMinWidth="48dp" />
-
-                            <TextView
-                                                                style="@style/TextAppearance.AppCompat.Body1"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_marginLeft="8dp"
-                                android:gravity="center"
-                                android:text="Ounces" />
-
-                        </LinearLayout>
-
+                            android:text="Oz" />
 
                     </LinearLayout>
 
 
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-
-                        <TextView
-                            style="@style/TextAppearance.AppCompat.Subhead"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginBottom="8dp"
-                            android:text="Coffee Units" />
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:orientation="horizontal">
-
-
-                            <TextView
-                                style="@style/TextAppearance.AppCompat.Body1"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_marginRight="8dp"
-                                android:text="Grams" />
-
-                            <android.support.v7.widget.SwitchCompat
-                                android:id="@+id/coffee_units_switch"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:checked="false"
-                                app:switchMinWidth="48dp" />
-
-                            <TextView
-                                style="@style/TextAppearance.AppCompat.Body1"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_marginLeft="8dp"
-                                android:gravity="center"
-                                android:text="Ounces" />
-
-                        </LinearLayout>
-                    </LinearLayout>
                 </LinearLayout>
+
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/my_divider"
+                    android:backgroundTint="@color/backgroundColorBeige"/>
 
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:clipToPadding="false"
-                    android:gravity="center|bottom"
-                    android:padding="16dp">
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                    <Button
-                        android:id="@+id/start_button"
-                        style="@style/TextAppearance.AppCompat.Title"
-                        android:layout_width="0dp"
-                        android:layout_height="56dp"
+                    <TextView
+                        style="@style/TextAppearance.AppCompat.Subhead"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
                         android:layout_marginBottom="8dp"
-                        android:layout_marginLeft="48dp"
-                        android:layout_marginRight="48dp"
-                        android:layout_weight="1"
-                        android:background="@color/colorAccent"
-                        android:padding="8dp"
-                        android:text="Start!"
-                        android:textColor="@color/common_google_signin_btn_text_dark"
-                        android:textStyle="bold"
+                        android:text="Coffee" />
 
-                        />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginRight="8dp"
+                            android:text="G" />
+
+                        <android.support.v7.widget.SwitchCompat
+                            android:id="@+id/coffee_units_switch"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:checked="false"
+                            app:switchMinWidth="48dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="8dp"
+                            android:gravity="center"
+                            android:text="Oz" />
+
+                    </LinearLayout>
                 </LinearLayout>
-
-
             </LinearLayout>
-        </android.support.v4.widget.NestedScrollView>
-    </android.support.v7.widget.CardView>
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 </FrameLayout>

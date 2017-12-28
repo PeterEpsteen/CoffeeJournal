@@ -53,6 +53,8 @@ public class BrewRecipeActivity extends AppCompatActivity implements BrewRecipeF
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_brew_recipe);
+
         name = getIntent().getExtras().getString("Brew Name");
         DBOperator dbOperator = new DBOperator(this);
         br = dbOperator.getBrewRecipe(name);
@@ -60,7 +62,15 @@ public class BrewRecipeActivity extends AppCompatActivity implements BrewRecipeF
 //        ab.setTitle(name);
 //        ab.setElevation(0);
 //        ab.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-        setContentView(R.layout.activity_brew_recipe);
+        if(savedInstanceState == null) {
+            BrewRecipeFragment brewRecipeFragment = new BrewRecipeFragment();
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.frameLayout, brewRecipeFragment, "recipeFragment")
+                    .disallowAddToBackStack()
+                    .commit();
+            isNotesShowing = false;
+        }
         bottomSheet = findViewById(R.id.bottom_sheet);
         // init the bottom sheet behavior
          bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
@@ -87,7 +97,6 @@ public class BrewRecipeActivity extends AppCompatActivity implements BrewRecipeF
         bar.setDisplayHomeAsUpEnabled(true);
         bar.setDisplayShowTitleEnabled(true);
         showNotesButton = findViewById(R.id.show_notes_button);
-        final BrewRecipeFragment brewRecipeFragment = new BrewRecipeFragment();
         final BrewNotesFragment notesFragment = new BrewNotesFragment();
 
         showNotesButton.setOnClickListener(new View.OnClickListener() {
@@ -102,12 +111,7 @@ public class BrewRecipeActivity extends AppCompatActivity implements BrewRecipeF
             }
         });
 
-        getSupportFragmentManager()
-                .beginTransaction()
-                .add(R.id.frameLayout, brewRecipeFragment, "recipeFragment")
-                .disallowAddToBackStack()
-                .commit();
-        isNotesShowing = false;
+
 
         notesTv = findViewById(R.id.notes_text_view);
         grindTv = findViewById(R.id.brew_grind_notes_text_view);

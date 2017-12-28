@@ -1,17 +1,31 @@
 package com.example.peter.coffeejournal;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
+import com.jjoe64.graphview.DefaultLabelFormatter;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.LabelFormatter;
+import com.jjoe64.graphview.Viewport;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
+
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.zip.Inflater;
 
@@ -24,6 +38,13 @@ public class RoastActivity extends AppCompatActivity {
     List<RoastStep> steps;
     List<Bean> beans;
     CollapsingToolbarLayout collapsingToolbarLayout;
+
+    //TODO
+    //Get steps to work with graph
+    //Special steps have special characters
+    //little info pop ups next to special steps
+    // touching steps on graphs highlights bottom
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +59,12 @@ public class RoastActivity extends AppCompatActivity {
         collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.backgroundDefaultWhite));
         collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.TextAppearance_AppCompat_Widget_ActionBar_Title);
         collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.backgroundDefaultWhite));
+        android.support.v7.widget.Toolbar mToolBar = findViewById(R.id.main_toolbar);
+        setSupportActionBar(mToolBar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+
         roastContainer = findViewById(R.id.roast_container);
 
         LayoutInflater inflater = getLayoutInflater();
@@ -61,7 +88,7 @@ public class RoastActivity extends AppCompatActivity {
         topBeanWeightTv.setTextColor(getResources().getColor(R.color.colorTextLight));
         topBeanWeightTv.setText("Weight");
         beansCvContainer.addView(topBeanRow);
-        for(Bean bean : beans) {
+        for (Bean bean : beans) {
             Log.i("BeanRow", "Bean row: " + bean.getBeanName());
             LinearLayout beanRow = (LinearLayout) inflater.inflate(R.layout.bean_row, roastContainer, false);
             TextView beanNameTv = beanRow.findViewById(R.id.bean_name_text_view);
@@ -94,7 +121,7 @@ public class RoastActivity extends AppCompatActivity {
         topStepCommentsTv.setTextColor(getResources().getColor(R.color.colorTextLight));
         topStepCommentsTv.setText("Comment");
         stepsCvContainer.addView(topStepRow);
-        for(RoastStep step : steps) {
+        for (RoastStep step : steps) {
             LinearLayout stepRow = (LinearLayout) inflater.inflate(R.layout.step_row, roastContainer, false);
             TextView timeTv = stepRow.findViewById(R.id.step_time_text_view);
             timeTv.setText(step.getTime());
@@ -118,13 +145,105 @@ public class RoastActivity extends AppCompatActivity {
         notesCv.addView(tastingLayout);
         roastContainer.addView(notesCv);
 
+        Collections.sort(steps, new Comparator<RoastStep>() {
+            @Override
+            public int compare(RoastStep o1, RoastStep o2) {
+                Integer time1 = 0;
+                Integer time2 = 0;
+                String[] arr1 = o1.getTime().split(":");
+                time1 = Integer.parseInt(arr1[0]) * 60 + Integer.parseInt(arr1[1]);
+                String[] arr2 = o2.getTime().split(":");
+                time2 = Integer.parseInt(arr2[0]) * 60 + Integer.parseInt(arr2[1]);
+                return time1.compareTo(time2);
+            }
+        });
+        GraphView graph = (GraphView) findViewById(R.id.graph);
+
+        try {
+            graph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
+                @Override
+                public String formatLabel(double value, boolean isValueX) {
+                    if (isValueX) {
+                        String timeString = "";
+                        int minutes = (int) value/60;
+                        int seconds = (int) value%60;
+                        String minuteString = Integer.toString(minutes);
+                        if (minuteString.length() == 1) {
+                            minuteString = 0 + minuteString;
+                        }
+                        String secondsString = Integer.toString(seconds);
+                        if (secondsString.length() == 1) {
+                            secondsString = 0 + secondsString;
+                        }
+                        return minuteString + ":" + secondsString;
+                    }
+                    else {
+                        return super.formatLabel(value, isValueX);
+                    }
+                }
+
+            });
+//        graph.setBackgroundColor(getResources().getColor(R.color.backgroundDefaultWhite));
+            graph.getGridLabelRenderer().setGridColor(R.color.colorTextDark);
+//        graph.getGridLabelRenderer().setHorizontalLabelsColor(R.color.colorTextDark);
+//        graph.getGridLabelRenderer().setVerticalLabelsColor(R.color.colorTextDark);
+//        graph.getGridLabelRenderer().setVerticalAxisTitleColor(R.color.colorTextDark);
+            graph.getGridLabelRenderer().setLabelsSpace(10);
+            graph.getViewport().setScalable(false);
+            graph.getViewport().setBackgroundColor(Color.WHITE);
+            graph.getViewport().setYAxisBoundsManual(true);
+            graph.getViewport().setMinY(0);
+            graph.getViewport().setMaxY(steps.get(steps.size()-1).getTemp() + 100);
+
+            DataPoint[] datapoint = new DataPoint[steps.size()];
+
+            for (int i = 0; i < steps.size(); i++) {
+                // add new DataPoint object to the array for each of your list entries
+                RoastStep step = steps.get(i);
+                String timeString = step.getTime();
+                double timeDouble = 0;
+                String[] arr = timeString.split(":");
+                timeDouble = Double.parseDouble(arr[0]) * 60 + Double.parseDouble(arr[1]);
+                datapoint[i] = new DataPoint(timeDouble, step.getTemp()); // not sure but I think the second argument should be of type double
+            }
+
+            LineGraphSeries<DataPoint> series = new LineGraphSeries<>(datapoint);
+            series.setDrawDataPoints(true);
+            graph.addSeries(series);
+
+        } catch (Exception e) {
+            //Error making graph
+            Log.e("Error", e.toString());
+            graph.setVisibility(View.GONE);
+            AppBarLayout mAppBarLayout = findViewById(R.id.main_appbar);
+            mAppBarLayout.setExpanded(false, false);
+            CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams)mAppBarLayout.getLayoutParams();
+            lp.height = (int) getResources().getDimension(R.dimen.toolbar_height);
+            collapsingToolbarLayout.setTitleEnabled(false);
+            android.support.v7.widget.Toolbar mainToolbar = findViewById(R.id.main_toolbar);
+            mainToolbar.setTitle(brewName);
+        }
     }
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         Intent i = new Intent(this, MainActivity.class);
+        i.putExtra("Page", "Roast");
         startActivity(i);
+        finish();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle arrow click here
+        if (item.getItemId() == android.R.id.home) {
+            Intent i = new Intent(this, MainActivity.class);
+            startActivity(i);
+            finish();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 }
