@@ -7,7 +7,7 @@ package com.example.peter.coffeejournal;
 public class RoastStep {
 
     private String time, comment;
-    private int temp, specialStep;
+    private int temp, specialStep, beanTemp;
 
     final static int ROAST_START = 1;
     final static int ROAST_END = 2;
@@ -16,14 +16,23 @@ public class RoastStep {
     final static int SECOND_CRACK_START = 5;
     final static int SECOND_CRACK_END = 6;
 
-    public RoastStep(String time, int temp, String comment) {
+    public RoastStep(String time, int temp, String comment, int beanTemp) {
         this.comment = comment;
         this.temp = temp;
         this.time = time;
+        this.beanTemp = beanTemp;
     }
 
     public int getTemp() {
         return temp;
+    }
+
+    public int getBeanTemp() {
+        return beanTemp;
+    }
+
+    public void setBeanTemp(int beanTemp) {
+        this.beanTemp = beanTemp;
     }
 
     public String getComment() {

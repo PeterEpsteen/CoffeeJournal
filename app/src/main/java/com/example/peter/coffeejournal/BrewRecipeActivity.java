@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -98,7 +99,18 @@ public class BrewRecipeActivity extends AppCompatActivity implements BrewRecipeF
         bar.setDisplayShowTitleEnabled(true);
         showNotesButton = findViewById(R.id.show_notes_button);
         final BrewNotesFragment notesFragment = new BrewNotesFragment();
-
+        ImageView imageView = findViewById(R.id.notes_drop_icon);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                }
+                else {
+                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                }
+            }
+        });
         showNotesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

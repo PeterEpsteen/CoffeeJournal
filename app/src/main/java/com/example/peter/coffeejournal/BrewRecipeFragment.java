@@ -476,12 +476,14 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
                 waterUnitsTv.setText("Ounces");
                 setWaterUnits(convertGramsToOz(waterUnits));
                 seekBarStep = 0.1;
+                updateSeekBar();
 
             } else {
                 waterUnitsTv.setText("Grams");
                 isWaterMetric = true;
                 setWaterUnits(convertOzToGrams(waterUnits));
                 seekBarStep = 1;
+                updateSeekBar();
             }
         } else if (buttonView == coffeeSwitch) {
             if (isChecked) {

@@ -21,9 +21,11 @@
     <android.support.design.widget.TextInputLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="2"
         android:paddingBottom="16dp"
         android:layout_gravity="top"
+        android:textColorHint="@color/colorTextDark"
+        android:layout_marginRight="8dp"
         android:id="@+id/time_textinputlayout"
         >
         <EditText
@@ -33,6 +35,7 @@
             style="@style/TextAppearance.AppCompat.Body1"
             android:singleLine="true"
             android:layout_gravity="top"
+            android:textColor="@color/colorTextDark"
             android:inputType="time"
             android:paddingBottom="16dp"
             android:backgroundTint="@color/common_google_signin_btn_text_dark_disabled"
@@ -41,26 +44,54 @@
 
 
     </android.support.design.widget.TextInputLayout>
+
     <android.support.design.widget.TextInputLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="2"
+        android:textColorHint="@color/colorTextDark"
         android:paddingBottom="16dp"
+        android:layout_marginRight="8dp"
         android:layout_gravity="top"
         >
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:paddingBottom="16dp"
         android:backgroundTint="@color/common_google_signin_btn_text_dark_disabled"
         android:singleLine="true"
+        android:textColor="@color/colorTextDark"
+
         android:layout_gravity="top"
         style="@style/TextAppearance.AppCompat.Body1"
         android:inputType="number"
         android:id="@+id/temp_edit_text"
-        android:hint="Temp"/>
+        android:hint="Roaster Temp"/>
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColorHint="@color/colorTextDark"
+
+        android:layout_weight="2"
+        android:paddingBottom="16dp"
+        android:layout_gravity="top"
+        >
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="16dp"
+            android:backgroundTint="@color/common_google_signin_btn_text_dark_disabled"
+            android:singleLine="true"
+            android:textColor="@color/colorTextDark"
+            android:layout_gravity="top"
+            style="@style/TextAppearance.AppCompat.Body1"
+            android:inputType="number"
+            android:id="@+id/bean_temp_edit_text"
+            android:hint="Bean Temp"/>
     </android.support.design.widget.TextInputLayout>
 </LinearLayout>
         <LinearLayout
@@ -74,82 +105,22 @@
                 android:inputType="textMultiLine"
                 style="@style/TextAppearance.AppCompat.Body1"
                 android:id="@+id/comments_edit_text"
+                android:textColor="@color/colorTextDark"
+                android:textColorHint="@color/colorTextDark"
                 android:layout_height="wrap_content"
                 android:hint="Comments"/>
-            <Button
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@drawable/drop_icon"
-                android:layout_gravity="end|center_vertical"
-                android:onClick="expandCard"
-                android:id="@+id/expand_roast_step_button"
-                />
 
         </LinearLayout>
 
-
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <Button
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="16dp"
-            android:orientation="vertical"
-            android:id="@+id/expanded_step_row">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Mark step as key event:"
-                style="@style/TextAppearance.AppCompat.Body1"
-                android:layout_marginLeft="16dp"
-                android:layout_marginBottom="8dp"/>
+            android:text="Delete Row"
+            android:background="@color/backgroundDefaultWhite"
+            android:textColor="@color/common_google_signin_btn_text_light"
+            android:id="@+id/step_row_delete_button"
+            android:onClick="deleteRow"/>
 
-        <RadioGroup
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp">
-
-            <android.support.v7.widget.AppCompatRadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:text="Roast Start"/>
-
-            <android.support.v7.widget.AppCompatRadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:text="First Crack Start"/>
-
-            <android.support.v7.widget.AppCompatRadioButton
-                android:layout_width="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_height="wrap_content"
-                android:text="First Crack End"/>
-            <android.support.v7.widget.AppCompatRadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:text="Second Crack Start"/>
-
-            <android.support.v7.widget.AppCompatRadioButton
-                android:layout_width="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_height="wrap_content"
-                android:text="Second Crack End"/>
-
-            <android.support.v7.widget.AppCompatRadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:text="Roast End"/>
-
-        </RadioGroup>
-
-        </LinearLayout>
     </LinearLayout>
 
 

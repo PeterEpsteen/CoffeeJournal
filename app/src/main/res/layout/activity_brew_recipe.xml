@@ -229,15 +229,26 @@
             android:clipToPadding="false"
             android:layout_margin="0dp"
             >
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginRight="-8dp"
+                android:layout_marginLeft="16dp"
+                android:translationZ="10dp"
+                android:rotation="180"
+                android:layout_gravity="center"
+                android:src="@drawable/drop_icon"
+                android:id="@+id/notes_drop_icon"/>
             <Button
                 android:layout_width="0dp"
+                style="@style/Widget.AppCompat.Button.Borderless"
                 android:layout_weight="2"
                 android:layout_height="56dp"
                 android:background="@color/backgroundDefaultWhite"
                 android:src="@drawable/sort_by_icon"
                 android:scaleType="centerCrop"
                 android:paddingRight="32dp"
-                android:text="^ Notes"
+                android:text="Notes"
                 android:id="@+id/show_notes_button"
                 />
 
@@ -252,7 +263,7 @@
                 android:layout_marginRight="8dp"
                 android:text="Reset"
                 android:backgroundTint="@color/backgroundDefaultWhite"
-                android:textColor="@color/colorTextDark"
+                android:textColor="@color/common_google_signin_btn_text_light"
                 />
 
             <Button

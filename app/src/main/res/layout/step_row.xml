@@ -9,14 +9,6 @@
     android:clipToPadding="false"
     android:background="@drawable/border_bottom">
     <TextView
-        android:id="@+id/step_number_text_view"
-        android:layout_width="wrap_content"
-        android:layout_marginRight="8dp"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        style="@style/TextStyle"
-        android:text="1"/>
-    <TextView
         android:id="@+id/step_time_text_view"
         android:layout_width="0dp"
         android:layout_weight="2"
@@ -33,6 +25,15 @@
         android:layout_weight="1"
         android:gravity="start"
         android:id="@+id/temp_text_view"
+        android:text="200F"/>
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/TextStyle"
+        android:layout_marginRight="8dp"
+        android:layout_weight="1"
+        android:gravity="start"
+        android:id="@+id/bean_temp_text_view"
         android:text="200F"/>
     <TextView
         android:layout_width="0dp"

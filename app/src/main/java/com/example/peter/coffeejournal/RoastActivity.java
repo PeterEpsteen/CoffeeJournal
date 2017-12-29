@@ -1,7 +1,13 @@
 package com.example.peter.coffeejournal;
 
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -10,19 +16,30 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
+import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.LabelFormatter;
+import com.jjoe64.graphview.LegendRenderer;
 import com.jjoe64.graphview.Viewport;
+import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.DataPointInterface;
 import com.jjoe64.graphview.series.LineGraphSeries;
+import com.jjoe64.graphview.series.OnDataPointTapListener;
+import com.jjoe64.graphview.series.Series;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -38,6 +55,10 @@ public class RoastActivity extends AppCompatActivity {
     List<RoastStep> steps;
     List<Bean> beans;
     CollapsingToolbarLayout collapsingToolbarLayout;
+    PopupWindow popupWindow;
+    ConstraintLayout layoutOfPopup;
+    TextView datapointTv;
+    float lastTouchedX, lastTouchedY;
 
     //TODO
     //Get steps to work with graph
@@ -63,15 +84,30 @@ public class RoastActivity extends AppCompatActivity {
         setSupportActionBar(mToolBar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
-
+        LayoutInflater layoutInflater = (LayoutInflater) this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        layoutOfPopup = (ConstraintLayout) layoutInflater.inflate(R.layout.pop_up_generic, null, false);
+        popupWindow = new PopupWindow(this);
         roastContainer = findViewById(R.id.roast_container);
-
+        datapointTv = findViewById(R.id.datapoint_text_view);
+        datapointTv.setVisibility(View.GONE);
         LayoutInflater inflater = getLayoutInflater();
         db = new DBOperator(this);
         roast = db.getRoast(brewName, brewDate);
         beans = roast.getBeanList();
         steps = roast.getStepList();
+        Collections.sort(steps, new Comparator<RoastStep>() {
+            @Override
+            public int compare(RoastStep o1, RoastStep o2) {
+                Integer time1 = 0;
+                Integer time2 = 0;
+                String[] arr1 = o1.getTime().split(":");
+                time1 = Integer.parseInt(arr1[0]) * 60 + Integer.parseInt(arr1[1]);
+                String[] arr2 = o2.getTime().split(":");
+                time2 = Integer.parseInt(arr2[0]) * 60 + Integer.parseInt(arr2[1]);
+                return time1.compareTo(time2);
+            }
+        });
         int count = 1;
         TextView beanTv = (TextView) inflater.inflate(R.layout.generic_text_view, roastContainer, false);
         beanTv.setText("Beans");
@@ -109,14 +145,15 @@ public class RoastActivity extends AppCompatActivity {
         CardView stepsCv = (CardView) inflater.inflate(R.layout.generic_card_view, roastContainer, false);
         LinearLayout stepsCvContainer = stepsCv.findViewById(R.id.card_view_container);
         LinearLayout topStepRow = (LinearLayout) inflater.inflate(R.layout.step_row, roastContainer, false);
-        TextView topStepNumbTv = topStepRow.findViewById(R.id.step_number_text_view);
-        topStepNumbTv.setText("");
         TextView topStepTimeTv = topStepRow.findViewById(R.id.step_time_text_view);
         topStepTimeTv.setTextColor(getResources().getColor(R.color.colorTextLight));
         topStepTimeTv.setText("Time");
         TextView topStepTempTv = topStepRow.findViewById(R.id.temp_text_view);
         topStepTempTv.setTextColor(getResources().getColor(R.color.colorTextLight));
-        topStepTempTv.setText("Temp");
+        topStepTempTv.setText("Roast");
+        TextView topStepBeanTempTv = topStepRow.findViewById(R.id.bean_temp_text_view);
+        topStepBeanTempTv.setTextColor(getResources().getColor(R.color.colorTextLight));
+        topStepBeanTempTv.setText("Bean");
         TextView topStepCommentsTv = topStepRow.findViewById(R.id.comments_text_view);
         topStepCommentsTv.setTextColor(getResources().getColor(R.color.colorTextLight));
         topStepCommentsTv.setText("Comment");
@@ -126,12 +163,13 @@ public class RoastActivity extends AppCompatActivity {
             TextView timeTv = stepRow.findViewById(R.id.step_time_text_view);
             timeTv.setText(step.getTime());
             TextView tempTv = stepRow.findViewById(R.id.temp_text_view);
-            tempTv.setText(String.valueOf(step.getTemp()));
+            String tempString = String.valueOf(step.getTemp()) + "°";
+            tempTv.setText(tempString);
+            TextView tempBeanTv = stepRow.findViewById(R.id.bean_temp_text_view);
+            String tempBeanString = String.valueOf(step.getBeanTemp()) + "°";
+            tempBeanTv.setText(tempBeanString);
             TextView commentsTv = stepRow.findViewById(R.id.comments_text_view);
             commentsTv.setText(step.getComment());
-            TextView countTv = stepRow.findViewById(R.id.step_number_text_view);
-            countTv.setText("");
-            count++;
             stepsCvContainer.addView(stepRow);
         }
         roastContainer.addView(stepsCv);
@@ -145,37 +183,36 @@ public class RoastActivity extends AppCompatActivity {
         notesCv.addView(tastingLayout);
         roastContainer.addView(notesCv);
 
-        Collections.sort(steps, new Comparator<RoastStep>() {
-            @Override
-            public int compare(RoastStep o1, RoastStep o2) {
-                Integer time1 = 0;
-                Integer time2 = 0;
-                String[] arr1 = o1.getTime().split(":");
-                time1 = Integer.parseInt(arr1[0]) * 60 + Integer.parseInt(arr1[1]);
-                String[] arr2 = o2.getTime().split(":");
-                time2 = Integer.parseInt(arr2[0]) * 60 + Integer.parseInt(arr2[1]);
-                return time1.compareTo(time2);
-            }
-        });
-        GraphView graph = (GraphView) findViewById(R.id.graph);
+
+        final GraphView graph = (GraphView) findViewById(R.id.graph);
 
         try {
+//            StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graph);
+//            String finalTime = steps.get(steps.size()-1).getTime();
+//            int finalTimeMinutes = Integer.parseInt(finalTime.split(":")[0]) % 60 + 1;
+//            String[] labels = new String[finalTimeMinutes+1];
+//            for(int i = 0; i < labels.length; i++){
+//                labels[i] = i + ""
+//            }
+//            staticLabelsFormatter.setHorizontalLabels(new String[] {0:00, });
             graph.getGridLabelRenderer().setLabelFormatter(new DefaultLabelFormatter() {
                 @Override
                 public String formatLabel(double value, boolean isValueX) {
                     if (isValueX) {
-                        String timeString = "";
-                        int minutes = (int) value/60;
-                        int seconds = (int) value%60;
-                        String minuteString = Integer.toString(minutes);
-                        if (minuteString.length() == 1) {
-                            minuteString = 0 + minuteString;
-                        }
-                        String secondsString = Integer.toString(seconds);
-                        if (secondsString.length() == 1) {
-                            secondsString = 0 + secondsString;
-                        }
-                        return minuteString + ":" + secondsString;
+//                        String timeString = "";
+//                        int minutes = (int) value/60;
+//                        int seconds = (int) value%60;
+//                        String minuteString = Integer.toString(minutes);
+//                        if (minuteString.length() == 1) {
+//                            minuteString = 0 + minuteString;
+//                        }
+//                        String secondsString = Integer.toString(seconds);
+//                        if (secondsString.length() == 1) {
+//                            secondsString = 0 + secondsString;
+//                        }
+//                        return minuteString + ":" + secondsString;
+                        double minutes = value/60;
+                        return super.formatLabel(minutes, isValueX);
                     }
                     else {
                         return super.formatLabel(value, isValueX);
@@ -185,6 +222,7 @@ public class RoastActivity extends AppCompatActivity {
             });
 //        graph.setBackgroundColor(getResources().getColor(R.color.backgroundDefaultWhite));
             graph.getGridLabelRenderer().setGridColor(R.color.colorTextDark);
+
 //        graph.getGridLabelRenderer().setHorizontalLabelsColor(R.color.colorTextDark);
 //        graph.getGridLabelRenderer().setVerticalLabelsColor(R.color.colorTextDark);
 //        graph.getGridLabelRenderer().setVerticalAxisTitleColor(R.color.colorTextDark);
@@ -192,10 +230,13 @@ public class RoastActivity extends AppCompatActivity {
             graph.getViewport().setScalable(false);
             graph.getViewport().setBackgroundColor(Color.WHITE);
             graph.getViewport().setYAxisBoundsManual(true);
+            graph.getViewport().setXAxisBoundsManual(true);
+            graph.getViewport().setMinX(0);
+            graph.getViewport().setMaxX(Integer.parseInt(steps.get(steps.size()-1).getTime().split(":")[0])*60+60);
             graph.getViewport().setMinY(0);
             graph.getViewport().setMaxY(steps.get(steps.size()-1).getTemp() + 100);
-
-            DataPoint[] datapoint = new DataPoint[steps.size()];
+            final DataPoint[] datapoint = new DataPoint[steps.size()];
+            DataPoint[] beanDatapoint = new DataPoint[steps.size()];
 
             for (int i = 0; i < steps.size(); i++) {
                 // add new DataPoint object to the array for each of your list entries
@@ -205,11 +246,64 @@ public class RoastActivity extends AppCompatActivity {
                 String[] arr = timeString.split(":");
                 timeDouble = Double.parseDouble(arr[0]) * 60 + Double.parseDouble(arr[1]);
                 datapoint[i] = new DataPoint(timeDouble, step.getTemp()); // not sure but I think the second argument should be of type double
+                beanDatapoint[i] = new DataPoint(timeDouble, step.getBeanTemp());
             }
 
             LineGraphSeries<DataPoint> series = new LineGraphSeries<>(datapoint);
             series.setDrawDataPoints(true);
             graph.addSeries(series);
+            LineGraphSeries<DataPoint> seriesBean = new LineGraphSeries<>(beanDatapoint);
+            seriesBean.setColor(Color.RED);
+            seriesBean.setDrawDataPoints(true);
+            graph.addSeries(seriesBean);
+            series.setTitle("Environment");
+            series.setOnDataPointTapListener(new OnDataPointTapListener() {
+                @Override
+                public void onTap(Series series, DataPointInterface dataPoint) {
+                    RoastStep step = roast.findStep((int)dataPoint.getX());
+                    if (!step.getComment().equals("")) {
+                        double timeSeconds = dataPoint.getX();
+                        String timeSecondsString = "";
+                        if (timeSeconds % 60 < 10) {
+                            timeSecondsString = "0" + (int)timeSeconds%60;
+                        }
+                        else {
+                            timeSecondsString = "" + (int)timeSeconds%60;
+                        }
+                        String timeString = (int)timeSeconds/60 + ":" + timeSecondsString;
+                        datapointTv.setText("Comment at " + timeString+ ": \n" + step.getComment());
+                        datapointTv.setVisibility(View.VISIBLE);
+
+                    }
+                }
+
+            });
+            seriesBean.setOnDataPointTapListener(new OnDataPointTapListener() {
+                @Override
+                public void onTap(Series series, DataPointInterface dataPoint) {
+                    RoastStep step = roast.findStep((int)dataPoint.getX());
+                    if (!step.getComment().equals("")) {
+                        double timeSeconds = dataPoint.getX();
+                        String timeSecondsString = "";
+                        if (timeSeconds % 60 < 10) {
+                            timeSecondsString = "0" + (int)timeSeconds%60;
+                        }
+                        else {
+                            timeSecondsString = "" + (int)timeSeconds%60;
+                        }
+                        String timeString = (int)timeSeconds/60 + ":" + timeSecondsString;
+                        datapointTv.setText("Comment at " + timeString+ ": \n" + step.getComment());
+                        datapointTv.setVisibility(View.VISIBLE);
+
+                    }
+                }
+            });
+            seriesBean.setTitle("Bean");
+            graph.getLegendRenderer().setVisible(true);
+            graph.getLegendRenderer().setAlign(LegendRenderer.LegendAlign.BOTTOM);
+
+
+
 
         } catch (Exception e) {
             //Error making graph
@@ -222,8 +316,11 @@ public class RoastActivity extends AppCompatActivity {
             collapsingToolbarLayout.setTitleEnabled(false);
             android.support.v7.widget.Toolbar mainToolbar = findViewById(R.id.main_toolbar);
             mainToolbar.setTitle(brewName);
+            TextView tv = findViewById(R.id.roast_profile_title_tv);
+            tv.setVisibility(View.GONE);
         }
     }
+
 
     @Override
     public void onBackPressed() {

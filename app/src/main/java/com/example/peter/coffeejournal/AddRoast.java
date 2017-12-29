@@ -40,8 +40,6 @@ import java.util.regex.Pattern;
 
 
 //TODO Refine validation and make sure there are no bugs. Seems stable for now.
-//TODO add special step adding and displaying.
-//TODO graphing roast
 
 public class AddRoast extends AppCompatActivity implements View.OnClickListener {
 
@@ -180,6 +178,15 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener 
             toast.show();
             return false;
         }
+        for (LinearLayout linearLayout : stepsRowLinearLayoutList) {
+            TextInputLayout textInputLayout = linearLayout.findViewById(R.id.time_textinputlayout);
+            if(textInputLayout.isErrorEnabled()){
+                CharSequence text = "Please enter a valid time.";
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+                return false;
+            }
+        }
         return true;
     }
 
@@ -201,33 +208,54 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener 
                 finish();
                 startActivity(intent);
                 break;
-
-
         }
     }
 
     private void addStepRow() {
         LayoutInflater inflater = getLayoutInflater();
-        CardView stepRow = (CardView) inflater.inflate(R.layout.add_tempature_row, null, false);
+        final CardView stepRow = (CardView) inflater.inflate(R.layout.add_tempature_row, null, false);
         stepsContainer.addView(stepRow);
         TextInputLayout timeTextInput = stepRow.findViewById(R.id.time_textinputlayout);
         EditText timeStepTv = stepRow.findViewById(R.id.time_edit_text);
         timeStepTv.setText(String.format("%02d:%02d", minutes, seconds));
         timeStepTv.addTextChangedListener(new mTextWatcher(timeTextInput));
-        LinearLayout stepRowLinear = stepRow.findViewById(R.id.add_step_linear);
+        final LinearLayout stepRowLinear = stepRow.findViewById(R.id.add_step_linear);
+
         stepsRowLinearLayoutList.add(stepRowLinear);
+        Button deleteButton = stepRow.findViewById(R.id.step_row_delete_button);
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                stepsRowLinearLayoutList.remove(stepRowLinear);
+                stepRowLinear.setVisibility(View.GONE);
+                stepsContainer.removeView(stepRow);
+            }
+        });
         Log.i("Row", "Adding temp row...");
     }
+
+    public void deleteRow(View v) {
+        LinearLayout ll = (LinearLayout) v.getParent();
+        CardView cv = (CardView) ll.getParent();
+        stepsRowLinearLayoutList.remove(ll);
+        stepsContainer.removeView(cv);
+        cv.setVisibility(View.GONE);
+    }
+
+
     private void addStepRow(RoastStep step) {
         String stepTime = step.getTime();
         String stepComment = step.getComment();
         String stepTemp = String.valueOf(step.getTemp());
+        String beanstepTemp = String.valueOf(step.getBeanTemp());
         LayoutInflater inflater = getLayoutInflater();
         CardView stepRow = (CardView) inflater.inflate(R.layout.add_tempature_row, null, false);
         EditText stepTimeEdit = stepRow.findViewById(R.id.time_edit_text);
         stepTimeEdit.setText(stepTime);
         EditText stepTempEdit = stepRow.findViewById(R.id.temp_edit_text);
         stepTempEdit.setText(stepTemp);
+        EditText stepBeanTempEdit = stepRow.findViewById(R.id.bean_temp_edit_text);
+        stepBeanTempEdit.setText(beanstepTemp);
         EditText stepCommentEdit = stepRow.findViewById(R.id.comments_edit_text);
         stepCommentEdit.setText(stepComment);
         stepsContainer.addView(stepRow);
@@ -340,15 +368,22 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener 
                 EditText stepTimeEditText = row.findViewById(R.id.time_edit_text);
                 String stepTime = stepTimeEditText.getText().toString();
                 EditText stepTempEditText = row.findViewById(R.id.temp_edit_text);
+                EditText stepBeanTempEditText = row.findViewById(R.id.bean_temp_edit_text);
                 EditText commentsEdit = row.findViewById(R.id.comments_edit_text);
                 String comments = commentsEdit.getText().toString();
                 String tempString = stepTempEditText.getText().toString();
-                if (!stepTime.equals("") && !tempString.equals("")) {
+                String beanTempString = stepBeanTempEditText.getText().toString();
+                int stepTemp = 0;
+                int stepBeanTemp = 0;
+                if (!tempString.equals("")) {
                     Log.i("Bean", "Adding step time: " + stepTime);
-                    int stepTemp = Integer.parseInt(tempString);
-                    RoastStep newStep = new RoastStep(stepTime, stepTemp, comments);
-                    roast.addToStepList(newStep);
+                    stepTemp = Integer.parseInt(tempString);
                 }
+                if(!beanTempString.equals("")){
+                    stepBeanTemp = Integer.parseInt(beanTempString);
+                }
+                RoastStep newStep = new RoastStep(stepTime, stepTemp, comments, stepBeanTemp);
+                roast.addToStepList(newStep);
             }
 
             Log.i("Roast", roast.toString());
@@ -368,7 +403,8 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener 
 //                    startActivity(i);
                     Intent i = new Intent(this, MainActivity.class);
                     startActivity(i);
-                    finish();                }
+                    finish();
+                }
             }
             else {
                 roast.setDateAdded(editRoastDate);
@@ -397,6 +433,7 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener 
         super.onBackPressed();
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
+        finish();
     }
 
     @Override
@@ -417,17 +454,4 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener 
         return super.onOptionsItemSelected(item);
     }
 
-    public void expandCard(View view) {
-        Button moreButton = (Button) view;
-        View parent = (View) view.getParent().getParent();
-        LinearLayout expanded = parent.findViewById(R.id.expanded_step_row);
-        float deg = (moreButton.getRotation() == 180F) ? 0F : 180F;
-        moreButton.animate().rotation(deg).setInterpolator(new AccelerateDecelerateInterpolator());
-        if (expanded.getVisibility() == View.GONE){
-            expanded.setVisibility(View.VISIBLE);
-        }
-        else {
-            expanded.setVisibility(View.GONE);
-        }
-    }
 }

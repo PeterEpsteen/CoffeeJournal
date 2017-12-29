@@ -18,7 +18,7 @@ import java.util.List;
 
 public class DBOperator extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 16;
+    private static final int DATABASE_VERSION = 17;
     private static final String DATABASE_NAME = "COFFEE_JOURNAL_DB";
     private static final String BREW_TABLE_NAME = "BREW_TABLE";
     private static final String ROAST_TABLE_NAME = "ROAST_TABLE";
@@ -36,6 +36,8 @@ public class DBOperator extends SQLiteOpenHelper {
     private static final String BLOOM_TIME = "bloom";
     private static final String BREW_TIME = "brew_time";
     private static final String TEMP = "temp";
+    private static final String BEAN_TEMP = "bean_temp";
+
     private static final String DATE = "date";
     private static final String WEIGHT = "weight";
     private static final String MEASUREMENT = "measurement";
@@ -50,7 +52,7 @@ public class DBOperator extends SQLiteOpenHelper {
     private static final String CREATE_ROAST_TABLE = "create table if not exists " + ROAST_TABLE_NAME + " ( " + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + NAME + " TEXT, " + NOTES + " TEXT, " + DATE + " TEXT)";
     private static final String CREATE_BEANS_TABLE = "create table if not exists " + BEANS_TABLE_NAME + " ( " + NAME + " TEXT, " + WEIGHT + " REAL, " + METRIC + " INTEGER, " + ROAST_ID + " INTEGER, PRIMARY KEY(" + ROAST_ID + ", " + NAME + "))";
     private static final String CREATE_ROAST_STEPS_TABLE = "create table if not exists " + ROAST_STEPS_TABLE_NAME + " ( " + STEP_TIME + " " +
-            "TEXT, " + ROAST_ID + " INTEGER, " + TEMP + " INTEGER, " + NOTES + " TEXT, " + METRIC + " INTEGER, PRIMARY KEY(" + ROAST_ID + ", " + STEP_TIME + "))";
+            "TEXT, " + ROAST_ID + " INTEGER, " + TEMP + " INTEGER, " + BEAN_TEMP + " INTEGER, " + NOTES + " TEXT, " + METRIC + " INTEGER, PRIMARY KEY(" + ROAST_ID + ", " + STEP_TIME + "))";
 
 
     public DBOperator(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -405,6 +407,7 @@ public class DBOperator extends SQLiteOpenHelper {
             cv.put(TEMP, step.getTemp());
             cv.put(NOTES, step.getComment());
             cv.put(ROAST_ID, roastID);
+            cv.put(BEAN_TEMP, step.getBeanTemp());
             returnLong = db.insert(ROAST_STEPS_TABLE_NAME, null, cv);
             Log.i("Insert", "Inserted " + step.getTime());
         }
@@ -443,6 +446,7 @@ public class DBOperator extends SQLiteOpenHelper {
             cv.put(STEP_TIME, step.getTime());
             cv.put(TEMP, step.getTemp());
             cv.put(NOTES, step.getComment());
+            cv.put(BEAN_TEMP, step.getBeanTemp());
             cv.put(ROAST_ID, roastID);
             returnLong = db.insert(ROAST_STEPS_TABLE_NAME, null, cv);
             Log.i("Insert", "Inserted " + step.getTime());
@@ -538,8 +542,9 @@ public class DBOperator extends SQLiteOpenHelper {
             while (data.moveToNext()) {
                 String stepTime = data.getString(data.getColumnIndex(STEP_TIME));
                 int temp = data.getInt(data.getColumnIndex(TEMP));
+                int beanTemp = data.getInt(data.getColumnIndex(BEAN_TEMP));
                 String comments = data.getString(data.getColumnIndex(NOTES));
-                RoastStep step = new RoastStep(stepTime, temp, comments);
+                RoastStep step = new RoastStep(stepTime, temp, comments, beanTemp);
                 roast.addToStepList(step);
             }
         }

@@ -41,6 +41,16 @@ public class Roast implements Parcelable {
         notes = "";
     }
 
+    public RoastStep findStep(int timeInSeconds) {
+        for (RoastStep step : stepList) {
+            int timeSeconds = Integer.parseInt(step.getTime().split(":")[0]) * 60 + Integer.parseInt(step.getTime().split(":")[1]) % 60;
+            if (timeSeconds == timeInSeconds) {
+                return step;
+            }
+        }
+        return new RoastStep("00:00", 0, "null", 0);
+    }
+
     public static final Creator<Roast> CREATOR = new Creator<Roast>() {
         @Override
         public Roast createFromParcel(Parcel in) {
