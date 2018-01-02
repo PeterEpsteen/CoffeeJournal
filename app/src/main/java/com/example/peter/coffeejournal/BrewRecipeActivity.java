@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.Surface;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -25,6 +26,9 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toolbar;
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import java.lang.reflect.Method;
 import java.text.DecimalFormat;
@@ -44,6 +48,8 @@ public class BrewRecipeActivity extends AppCompatActivity implements BrewRecipeF
     String name;
     LinearLayout bottomSheet;
     BottomSheetBehavior bottomSheetBehavior;
+    ImageView imageView;
+    AdView adView;
 
     private SectionsPageAdapter mSectionsPageAdapter;
     private ViewPager mViewPager;
@@ -55,7 +61,9 @@ public class BrewRecipeActivity extends AppCompatActivity implements BrewRecipeF
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_brew_recipe);
-
+        adView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
         name = getIntent().getExtras().getString("Brew Name");
         DBOperator dbOperator = new DBOperator(this);
         br = dbOperator.getBrewRecipe(name);
@@ -72,6 +80,7 @@ public class BrewRecipeActivity extends AppCompatActivity implements BrewRecipeF
                     .commit();
             isNotesShowing = false;
         }
+        imageView = findViewById(R.id.notes_drop_icon);
         bottomSheet = findViewById(R.id.bottom_sheet);
         // init the bottom sheet behavior
          bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
@@ -82,7 +91,10 @@ public class BrewRecipeActivity extends AppCompatActivity implements BrewRecipeF
         bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
-
+                if (newState == BottomSheetBehavior.STATE_EXPANDED || newState == BottomSheetBehavior.STATE_COLLAPSED) {
+                    float deg = (imageView.getRotation() == 0F) ? 180F : 0F;
+                    imageView.animate().rotation(deg).setInterpolator(new AccelerateDecelerateInterpolator());
+                }
             }
 
             @Override
@@ -99,10 +111,12 @@ public class BrewRecipeActivity extends AppCompatActivity implements BrewRecipeF
         bar.setDisplayShowTitleEnabled(true);
         showNotesButton = findViewById(R.id.show_notes_button);
         final BrewNotesFragment notesFragment = new BrewNotesFragment();
-        ImageView imageView = findViewById(R.id.notes_drop_icon);
+
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                float deg = (v.getRotation() == 0F) ? 180F : 0F;
+//                v.animate().rotation(deg).setInterpolator(new AccelerateDecelerateInterpolator());
                 if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 }
@@ -114,6 +128,8 @@ public class BrewRecipeActivity extends AppCompatActivity implements BrewRecipeF
         showNotesButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                float deg = (imageView.getRotation() == 0F) ? 180F : 0F;
+//                imageView.animate().rotation(deg).setInterpolator(new AccelerateDecelerateInterpolator());
                 if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 }

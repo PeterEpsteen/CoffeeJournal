@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.widget.SwitchCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -20,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,7 +31,7 @@ import org.w3c.dom.Text;
 
 import java.util.regex.Pattern;
 
-public class AddBrew extends AppCompatActivity implements View.OnClickListener {
+public class AddBrew extends AppCompatActivity {
 
     BrewRecipe br;
     String name, brewMethod, grind, notes, editBrewName, editBrewDate;
@@ -38,7 +40,7 @@ public class AddBrew extends AppCompatActivity implements View.OnClickListener {
     double waterUnits, coffeeUnits;
     SwitchCompat metricEdit;
     TextView dynamicWaterUnitsTv, dynamicCoffeeUnitsTv;
-    NestedScrollView nsv;
+    ScrollView sv;
     EditText nameEdit;
     EditText grindEdit;
     EditText notesEdit;
@@ -50,6 +52,10 @@ public class AddBrew extends AppCompatActivity implements View.OnClickListener {
     TextInputLayout coffeeWeightTI;
     TextInputLayout waterWeightTI;
     TextView nameTextView;
+    Button addButton;
+
+    public static final int CHANGED_BREW_DB_DATA = 1;
+    public static final int INSERTED_BREW = 2;
 
 
     @Override
@@ -61,7 +67,6 @@ public class AddBrew extends AppCompatActivity implements View.OnClickListener {
         setContentView(R.layout.activity_add_brew);
         Intent myIntent = getIntent();
         editBrewName = myIntent.getStringExtra("Brew Name");
-        editBrewDate = myIntent.getStringExtra("Brew Date");
 
         android.support.v7.widget.Toolbar mtoolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(mtoolbar);
@@ -70,9 +75,8 @@ public class AddBrew extends AppCompatActivity implements View.OnClickListener {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        nsv = findViewById(R.id.nested_scrollview);
-        Button btn = findViewById(R.id.add_brew_button);
-        btn.setOnClickListener(this);
+        sv = findViewById(R.id.main_scroll_view);
+
 
         //Initialize all settings for BrewRecipe obj
         //Get all edit texts
@@ -85,6 +89,8 @@ public class AddBrew extends AppCompatActivity implements View.OnClickListener {
         brewTimeEditSeconds = findViewById(R.id.brew_time_edit_seconds);
         bloomTimeEditMinutes = findViewById(R.id.bloom_time_edit_minutes);
         bloomTimeEditSeconds = findViewById(R.id.bloom_time_edit_seconds);
+
+        nameEdit.requestFocus();
 
         bloomTimeEditMinutes.addTextChangedListener(new TextWatcher() {
             @Override
@@ -165,10 +171,11 @@ public class AddBrew extends AppCompatActivity implements View.OnClickListener {
 
             }
         });
+        addButton = findViewById(R.id.add_brew_button);
 
         if (editBrewName != null) {
             actionBar.setTitle("Edit Brew");
-            btn.setText("Save Edit");
+            addButton.setText("Save Edit");
             DBOperator dbOperator = new DBOperator(this);
             BrewRecipe editBrew = dbOperator.getBrewRecipe(editBrewName);
             if (editBrew.getBrewMethod() != null) {
@@ -220,32 +227,38 @@ public class AddBrew extends AppCompatActivity implements View.OnClickListener {
                 myToast.show();
             }
 
+
+
+            if (editBrewName != null) {
+                addButton.setText("Save");
+            }
+
         }
     }
+
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent i = new Intent(this, MainActivity.class);
-        startActivity(i);
         finish();
     }
 
-    @Override
-    public void onClick(View v) {insertBrew();}
 
-    public void insertBrew() {
+    public void insertBrew(View v) {
 
         Log.i("DB", "Attempting to insert Brew");
 
         Context context = getApplicationContext();
         int duration = Toast.LENGTH_LONG;
 
+        db = new DBOperator(this);
+
+
         name = nameEdit.getText().toString();
 
-        if(name.equals("")) {
+        if(name.equals("") || name.isEmpty()) {
             //Request focus to text view and pop keyboard up
-            nsv.scrollTo(0,0);
+            sv.scrollTo(nameEdit.getLeft(),nameEdit.getTop());
             nameEdit.requestFocus();
             nameTI.setError("Brew name required!");
             nameEdit.postDelayed(new Runnable() {
@@ -257,6 +270,12 @@ public class AddBrew extends AppCompatActivity implements View.OnClickListener {
                 }
             },200);
         }
+
+        else if(db.getBrewNames().contains(name) && editBrewName == null) {
+            Toast myToast = Toast.makeText(this, "Brew name already exists. Please enter a unique name", Toast.LENGTH_LONG);
+            myToast.show();
+        }
+
         else {
             //Spinner selection is handled in onItemSelected above
             grind = grindEdit.getText().toString();
@@ -335,7 +354,6 @@ public class AddBrew extends AppCompatActivity implements View.OnClickListener {
 
             //Create brewRecipe, open db and insert
             br = new BrewRecipe(name, brewMethod, grind, notes, coffeeUnits, waterUnits, metric, brewTime, bloomTime);
-            db = new DBOperator(this);
 
             Toast myToast = Toast.makeText(getApplicationContext(), "Error inserting or updating", duration);
 
@@ -344,17 +362,15 @@ public class AddBrew extends AppCompatActivity implements View.OnClickListener {
             long rows = db.insert(br);
             if (rows != -1)
                 Log.i("db", "Sucessfully inserted rows: " + rows);
-                Intent i = new Intent(this, MainActivity.class);
-                startActivity(i);
+            setResult(CHANGED_BREW_DB_DATA);
             finish();
             }
 
             else {
-                long rows = db.update(br, editBrewName, editBrewDate);
+                long rows = db.update(br, editBrewName);
                 if (rows != -1) {
                     Log.i("db", "Sucessfully inserted rows: " + rows);
-                    Intent i = new Intent(this, MainActivity.class);
-                    startActivity(i);
+                    setResult(CHANGED_BREW_DB_DATA);
                     finish();
                 }
                 else {

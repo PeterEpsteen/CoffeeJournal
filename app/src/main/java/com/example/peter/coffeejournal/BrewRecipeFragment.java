@@ -252,7 +252,27 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
         return rootView;
     }
 
-    private void updateSeekBar() {
+    private void changeSeekBarUnits() {
+        int progressCurrent = scaleSlider.getProgress();
+        int maxCurrent = scaleSlider.getMax();
+        if(isWaterMetric) {
+            seekBarStep = 1;
+            seekBarMax = (int) convertOzToGrams((double)maxCurrent/10);
+            scaleSlider.setMax(seekBarMax);
+            progressCurrent = (int) convertOzToGrams((double)scaleSlider.getProgress()/10);
+            scaleSlider.setProgress(progressCurrent);
+        }
+        else {
+            seekBarStep = .1;
+            seekBarMax = (int)convertGramsToOz(maxCurrent) * 10;
+            scaleSlider.setMax(seekBarMax);
+            progressCurrent = (int) convertGramsToOz(progressCurrent) * 10;
+            scaleSlider.setProgress(progressCurrent);
+        }
+
+    }
+
+    private void updateSeekBar(){
         if (isWaterMetric) {
             seekBarStep = 1;
             seekBarMax = (int) (waterUnits * 2);
@@ -476,14 +496,16 @@ public class BrewRecipeFragment extends Fragment implements View.OnClickListener
                 waterUnitsTv.setText("Ounces");
                 setWaterUnits(convertGramsToOz(waterUnits));
                 seekBarStep = 0.1;
-                updateSeekBar();
+                changeSeekBarUnits();
+//                updateSeekBar();
 
             } else {
                 waterUnitsTv.setText("Grams");
                 isWaterMetric = true;
                 setWaterUnits(convertOzToGrams(waterUnits));
                 seekBarStep = 1;
-                updateSeekBar();
+                changeSeekBarUnits();
+//                updateSeekBar();
             }
         } else if (buttonView == coffeeSwitch) {
             if (isChecked) {

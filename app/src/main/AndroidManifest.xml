@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".AddBrew"
-            android:windowSoftInputMode="adjustPan"
+            android:windowSoftInputMode="adjustResize"
             android:parentActivityName=".MainActivity"/>
         <activity android:name=".AddRoast"
             android:windowSoftInputMode="adjustPan"

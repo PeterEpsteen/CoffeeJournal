@@ -29,6 +29,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.jjoe64.graphview.DefaultLabelFormatter;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.LabelFormatter;
@@ -58,7 +60,9 @@ public class RoastActivity extends AppCompatActivity {
     PopupWindow popupWindow;
     ConstraintLayout layoutOfPopup;
     TextView datapointTv;
+    private AdView adView;
     float lastTouchedX, lastTouchedY;
+    final static int ROAST_PAGE_RESULT = 5;
 
     //TODO
     //Get steps to work with graph
@@ -73,6 +77,11 @@ public class RoastActivity extends AppCompatActivity {
         setContentView(R.layout.activity_roast);
         brewName = getIntent().getExtras().getString("Name");
         brewDate = getIntent().getExtras().getString("Date");
+
+        adView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+
 
         collapsingToolbarLayout = findViewById(R.id.main_collapsing);
         collapsingToolbarLayout.setTitle(brewName);
@@ -325,9 +334,7 @@ public class RoastActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent i = new Intent(this, MainActivity.class);
-        i.putExtra("Page", "Roast");
-        startActivity(i);
+        setResult(ROAST_PAGE_RESULT);
         finish();
     }
 
@@ -335,9 +342,9 @@ public class RoastActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle arrow click here
         if (item.getItemId() == android.R.id.home) {
-            Intent i = new Intent(this, MainActivity.class);
-            startActivity(i);
+            setResult(AddRoast.GO_TO_ROASTS);
             finish();
+
         }
 
         return super.onOptionsItemSelected(item);

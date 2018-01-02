@@ -18,7 +18,7 @@ import java.util.List;
 
 public class DBOperator extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 17;
+    private static final int DATABASE_VERSION = 18;
     private static final String DATABASE_NAME = "COFFEE_JOURNAL_DB";
     private static final String BREW_TABLE_NAME = "BREW_TABLE";
     private static final String ROAST_TABLE_NAME = "ROAST_TABLE";
@@ -330,10 +330,10 @@ public class DBOperator extends SQLiteOpenHelper {
 
     }
 
-    public long update(BrewRecipe br, String editBrewName, String editBrewDate) {
+    public long update(BrewRecipe br, String editBrewName) {
         SQLiteDatabase db = this.getWritableDatabase();
         long returnLong = -1;
-        String whereClause = NAME + " = '" + editBrewName + "' AND " + DATE + " = '" + editBrewDate + "'";
+        String whereClause = NAME + " = '" + editBrewName + "'";
         if(db.delete(BREW_TABLE_NAME, whereClause, null) > 0) {
             Log.i("DB", "Deleted old brew name: " + editBrewName);
         }
@@ -343,6 +343,18 @@ public class DBOperator extends SQLiteOpenHelper {
         }
         db.close();
         return insert(br);
+    }
+
+    public ArrayList<String> getBrewNames() {
+        Cursor cursor = this.getReadableDatabase().rawQuery("SELECT " + NAME + " FROM " + BREW_TABLE_NAME, null);
+        ArrayList<String> brewNamesList = new ArrayList<String>();
+        if(cursor != null){
+            while (cursor.moveToNext()) {
+                brewNamesList.add(cursor.getString(cursor.getColumnIndex(NAME)));
+            }
+        }
+        return brewNamesList;
+
     }
 
     public long update(Roast r) {
@@ -463,7 +475,7 @@ public class DBOperator extends SQLiteOpenHelper {
         cv.put(NAME, roast.getName());
         cv.put(DATE, roast.getDate());
         cv.put(NOTES, roast.getNotes());
-        db.insert(ROAST_TABLE_NAME, null, cv);
+        returnVal = db.insert(ROAST_TABLE_NAME, null, cv);
         int roastID = -1;
         String roastIdQuery = "select "+ ID + " from " + ROAST_TABLE_NAME + " where " + NAME + " = '" + roast.getName() + "'";
         Cursor data = db.rawQuery(roastIdQuery, null);

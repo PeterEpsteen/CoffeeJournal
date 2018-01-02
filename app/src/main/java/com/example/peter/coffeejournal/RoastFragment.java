@@ -60,7 +60,7 @@ public class RoastFragment extends Fragment implements AdapterView.OnItemClickLi
     private RecyclerView rvRoast;
     private LinearLayoutManager linearLayoutManager;
     private SharedPreferences appSharedPrefs;
-    private ImageButton sortByButton;
+    private ImageButton sortByButton, addButton;
 
 
     private OnFragmentInteractionListener mListener;
@@ -141,6 +141,15 @@ public class RoastFragment extends Fragment implements AdapterView.OnItemClickLi
                 showSortMenu();
             }
         });
+        addButton = view.findViewById(R.id.add_roast_top_button);
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), AddRoast.class);
+                startActivityForResult(intent, 1);
+
+            }
+        });
 
         //Find the +1 button
 
@@ -178,7 +187,10 @@ public class RoastFragment extends Fragment implements AdapterView.OnItemClickLi
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.i("Result", "On Activity result called in fragment");
+        if(resultCode == AddRoast.ROAST_DB_CHANGED) {
+            Log.i("ResultRoast", "Roast result called db changed");
+            new LoadRoasts("checkDBChanged").execute();
+        }
     }
 
     public void initializeTouchHelper() {
@@ -283,6 +295,7 @@ public class RoastFragment extends Fragment implements AdapterView.OnItemClickLi
 
     }
 
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -303,6 +316,7 @@ public class RoastFragment extends Fragment implements AdapterView.OnItemClickLi
         private DBOperator dbOperator;
         private SharedPreferences appSharedPrefs;
         private String methodString;
+        boolean refreshSort = false;
 
         public LoadRoasts(String methodString) {
             this.methodString = methodString;
@@ -334,6 +348,7 @@ public class RoastFragment extends Fragment implements AdapterView.OnItemClickLi
             ArrayList<Roast> dbRoasts = dbOperator.getRoasts();
             if (dbRoasts.size() != roastArrayList.size()) {
                 roastArrayList = dbRoasts;
+                sortBy("Date");
             }
         }
 
@@ -368,6 +383,12 @@ public class RoastFragment extends Fragment implements AdapterView.OnItemClickLi
             }
         }
 
+        ArrayList<Roast> refreshDB() {
+            refreshSort = true;
+            roastArrayList = dbOperator.getRoasts();
+            return dbOperator.getRoasts();
+        }
+
 
         @Override
         protected ArrayList<Roast> doInBackground(Void... voids) {
@@ -384,6 +405,9 @@ public class RoastFragment extends Fragment implements AdapterView.OnItemClickLi
                 case "checkDBChanged":
                     checkDBChanged();
                     break;
+                case "refreshDB":
+                    refreshDB();
+                    break;
             }
             return roastArrayList;
 
@@ -394,6 +418,10 @@ public class RoastFragment extends Fragment implements AdapterView.OnItemClickLi
             super.onPostExecute(roasts);
             roastAdapter.setRoastList(roastArrayList);
             roastAdapter.notifyDataSetChanged();
+            if(refreshSort) {
+                methodString = "sortDate";
+                execute();
+            }
         }
     }
 

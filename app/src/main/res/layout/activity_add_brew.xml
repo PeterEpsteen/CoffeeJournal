@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_scroll_view">
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/main.appbar"
@@ -40,22 +48,15 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="fill_vertical"
-        android:layout_weight="1"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:clipToPadding="false"
-        android:id="@+id/nested_scrollview"
-        >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
         android:orientation="vertical"
-        android:paddingBottom="56dp">
+        >
 
         <TextView
             style="@style/TextAppearance.AppCompat.Title"
@@ -316,6 +317,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginRight="8dp"
                         android:gravity="end"
+                        android:nextFocusDown="@id/bloom_time_edit_minutes"
                         android:maxLength="5"
                         android:inputType="numberDecimal"
                         android:singleLine="true" />
@@ -335,6 +337,7 @@
 
 
                 </LinearLayout>
+
 
 
             </LinearLayout>
@@ -386,6 +389,7 @@
                             style="@style/TextAppearance.AppCompat.Subhead"
                             android:minWidth="56dp"
                             android:layout_width="wrap_content"
+                            android:nextFocusDown="@id/bloom_time_edit_seconds"
                             android:gravity="end"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="8dp"
@@ -407,6 +411,7 @@
                             android:minWidth="56dp"
                             android:layout_width="wrap_content"
                             android:gravity="end"
+                            android:nextFocusDown="@id/brew_time_edit_minutes"
                             android:layout_marginRight="8dp"
                             android:layout_height="wrap_content"
                             android:inputType="number"
@@ -453,6 +458,7 @@
                             android:minWidth="56dp"
                             android:layout_width="wrap_content"
                             android:gravity="end"
+                            android:nextFocusDown="@id/brew_time_edit_seconds"
                             android:layout_marginRight="8dp"
                             android:layout_height="wrap_content"
                             android:inputType="number"
@@ -525,9 +531,8 @@
             style="@style/TextAppearance.AppCompat.Subhead"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:lines="4"
             android:hint="Add notes or instructions relating to the brew here"
-            android:gravity="bottom"
+            android:gravity="top"
             />
     </LinearLayout>
 
@@ -539,6 +544,9 @@
             android:id="@+id/add_brew_button"
             style="@style/TextAppearance.AppCompat.Button"
             android:layout_width="match_parent"
+            android:focusableInTouchMode="false"
+            android:focusable="false"
+            android:onClick="insertBrew"
             android:layout_weight="1"
             android:layout_marginRight="64dp"
             android:layout_marginLeft="64dp"
@@ -547,12 +555,14 @@
             android:layout_margin="16dp"
             android:backgroundTint="@color/colorAccent"
             android:text="Add Brew!"
-            android:textColor="@color/common_google_signin_btn_text_dark" />
+            android:textColor="@color/common_google_signin_btn_text_dark"
+            android:layout_marginBottom="56dp"/>
 
 
+    </LinearLayout>
     </LinearLayout>
 
 
     <!-- TODO: MAKE THIS BETTER, find design closer to finished product and start with that -->
-    </android.support.v4.widget.NestedScrollView>
 </android.support.design.widget.CoordinatorLayout>
+</ScrollView>

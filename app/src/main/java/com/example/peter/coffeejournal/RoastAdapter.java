@@ -74,7 +74,6 @@ public class RoastAdapter extends RecyclerView.Adapter<RoastAdapter.ViewHolder> 
                 myIntent.putExtra("Name", roastName);
                 myIntent.putExtra("Date", date);
                 v.getContext().startActivity(myIntent);
-                ((Activity)mContext).finish();
             }
         });
         ViewHolder vh = new ViewHolder(v);

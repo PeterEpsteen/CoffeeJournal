@@ -8,7 +8,6 @@ import java.util.Date;
 /**
  * Created by peter on 11/5/17.
  */
-
 public class BrewRecipe implements Parcelable {
 
     String name, brewMethod, grind, notes, dateAdded;
@@ -33,6 +32,7 @@ public class BrewRecipe implements Parcelable {
         Date date = new Date();
         dateAdded = date.toString();
     }
+
 
     public BrewRecipe(Parcel in){
         // the order needs to be the same as in writeToParcel() method

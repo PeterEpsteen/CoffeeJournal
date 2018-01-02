@@ -5,7 +5,8 @@
     android:layout_margin="16dp"
     android:id="@+id/tasting_notes_linear_layout">
     <TextView
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_width="match_parent"

@@ -66,7 +66,7 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemClickLis
     private ArrayList<BrewRecipe> brewRecipeArrayList;
     private String sortByCurrent;
     private ItemTouchHelper itemTouchHelper;
-    private ImageButton imageButton;
+    private ImageButton imageButton, addButton;
     LinearLayoutManager llm;
 
     public BrewFragment() {
@@ -105,14 +105,14 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemClickLis
         super.onResume();
     }
 
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        super.setUserVisibleHint(isVisibleToUser);
-        if(isVisibleToUser && getView()!=null) {
-            Log.i("SetVisible", "Set user visible called on Brew Fragment");
-            new LoadBrews().execute("checkDBChanged");
-        }
-    }
+//    @Override
+//    public void setUserVisibleHint(boolean isVisibleToUser) {
+//        super.setUserVisibleHint(isVisibleToUser);
+//        if(isVisibleToUser && getView()!=null) {
+//            Log.i("SetVisible", "Set user visible called on Brew Fragment");
+//            new LoadBrews().execute("checkDBChanged");
+//        }
+//    }
 
     //TODO HANDLE ARRAYLIST in onCreate instead of onResume
 
@@ -163,13 +163,6 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemClickLis
         };
         ItemTouchHelper ith = new ItemTouchHelper(ithCallback);
         ith.attachToRecyclerView(rv);
-        TextView sortTv = rootView.findViewById(R.id.sort_text_view);
-        sortTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showSortMenu();
-            }
-        });
         imageButton = rootView.findViewById(R.id.sort_button);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -177,11 +170,21 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemClickLis
                 showSortMenu();
             }
         });
-        if (!isViewShown) {
-            new LoadBrews().execute("checkDBChanged");
-        }
+//        if (!isViewShown) {
+//            new LoadBrews().execute("checkDBChanged");
+//        }
+        addButton = rootView.findViewById(R.id.add_brew_top_button);
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), AddBrew.class);
+                startActivityForResult(intent, 1);
+            }
+        });
 
         return rootView;
+
+
     }
 
     public void showSortMenu() {
@@ -221,28 +224,6 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemClickLis
         inflater.inflate(R.menu.context_menu, menu);
     }
 
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-            TextView tv = info.targetView.findViewById(R.id.brew_title_text_view);
-            String brewName = tv.getText().toString();
-            switch (item.getItemId()) {
-                case R.id.menu_edit:
-                    Intent myIntent = new Intent(getContext(), AddBrew.class);
-                    myIntent.putExtra("Brew Name", brewName);
-                    startActivityForResult(myIntent, 1);
-                    return true;
-                case R.id.menu_delete:
-                    Log.i("Info", "You would be deleting this brew: " + brewName);
-                    mDBOperator.deleteBrew(brewName);
-                    FragmentTransaction ft = getFragmentManager().beginTransaction();
-                    ft.detach(this).attach(this).commit();
-                    return true;
-                default:
-                    return super.onContextItemSelected(item);
-
-            }
-    }
 
     @Override
     public void onPause() {
@@ -310,18 +291,23 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemClickLis
         void onFragmentInteraction(Uri uri);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == AddBrew.CHANGED_BREW_DB_DATA) {
+            new LoadBrews().execute("refreshDB");
+        }
+        Log.i("Result", "Brew frag result received");
 
+    }
 
     private class LoadBrews extends AsyncTask<String, Void, ArrayList<BrewRecipe>> {
         private ArrayList<BrewRecipe> list;
+        private boolean resort = false;
 
         @Override
         protected ArrayList<BrewRecipe> doInBackground(String... params) {
             list = brewRecipeArrayList;
             switch (params[0]) {
-                case "checkDBChanged":
-                    list = checkDBChanged();
-                    break;
                 case "initialize":
                     list = initialize();
                     break;
@@ -334,26 +320,26 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemClickLis
                 case "sortMethod":
                     list = sortMethod();
                     break;
+                case "refreshDB":
+                    list = mDBOperator.getBrewRecipes();
+                    resort = true;
+                    break;
+
             }
             return list;
         }
+
 
         @Override
         protected void onPostExecute(ArrayList<BrewRecipe> brewRecipes) {
             super.onPostExecute(brewRecipes);
             brewRecipeArrayList = brewRecipes;
             ba.setBrewList(brewRecipes);
+            if (resort) {
+                doInBackground("sortDate");
+            }
         }
 
-        ArrayList<BrewRecipe> checkDBChanged(){
-            ArrayList<BrewRecipe> current = brewRecipeArrayList;
-            ArrayList<BrewRecipe> dbBrewList = mDBOperator.getBrewRecipes();
-            if(current.size() != dbBrewList.size()){
-                return dbBrewList;
-            }
-            else
-                return current;
-        }
 
         ArrayList<BrewRecipe> initialize(){
             ArrayList<BrewRecipe> dbBrewList = mDBOperator.getBrewRecipes();
