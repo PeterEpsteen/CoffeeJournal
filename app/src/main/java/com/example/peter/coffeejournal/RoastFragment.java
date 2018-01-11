@@ -123,11 +123,17 @@ public class RoastFragment extends Fragment implements AdapterView.OnItemClickLi
         rvRoast.setLayoutManager(linearLayoutManager);
         rvRoast.setAdapter(roastAdapter);
         if (savedInstanceState != null) {
-            Log.i("Brew Order", "Setting to last saved order");
-            Parcelable savedRecyclerLayoutState = savedInstanceState.getParcelable(LIST_STATE_KEY_ROAST);
-            rvRoast.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
-            roastArrayList = savedInstanceState.getParcelableArrayList(ROAST_LIST_KEY);
-            roastAdapter = new RoastAdapter(view.getContext(), roastArrayList);
+            try {
+                Log.i("Brew Order", "Setting to last saved order");
+                Parcelable savedRecyclerLayoutState = savedInstanceState.getParcelable(LIST_STATE_KEY_ROAST);
+                rvRoast.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
+                roastArrayList = savedInstanceState.getParcelableArrayList(ROAST_LIST_KEY);
+                roastAdapter = new RoastAdapter(view.getContext(), roastArrayList);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+                new LoadRoasts("initialize").execute();
+            }
         }
         rvRoast.setAdapter(roastAdapter);
 

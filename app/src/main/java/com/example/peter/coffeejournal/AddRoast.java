@@ -29,6 +29,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
 import org.w3c.dom.Text;
 
 import java.text.DateFormat;
@@ -55,6 +58,7 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener 
     CollapsingToolbarLayout collapsingToolbarLayout;
     String timerText;
     int seconds, minutes;
+    private AdView adView;
     long startTime = 0;
     boolean isTimerOn = false;
     private Toolbar mToolBar;
@@ -90,6 +94,8 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener 
         editRoastName = intent.getStringExtra("Name");
         editRoastDate = intent.getStringExtra("Date");
         db = new DBOperator(this);
+
+//
 
         beanRowLinearLayoutList = new ArrayList<LinearLayout>();
         stepsRowLinearLayoutList = new ArrayList<LinearLayout>();

@@ -78,9 +78,9 @@ public class RoastActivity extends AppCompatActivity {
         brewName = getIntent().getExtras().getString("Name");
         brewDate = getIntent().getExtras().getString("Date");
 
-        adView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
+//        adView = findViewById(R.id.adView);
+//        AdRequest adRequest = new AdRequest.Builder().build();
+//        adView.loadAd(adRequest);
 
 
         collapsingToolbarLayout = findViewById(R.id.main_collapsing);

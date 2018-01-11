@@ -3,13 +3,16 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_first_fragment"
-            android:title="Settings" />
+            android:id="@+id/nav_contact"
+            android:title="Contact Developer" />
         <item
-            android:id="@+id/nav_second_fragment"
+            android:id="@+id/nav_feedback"
             android:title="Leave Feedback" />
         <item
-            android:id="@+id/nav_third_fragment"
-            android:title="Upgrade" />
+            android:id="@+id/nav_help"
+            android:title="Help"/>
+        <!--<item-->
+            <!--android:id="@+id/nav_third_fragment"-->
+            <!--android:title="Upgrade" />-->
     </group>
 </menu>

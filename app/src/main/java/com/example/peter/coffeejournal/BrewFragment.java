@@ -131,10 +131,17 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemClickLis
         rv.setAdapter(ba);
         if (savedInstanceState != null) {
             Log.i("Brew Order", "Setting to last saved order");
-            Parcelable savedRecyclerLayoutState = savedInstanceState.getParcelable(LIST_STATE_KEY);
-            rv.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
-            brewRecipeArrayList = savedInstanceState.getParcelableArrayList(BREW_RECIPE_LIST_KEY);
-            ba.setBrewList(brewRecipeArrayList);
+            try {
+                Parcelable savedRecyclerLayoutState = savedInstanceState.getParcelable(LIST_STATE_KEY);
+                rv.getLayoutManager().onRestoreInstanceState(savedRecyclerLayoutState);
+                brewRecipeArrayList = savedInstanceState.getParcelableArrayList(BREW_RECIPE_LIST_KEY);
+                ba.setBrewList(brewRecipeArrayList);
+            }
+            catch (Exception e){
+                e.printStackTrace();
+                new LoadBrews().execute("initialize");
+            }
+
         }
 
 
@@ -233,6 +240,7 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemClickLis
         SharedPreferences.Editor prefsEditor = appSharedPrefs.edit();
         Gson gson = new Gson();
         String json = gson.toJson(ba.getBrewList());
+        Log.i("JSON", json);
         prefsEditor.putString(BREW_RECIPE_PREFERENCE_KEY, json);
         prefsEditor.apply();
     }
@@ -343,6 +351,14 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemClickLis
 
         ArrayList<BrewRecipe> initialize(){
             ArrayList<BrewRecipe> dbBrewList = mDBOperator.getBrewRecipes();
+            ArrayList<BrewRecipe> sortedJsonList = mDBOperator.getBrewRecipes();
+
+            Collections.sort(dbBrewList, new Comparator<BrewRecipe>() {
+                @Override
+                public int compare(BrewRecipe brewRecipe, BrewRecipe t1) {
+                    return brewRecipe.getName().compareToIgnoreCase(t1.getName());
+                }
+            });
             Gson gson = new Gson();
             SharedPreferences appSharedPrefs = PreferenceManager
                     .getDefaultSharedPreferences(getActivity().getApplicationContext());
@@ -354,13 +370,29 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemClickLis
                 Type type = new TypeToken<List<BrewRecipe>>() {
                 }.getType();
                 brewRecipeArrayList = gson.fromJson(json, type);
+                sortedJsonList = new ArrayList<>(brewRecipeArrayList);
+                Collections.sort(sortedJsonList, new Comparator<BrewRecipe>() {
+                    @Override
+                    public int compare(BrewRecipe brewRecipe, BrewRecipe t1) {
+                        return brewRecipe.getName().compareToIgnoreCase(t1.getName());
+                    }
+                });
+
             }
-            if (dbBrewList.size() != brewRecipeArrayList.size()) {
-                Log.i("Shared Pref", "Sizes dont match");
-                return dbBrewList;
+            if (brewRecipeArrayList != null) {
+                if (!dbBrewList.equals(sortedJsonList)) {
+                    for (BrewRecipe br : sortedJsonList) {
+                        Log.i("JSON", br.getName());
+                    }
+                    Log.i("Shared Pref", "Json list and db list dont match");
+                    return dbBrewList;
+                } else {
+                    Log.i("Shared Pref", "Lists match, setting to saved");
+                    return brewRecipeArrayList;
+                }
             }
             else {
-                Log.i("Shared Pref", "Sizes match, setting to saved");
+                brewRecipeArrayList = dbBrewList;
                 return brewRecipeArrayList;
             }
         }

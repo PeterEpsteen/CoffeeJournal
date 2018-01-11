@@ -15,7 +15,6 @@ public class BrewRecipe implements Parcelable {
     double coffeeUnits, waterUnits;
 
     public BrewRecipe(){
-        return;
     }
 
     public BrewRecipe(String name, String brewMethod, String grind, String notes, double coffeeUnits, double waterUnits, int metric, int brewTime, int bloomTime) {
@@ -198,5 +197,14 @@ public class BrewRecipe implements Parcelable {
         this.icon = icon;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        // Basic checks.
+        if (obj == this) return true;
+        if (!(obj instanceof BrewRecipe)) return false;
 
+        // Property checks.
+        BrewRecipe other = (BrewRecipe) obj;
+        return name.equalsIgnoreCase(other.getName());
+    }
 }

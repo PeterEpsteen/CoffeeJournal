@@ -61,9 +61,6 @@ public class BrewRecipeActivity extends AppCompatActivity implements BrewRecipeF
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_brew_recipe);
-        adView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
         name = getIntent().getExtras().getString("Brew Name");
         DBOperator dbOperator = new DBOperator(this);
         br = dbOperator.getBrewRecipe(name);
@@ -147,6 +144,10 @@ public class BrewRecipeActivity extends AppCompatActivity implements BrewRecipeF
         notesTv.setText(br.getNotes());
         titleTv.setText(name);
         grindTv.setText(br.getGrind());
+
+//        adView = findViewById(R.id.adView);
+//        AdRequest adRequest = new AdRequest.Builder().build();
+//        adView.loadAd(adRequest);
 //
     }
 
