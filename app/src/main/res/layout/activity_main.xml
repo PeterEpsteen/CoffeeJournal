@@ -13,7 +13,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:background="@color/backgroundDefaultWhite"
-    tools:context="com.example.peter.coffeejournal.MainActivity">
+    tools:context="com.example.peter.coffeekeeper.MainActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
@@ -72,7 +72,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center"
         ads:adSize="SMART_BANNER"
-        ads:adUnitId="ca-app-pub-3940256099942544/6300978111">
+        ads:adUnitId="ca-app-pub-4742169084911884/8955034095">
     </com.google.android.gms.ads.AdView>
 
 

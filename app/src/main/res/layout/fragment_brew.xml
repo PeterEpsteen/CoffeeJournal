@@ -7,7 +7,7 @@
     android:layout_marginBottom="56dp"
     android:fitsSystemWindows="true"
     android:background="@color/backgroundColorBeige"
-    tools:context="com.example.peter.coffeejournal.BrewFragment">
+    tools:context="com.example.peter.coffeekeeper.BrewFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -1,4 +1,4 @@
-package com.example.peter.coffeejournal;
+package com.example.peter.coffeekeeper;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

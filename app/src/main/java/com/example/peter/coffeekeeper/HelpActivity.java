@@ -1,4 +1,4 @@
-package com.example.peter.coffeejournal;
+package com.example.peter.coffeekeeper;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -7,11 +7,16 @@ import android.widget.TextView;
 public class HelpActivity extends AppCompatActivity {
 
     private  TextView welcomeText, brewText, roastText, otherText;
+    private android.support.v7.widget.Toolbar tb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);
+        tb = findViewById(R.id.toolbar);
+        setSupportActionBar(tb);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         otherText = findViewById(R.id.other_text);
         welcomeText = findViewById(R.id.welcome_text);
         brewText = findViewById(R.id.brew_text);

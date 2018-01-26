@@ -3,17 +3,17 @@
     <!-- These settings headers are only used on tablets. -->
 
     <header
-        android:fragment="com.example.peter.coffeejournal.BrewSettingsActivity$GeneralPreferenceFragment"
+        android:fragment="com.example.peter.coffeekeeper.BrewSettingsActivity$GeneralPreferenceFragment"
         android:icon="@drawable/ic_info_black_24dp"
         android:title="@string/pref_header_general" />
 
     <header
-        android:fragment="com.example.peter.coffeejournal.BrewSettingsActivity$NotificationPreferenceFragment"
+        android:fragment="com.example.peter.coffeekeeper.BrewSettingsActivity$NotificationPreferenceFragment"
         android:icon="@drawable/ic_notifications_black_24dp"
         android:title="@string/pref_header_notifications" />
 
     <header
-        android:fragment="com.example.peter.coffeejournal.BrewSettingsActivity$DataSyncPreferenceFragment"
+        android:fragment="com.example.peter.coffeekeeper.BrewSettingsActivity$DataSyncPreferenceFragment"
         android:icon="@drawable/ic_sync_black_24dp"
         android:title="@string/pref_header_data_sync" />
 

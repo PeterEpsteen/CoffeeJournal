@@ -1,4 +1,4 @@
-package com.example.peter.coffeejournal;
+package com.example.peter.coffeekeeper;
 
 
 import android.os.Bundle;

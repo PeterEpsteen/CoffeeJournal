@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.peter.coffeejournal">
+    package="com.example.peter.coffeekeeper"
+    android:versionCode="2"
+    android:versionName="release">
 
     <!-- To access Google+ APIs: -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -13,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name="com.example.peter.coffeekeeper.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden">
@@ -24,22 +26,24 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AddBrew"
-            android:parentActivityName=".MainActivity"
+            android:name="com.example.peter.coffeekeeper.AddBrew"
+            android:parentActivityName="com.example.peter.coffeekeeper.MainActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".AddRoast"
-            android:parentActivityName=".MainActivity"
+            android:name="com.example.peter.coffeekeeper.AddRoast"
+            android:parentActivityName="com.example.peter.coffeekeeper.MainActivity"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".BrewRecipeActivity"
+            android:name="com.example.peter.coffeekeeper.BrewRecipeActivity"
             android:label="Test"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName="com.example.peter.coffeekeeper.MainActivity"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-            android:name=".RoastActivity"
-            android:parentActivityName=".MainActivity" />
-        <activity android:name=".HelpActivity"></activity>
+            android:name="com.example.peter.coffeekeeper.RoastActivity"
+            android:parentActivityName="com.example.peter.coffeekeeper.MainActivity" />
+        <activity android:name="com.example.peter.coffeekeeper.HelpActivity"
+            android:parentActivityName="com.example.peter.coffeekeeper.MainActivity"
+            android:theme="@style/AppTheme"/>
     </application>
 
 </manifest>

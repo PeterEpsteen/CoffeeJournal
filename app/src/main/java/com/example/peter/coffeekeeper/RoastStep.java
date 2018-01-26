@@ -1,4 +1,4 @@
-package com.example.peter.coffeejournal;
+package com.example.peter.coffeekeeper;
 
 /**
  * Created by peter on 11/24/17.

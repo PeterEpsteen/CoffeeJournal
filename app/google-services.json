@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "236647934233",
+    "firebase_url": "https://coffee-keeper.firebaseio.com",
+    "project_id": "coffee-keeper",
+    "storage_bucket": "coffee-keeper.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:236647934233:android:29690a0735fa759a",
+        "android_client_info": {
+          "package_name": "com.example.peter.coffeekeeper"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "236647934233-duno87m60cdnd15ogu0j98p1fsuhn052.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsByTciMZdLRmfN3cs6EH72vG_c_wDEsI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:236647934233:android:523ee2bad52856f7",
+        "android_client_info": {
+          "package_name": "com.coffeekeeperbrewingroasting"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "236647934233-duno87m60cdnd15ogu0j98p1fsuhn052.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsByTciMZdLRmfN3cs6EH72vG_c_wDEsI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

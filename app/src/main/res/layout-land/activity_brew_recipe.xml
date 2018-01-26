@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:clipToPadding="false"
-    tools:context="com.example.peter.coffeejournal.MainActivity">
+    tools:context="com.example.peter.coffeekeeper.MainActivity">
 
 
     <LinearLayout
@@ -225,7 +225,7 @@
                 android:layout_height="wrap_content"
                 ads:adSize="SMART_BANNER"
                 android:layout_gravity="bottom|center"
-                ads:adUnitId="ca-app-pub-3940256099942544/6300978111">
+                ads:adUnitId="ca-app-pub-4742169084911884/8706965549c">
             </com.google.android.gms.ads.AdView>
         </LinearLayout>
 

@@ -1,37 +1,24 @@
-package com.example.peter.coffeejournal;
+package com.example.peter.coffeekeeper;
 
-import android.animation.ObjectAnimator;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Surface;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toolbar;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-
-import java.lang.reflect.Method;
-import java.text.DecimalFormat;
 
 public class BrewRecipeActivity extends AppCompatActivity implements BrewRecipeFragment.SendBrew {
 
@@ -145,9 +132,9 @@ public class BrewRecipeActivity extends AppCompatActivity implements BrewRecipeF
         titleTv.setText(name);
         grindTv.setText(br.getGrind());
 
-//        adView = findViewById(R.id.adView);
-//        AdRequest adRequest = new AdRequest.Builder().build();
-//        adView.loadAd(adRequest);
+        adView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
 //
     }
 
@@ -164,28 +151,10 @@ public class BrewRecipeActivity extends AppCompatActivity implements BrewRecipeF
     @Override
     public void onConfigurationChanged(final Configuration config) {
         super.onConfigurationChanged(config);
-//        TextView title = findViewById(R.id.landscape_title);
-//        title.setText(name);
+
 
     }
 
-    private void forceTabs() {
-        try {
-            final android.app.ActionBar actionBar = getActionBar();
-            final Method setHasEmbeddedTabsMethod = actionBar.getClass().getDeclaredMethod("setHasEmbeddedTabs", boolean.class);
-            setHasEmbeddedTabsMethod.setAccessible(true);
-            setHasEmbeddedTabsMethod.invoke(actionBar, true);
-        }
-        catch (Exception e){}
-    }
-
-
-    private void setupViewPager(ViewPager viewPager){
-        SectionsPageAdapter adapter = new SectionsPageAdapter(getSupportFragmentManager());
-        adapter.addFragment(new BrewRecipeFragment(), "Recipe");
-        adapter.addFragment(new BrewNotesFragment(), "Notes" );
-        viewPager.setAdapter(adapter);
-    }
 
     public void update(){
         Intent intent = getIntent();

@@ -1,10 +1,8 @@
-package com.example.peter.coffeejournal;
+package com.example.peter.coffeekeeper;
 
-import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,7 +11,6 @@ import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -23,19 +20,10 @@ import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnCreateContextMenuListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.GridLayout;
-import android.widget.GridView;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.PopupMenu;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -350,80 +338,98 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemClickLis
 
 
         ArrayList<BrewRecipe> initialize(){
-            ArrayList<BrewRecipe> dbBrewList = mDBOperator.getBrewRecipes();
-            ArrayList<BrewRecipe> sortedJsonList = mDBOperator.getBrewRecipes();
+            try {
+                ArrayList<BrewRecipe> dbBrewList = mDBOperator.getBrewRecipes();
+                ArrayList<BrewRecipe> sortedJsonList = mDBOperator.getBrewRecipes();
 
-            Collections.sort(dbBrewList, new Comparator<BrewRecipe>() {
-                @Override
-                public int compare(BrewRecipe brewRecipe, BrewRecipe t1) {
-                    return brewRecipe.getName().compareToIgnoreCase(t1.getName());
-                }
-            });
-            Gson gson = new Gson();
-            SharedPreferences appSharedPrefs = PreferenceManager
-                    .getDefaultSharedPreferences(getActivity().getApplicationContext());
-            String json = appSharedPrefs.getString(BREW_RECIPE_PREFERENCE_KEY, "");
-            if (json.isEmpty()) {
-                Log.i("Shared Pref", "No shared preferences for brew list order");
-            } else {
-                Log.i("Shared Pref", "Loading shared preferences for brew list order");
-                Type type = new TypeToken<List<BrewRecipe>>() {
-                }.getType();
-                brewRecipeArrayList = gson.fromJson(json, type);
-                sortedJsonList = new ArrayList<>(brewRecipeArrayList);
-                Collections.sort(sortedJsonList, new Comparator<BrewRecipe>() {
+                Collections.sort(dbBrewList, new Comparator<BrewRecipe>() {
                     @Override
                     public int compare(BrewRecipe brewRecipe, BrewRecipe t1) {
                         return brewRecipe.getName().compareToIgnoreCase(t1.getName());
                     }
                 });
-
-            }
-            if (brewRecipeArrayList != null) {
-                if (!dbBrewList.equals(sortedJsonList)) {
-                    for (BrewRecipe br : sortedJsonList) {
-                        Log.i("JSON", br.getName());
-                    }
-                    Log.i("Shared Pref", "Json list and db list dont match");
-                    return dbBrewList;
+                Gson gson = new Gson();
+                SharedPreferences appSharedPrefs = PreferenceManager
+                        .getDefaultSharedPreferences(getActivity().getApplicationContext());
+                String json = appSharedPrefs.getString(BREW_RECIPE_PREFERENCE_KEY, "");
+                if (json.isEmpty()) {
+                    Log.i("Shared Pref", "No shared preferences for brew list order");
                 } else {
-                    Log.i("Shared Pref", "Lists match, setting to saved");
+                    Log.i("Shared Pref", "Loading shared preferences for brew list order");
+                    Type type = new TypeToken<List<BrewRecipe>>() {
+                    }.getType();
+                    brewRecipeArrayList = gson.fromJson(json, type);
+                    sortedJsonList = new ArrayList<>(brewRecipeArrayList);
+                    Collections.sort(sortedJsonList, new Comparator<BrewRecipe>() {
+                        @Override
+                        public int compare(BrewRecipe brewRecipe, BrewRecipe t1) {
+                            return brewRecipe.getName().compareToIgnoreCase(t1.getName());
+                        }
+                    });
+
+                }
+                if (brewRecipeArrayList != null) {
+                    if (!dbBrewList.equals(sortedJsonList)) {
+                        for (BrewRecipe br : sortedJsonList) {
+                            Log.i("JSON", br.getName());
+                        }
+                        Log.i("Shared Pref", "Json list and db list dont match");
+                        return dbBrewList;
+                    } else {
+                        Log.i("Shared Pref", "Lists match, setting to saved");
+                        return brewRecipeArrayList;
+                    }
+                } else {
+                    brewRecipeArrayList = dbBrewList;
                     return brewRecipeArrayList;
                 }
             }
-            else {
-                brewRecipeArrayList = dbBrewList;
+            catch(Exception e) {
+                brewRecipeArrayList = mDBOperator.getBrewRecipes();
+                return brewRecipeArrayList;
+                }
+        }
+
+        ArrayList<BrewRecipe> sortName() {
+            try {
+                ArrayList<BrewRecipe> currentList = ba.getBrewList();
+                Collections.sort(currentList, new Comparator<BrewRecipe>() {
+                    @Override
+                    public int compare(BrewRecipe o1, BrewRecipe o2) {
+                        return o1.getName().compareToIgnoreCase(o2.getName());
+                    }
+                });
+                return currentList;
+            }
+            catch(Exception e) {
+                brewRecipeArrayList = mDBOperator.getBrewRecipes();
                 return brewRecipeArrayList;
             }
         }
 
-        ArrayList<BrewRecipe> sortName() {
-            ArrayList<BrewRecipe> currentList = ba.getBrewList();
-            Collections.sort(currentList, new Comparator<BrewRecipe>() {
-                @Override
-                public int compare(BrewRecipe o1, BrewRecipe o2) {
-                    return o1.getName().compareToIgnoreCase(o2.getName());
-                }
-            });
-            return currentList;
-        }
-
         ArrayList<BrewRecipe> sortDate() {
-            ArrayList<BrewRecipe> currentList = ba.getBrewList();
-            Collections.sort(currentList, new Comparator<BrewRecipe>() {
-                @Override
-                public int compare(BrewRecipe o1, BrewRecipe o2) {
-                    int compareResult = 0;
-                    try {
-                        Date first = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").parse(o1.getDateAdded());
-                        Date end = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").parse(o2.getDateAdded());
-                        compareResult =  end.compareTo(first);
+            try {
+                ArrayList<BrewRecipe> currentList = ba.getBrewList();
+                Collections.sort(currentList, new Comparator<BrewRecipe>() {
+                    @Override
+                    public int compare(BrewRecipe o1, BrewRecipe o2) {
+                        int compareResult = 0;
+                        try {
+                            Date first = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").parse(o1.getDateAdded());
+                            Date end = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy").parse(o2.getDateAdded());
+                            compareResult = end.compareTo(first);
+                        } catch (ParseException e) {
+                            Log.e("Parse Error", e.toString());
+                        }
+                        return compareResult;
                     }
-                    catch (ParseException e) {Log.e("Parse Error", e.toString());}
-                    return compareResult;
+                });
+                return currentList;
+            }
+            catch(Exception e) {
+                    brewRecipeArrayList = mDBOperator.getBrewRecipes();
+                    return brewRecipeArrayList;
                 }
-            });
-            return currentList;
         }
 
         ArrayList<BrewRecipe> sortMethod() {
@@ -435,6 +441,7 @@ public class BrewFragment extends Fragment implements AdapterView.OnItemClickLis
                 }
             });
             return currentList;
+
         }
     }
 }
