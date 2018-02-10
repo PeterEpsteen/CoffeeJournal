@@ -18,7 +18,7 @@ import java.util.List;
 
 public class DBOperator extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 19;
+    private static final int DATABASE_VERSION = 20;
     private static final String DATABASE_NAME = "COFFEE_JOURNAL_DB";
     private static final String BREW_TABLE_NAME = "BREW_TABLE";
     private static final String ROAST_TABLE_NAME = "ROAST_TABLE";
@@ -31,6 +31,8 @@ public class DBOperator extends SQLiteOpenHelper {
     private static final String WATER_UNITS = "water_units";
     private static final String COFFEE_UNITS = "coffee_units";
     private static final String METRIC = "metric";
+    private static final String COFFEE_METRIC = "coffee_metric";
+    private static final String WATER_METRIC = "water_metric";
     private static final String NOTES = "notes";
     private static final String GRIND = "grind";
     private static final String BLOOM_TIME = "bloom";
@@ -45,10 +47,8 @@ public class DBOperator extends SQLiteOpenHelper {
     private static final String ROAST_ID = "roast_id";
 
 
-
-
     private static final String CREATE_BREW_TABLE = "create table if not exists " + BREW_TABLE_NAME + " ( " + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + NAME + " TEXT, " + BREW_METHOD + " TEXT, " +
-            WATER_UNITS + " REAL, "+ COFFEE_UNITS +" REAL, "+ METRIC + " INTEGER, " + NOTES + " TEXT, " + DATE + " TEXT, " + GRIND + " TEXT, " + BLOOM_TIME + " INTEGER, " + BREW_TIME + " INTEGER, " + TEMP + " INTEGER)";
+            WATER_UNITS + " REAL, " + COFFEE_UNITS + " REAL, " + COFFEE_METRIC + " INTEGER, "+ WATER_METRIC + " INTEGER, " + NOTES + " TEXT, " + DATE + " TEXT, " + GRIND + " TEXT, " + BLOOM_TIME + " INTEGER, " + BREW_TIME + " INTEGER, " + TEMP + " INTEGER)";
     private static final String CREATE_ROAST_TABLE = "create table if not exists " + ROAST_TABLE_NAME + " ( " + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + NAME + " TEXT, " + NOTES + " TEXT, " + DATE + " TEXT)";
     private static final String CREATE_BEANS_TABLE = "create table if not exists " + BEANS_TABLE_NAME + " ( " + NAME + " TEXT, " + WEIGHT + " REAL, " + METRIC + " INTEGER, " + ROAST_ID + " INTEGER, PRIMARY KEY(" + ROAST_ID + ", " + NAME + "))";
     private static final String CREATE_ROAST_STEPS_TABLE = "create table if not exists " + ROAST_STEPS_TABLE_NAME + " ( " + STEP_TIME + " " +
@@ -79,7 +79,8 @@ public class DBOperator extends SQLiteOpenHelper {
         brewMethodValues.put(BREW_METHOD, "Pour Over");
         brewMethodValues.put(WATER_UNITS, 440);
         brewMethodValues.put(COFFEE_UNITS, 29);
-        brewMethodValues.put(METRIC, 1);
+        brewMethodValues.put(COFFEE_METRIC, 1);
+        brewMethodValues.put(WATER_METRIC, 1);
         brewMethodValues.put(NOTES, "    Dosage: 29 Grams Coffee for 440g Water\n" +
                 "    Grind: Medium (or finer) (15-20/40)\n" +
                 "    Temp: Off the boil (203°-205°)\n" +
@@ -104,7 +105,8 @@ public class DBOperator extends SQLiteOpenHelper {
         brewMethodValues.put(BREW_METHOD, "French Press");
         brewMethodValues.put(WATER_UNITS, 400);
         brewMethodValues.put(COFFEE_UNITS, 27);
-        brewMethodValues.put(METRIC, 1);
+        brewMethodValues.put(COFFEE_METRIC, 1);
+        brewMethodValues.put(WATER_METRIC, 1);
         brewMethodValues.put(NOTES, "27g (5 Tbsp) coffee  •  400g (1.75 cups) water  •  4 minutes \n Recipe Instructions\n" +
                 "This recipe is for the 4-cup (17-oz) French Press coffee maker (also known as a \"press pot\"), which makes 2 small mugs of coffee. Double everything and follow the same process for the 8-cup (34-oz) version.\n" +
                 "Step 1:\n" +
@@ -127,8 +129,8 @@ public class DBOperator extends SQLiteOpenHelper {
         brewMethodValues.put(BREW_METHOD, "Chemex");
         brewMethodValues.put(WATER_UNITS, 600);
         brewMethodValues.put(COFFEE_UNITS, 40);
-        brewMethodValues.put(METRIC, 1);
-        brewMethodValues.put(NOTES, "One: Fill pouring kettle with hot filtered water and rinse filter until the glass is heated. Discard water from both.\n" +
+        brewMethodValues.put(COFFEE_METRIC, 1);
+        brewMethodValues.put(WATER_METRIC, 1);        brewMethodValues.put(NOTES, "One: Fill pouring kettle with hot filtered water and rinse filter until the glass is heated. Discard water from both.\n" +
                 "\n" +
                 "Two: Weigh coffee to desired strength (50-57 grams) and grind.\n" +
                 "\n" +
@@ -155,8 +157,8 @@ public class DBOperator extends SQLiteOpenHelper {
         brewMethodValues.put(BREW_METHOD, "Espresso");
         brewMethodValues.put(WATER_UNITS, 60);
         brewMethodValues.put(COFFEE_UNITS, 18);
-        brewMethodValues.put(METRIC, 1);
-        brewMethodValues.put(NOTES, "\n" +
+        brewMethodValues.put(COFFEE_METRIC, 1);
+        brewMethodValues.put(WATER_METRIC, 1);        brewMethodValues.put(NOTES, "\n" +
                 "Measure ~18g per 2oz (60g) shot of espresso. \n Grind very fine, but the exact grind will take trial and error. \nPut the grounds in the portafilter basket, and tamp with firm pressure. \nLoad the portafilter into the machine and pull the shot, aiming for 2oz of espresso in about 30 seconds. \nEspresso is an art and takes a lot of practice. If the pull is too quick, try using an extra gram of coffee, or a finer ground. The reverse is also true.");
         brewMethodValues.put(GRIND, "Extra-Fine");
         brewMethodValues.put(BLOOM_TIME, 5);
@@ -171,8 +173,8 @@ public class DBOperator extends SQLiteOpenHelper {
         brewMethodValues.put(BREW_METHOD, "Aeropress");
         brewMethodValues.put(WATER_UNITS, 370);
         brewMethodValues.put(COFFEE_UNITS, 35);
-        brewMethodValues.put(METRIC, 1);
-        brewMethodValues.put(NOTES, "Winner: 2017 World AeroPress Championship\n" +
+        brewMethodValues.put(COFFEE_METRIC, 1);
+        brewMethodValues.put(WATER_METRIC, 1);        brewMethodValues.put(NOTES, "Winner: 2017 World AeroPress Championship\n" +
                 "\n" +
                 "Coffee: 35g\n" +
                 "Water: 370g @ 84°C\n" +
@@ -208,14 +210,18 @@ public class DBOperator extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         //THIS WILL BE EXECUTED WHEN YOU UPDATED VERSION OF DATABASE_VERSION
         //YOUR DROP AND CREATE QUERIES
-        db.execSQL("DROP TABLE IF EXISTS " + BREW_TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + BEANS_TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + ROAST_TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS " + ROAST_STEPS_TABLE_NAME);
         onCreate(db);
+        String renameBrewTable = "ALTER TABLE " + BREW_TABLE_NAME + " RENAME TO og_brew_table";
+        db.execSQL(renameBrewTable);
+        String correctBrewTableColumns = "create table " + BREW_TABLE_NAME + " ( " + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + NAME + " TEXT, " + BREW_METHOD + " TEXT, " + WATER_UNITS + " REAL, " + COFFEE_UNITS + " REAL, " + COFFEE_METRIC + " INTEGER, " + WATER_METRIC + " INTEGER, " + NOTES + " TEXT, " + DATE + " TEXT, " + GRIND + " TEXT, " + BLOOM_TIME + " INTEGER, " + BREW_TIME + " INTEGER, " + TEMP + " INTEGER)";
+        db.execSQL(correctBrewTableColumns);
+        String insertOg = "INSERT INTO " + BREW_TABLE_NAME + " (" + ID + ", " + NAME + ", " + BREW_METHOD + ", "+ WATER_UNITS + ", "+ COFFEE_UNITS + ", "+ COFFEE_METRIC + ", "+ NOTES + ", "+ DATE + ", " + GRIND + ", "+ BLOOM_TIME + ", "+ BREW_TIME + ", "+ TEMP + ") SELECT " + ID + ", " + NAME + ", " + BREW_METHOD + ", "+ WATER_UNITS + ", "+ COFFEE_UNITS + ", "+ METRIC + ", "+ NOTES + ", "+ DATE + ", " + GRIND + ", "+ BLOOM_TIME + ", "+ BREW_TIME + ", "+ TEMP + " FROM og_brew_table";
+        db.execSQL(insertOg);
+        db.execSQL("DROP TABLE og_brew_table");
+        String updateBrew = "UPDATE " + BREW_TABLE_NAME + " SET " + WATER_METRIC+" = " + COFFEE_METRIC + " WHERE " + WATER_METRIC + " IS NULL";
+        db.execSQL(updateBrew);
     }
 
-    /*TODO : make adding data functional*/
 
     public long insert(BrewRecipe br) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -224,7 +230,8 @@ public class DBOperator extends SQLiteOpenHelper {
         cv.put(BREW_METHOD, br.getBrewMethod());
         cv.put(COFFEE_UNITS, br.getCoffeeUnits());
         cv.put(WATER_UNITS, br.getWaterUnits());
-        cv.put(METRIC, br.getMetric());
+        cv.put(COFFEE_METRIC, br.getCoffeeMetric());
+        cv.put(WATER_METRIC, br.getWaterMetric());
         cv.put(NOTES, br.getNotes());
         cv.put(GRIND, br.getGrind());
         cv.put(BLOOM_TIME, br.getBloomTime());
@@ -242,12 +249,10 @@ public class DBOperator extends SQLiteOpenHelper {
 
     public long update(BrewRecipe br, String editBrewName) {
         SQLiteDatabase db = this.getWritableDatabase();
-        long returnLong = -1;
         String whereClause = NAME + " = '" + editBrewName + "'";
-        if(db.delete(BREW_TABLE_NAME, whereClause, null) > 0) {
+        if (db.delete(BREW_TABLE_NAME, whereClause, null) > 0) {
             Log.i("DB", "Deleted old brew name: " + editBrewName);
-        }
-        else {
+        } else {
             Log.e("DB", "Error deleting old brew");
             return -1;
         }
@@ -258,10 +263,13 @@ public class DBOperator extends SQLiteOpenHelper {
     public ArrayList<String> getBrewNames() {
         Cursor cursor = this.getReadableDatabase().rawQuery("SELECT " + NAME + " FROM " + BREW_TABLE_NAME, null);
         ArrayList<String> brewNamesList = new ArrayList<String>();
-        if(cursor != null){
+        if (cursor != null) {
             while (cursor.moveToNext()) {
                 brewNamesList.add(cursor.getString(cursor.getColumnIndex(NAME)));
             }
+        }
+        if (cursor != null) {
+            cursor.close();
         }
         return brewNamesList;
 
@@ -273,15 +281,15 @@ public class DBOperator extends SQLiteOpenHelper {
         cv.put(NAME, r.getName());
         cv.put(NOTES, r.getNotes());
         cv.put(DATE, r.getDate());
-        String whereClause =  DATE + " = '" + r.getDate() + "'";
+        String whereClause = DATE + " = '" + r.getDate() + "'";
         long returnLong = db.update(ROAST_TABLE_NAME, cv, whereClause, null);
         int roastID = -1;
-        String roastIdQuery = "select "+ ID + " from " + ROAST_TABLE_NAME + " where " + DATE + " = '" + r.getDate() + "'";
+        String roastIdQuery = "select " + ID + " from " + ROAST_TABLE_NAME + " where " + DATE + " = '" + r.getDate() + "'";
         Cursor data = db.rawQuery(roastIdQuery, null);
-        if (data.moveToFirst()){
+        if (data.moveToFirst()) {
             roastID = data.getInt(data.getColumnIndex(ID));
         }
-        if(data != null)
+        if (data != null)
             data.close();
         Log.i("DB", "Roast ID of updated roast: " + roastID);
         updateBeans(r, roastID);
@@ -297,18 +305,18 @@ public class DBOperator extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         long returnLong = -1;
         String whereClause = ROAST_ID + " = " + roastID;
-        if(db.delete(BEANS_TABLE_NAME, whereClause, null) > 0) {
+        if (db.delete(BEANS_TABLE_NAME, whereClause, null) > 0) {
             Log.i("DB", "Deleted old beans");
         }
         ContentValues cv = new ContentValues();
         List<Bean> beanArrayList = r.getBeanList();
-        for(Bean bean : beanArrayList) {
+        for (Bean bean : beanArrayList) {
             cv = new ContentValues();
             cv.put(NAME, bean.getBeanName());
             cv.put(WEIGHT, bean.getBeanWeight());
             cv.put(ROAST_ID, roastID);
             returnLong = db.insert(BEANS_TABLE_NAME, null, cv);
-            Log.i("Insert", "Inserted " + bean.getBeanName() +"with roast id: " + roastID + " Return value is: " + returnLong);
+            Log.i("Insert", "Inserted " + bean.getBeanName() + "with roast id: " + roastID + " Return value is: " + returnLong);
         }
         db.close();
         return returnLong;
@@ -318,12 +326,12 @@ public class DBOperator extends SQLiteOpenHelper {
         ContentValues cv = new ContentValues();
         SQLiteDatabase db = this.getWritableDatabase();
         String whereClause = ROAST_ID + " = " + roastID;
-        if(db.delete(ROAST_STEPS_TABLE_NAME, whereClause, null) > 0) {
+        if (db.delete(ROAST_STEPS_TABLE_NAME, whereClause, null) > 0) {
             Log.i("DB", "Deleted old steps");
         }
         long returnLong = -1;
         List<RoastStep> stepList = r.getStepList();
-        for(RoastStep step : stepList) {
+        for (RoastStep step : stepList) {
             cv = new ContentValues();
             cv.put(STEP_TIME, step.getTime());
             cv.put(TEMP, step.getTemp());
@@ -343,13 +351,13 @@ public class DBOperator extends SQLiteOpenHelper {
         long returnLong = -1;
         ContentValues cv = new ContentValues();
         List<Bean> beanArrayList = r.getBeanList();
-        for(Bean bean : beanArrayList) {
+        for (Bean bean : beanArrayList) {
             cv = new ContentValues();
             cv.put(NAME, bean.getBeanName());
             cv.put(WEIGHT, bean.getBeanWeight());
             cv.put(ROAST_ID, roastID);
             returnLong = db.insert(BEANS_TABLE_NAME, null, cv);
-            Log.i("Insert", "Inserted " + bean.getBeanName() +"with roast id: " + roastID + " Return value is: " + returnLong);
+            Log.i("Insert", "Inserted " + bean.getBeanName() + "with roast id: " + roastID + " Return value is: " + returnLong);
         }
         db.close();
         return returnLong;
@@ -357,13 +365,12 @@ public class DBOperator extends SQLiteOpenHelper {
     }
 
 
-
     private long insertSteps(Roast r, int roastID) {
         ContentValues cv = new ContentValues();
         SQLiteDatabase db = this.getWritableDatabase();
         long returnLong = -1;
         List<RoastStep> stepList = r.getStepList();
-        for(RoastStep step : stepList) {
+        for (RoastStep step : stepList) {
             cv = new ContentValues();
             cv.put(STEP_TIME, step.getTime());
             cv.put(TEMP, step.getTemp());
@@ -387,19 +394,19 @@ public class DBOperator extends SQLiteOpenHelper {
         cv.put(NOTES, roast.getNotes());
         returnVal = db.insert(ROAST_TABLE_NAME, null, cv);
         int roastID = -1;
-        String roastIdQuery = "select "+ ID + " from " + ROAST_TABLE_NAME + " where " + NAME + " = '" + roast.getName() + "'";
+        String roastIdQuery = "select " + ID + " from " + ROAST_TABLE_NAME + " where " + NAME + " = '" + roast.getName() + "'";
         Cursor data = db.rawQuery(roastIdQuery, null);
-        if (data.moveToFirst()){
+        if (data.moveToFirst()) {
             roastID = data.getInt(data.getColumnIndex(ID));
         }
-        if(data != null)
+        if (data != null)
             data.close();
         db.close();
-        Log.i("DB", "Roast id of new roast: "+ roastID);
+        Log.i("DB", "Roast id of new roast: " + roastID);
 
         insertBeans(roast, roastID);
         insertSteps(roast, roastID);
-        return  returnVal;
+        return returnVal;
     }
 
     //Might want to handle duplicate names in the future
@@ -416,7 +423,7 @@ public class DBOperator extends SQLiteOpenHelper {
         ArrayList<Roast> roasts = new ArrayList<Roast>();
         String query = "select * from " + ROAST_TABLE_NAME;
         Cursor data = db.rawQuery(query, null);
-        if(data != null) {
+        if (data != null) {
             while (data.moveToNext()) {
                 String roastName = data.getString(data.getColumnIndex(NAME));
                 String date = data.getString(data.getColumnIndex(DATE));
@@ -426,7 +433,7 @@ public class DBOperator extends SQLiteOpenHelper {
                 roasts.add(newRoast);
             }
         }
-        if(data != null)
+        if (data != null)
             data.close();
         db.close();
         return roasts;
@@ -438,7 +445,7 @@ public class DBOperator extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         String queryString = "select * from " + ROAST_TABLE_NAME + " where " + NAME + " = '" + name + "' AND " + DATE + " = '" + date + "'";
         Cursor data = db.rawQuery(queryString, null);
-        if (data.moveToFirst()){
+        if (data.moveToFirst()) {
             roast.setNotes(data.getString(data.getColumnIndex(NOTES)));
             roastID = data.getInt(data.getColumnIndex(ID));
             roast.setRoastName(name);
@@ -447,7 +454,7 @@ public class DBOperator extends SQLiteOpenHelper {
         //Get all beans associated with roast
         queryString = "select * from " + BEANS_TABLE_NAME + " where " + ROAST_ID + " = " + roastID;
         data = db.rawQuery(queryString, null);
-        if (data != null){
+        if (data != null) {
             while (data.moveToNext()) {
                 String beanName = data.getString(data.getColumnIndex(NAME));
                 int weight = (int) data.getDouble(data.getColumnIndex(WEIGHT));
@@ -456,11 +463,13 @@ public class DBOperator extends SQLiteOpenHelper {
                 roast.addToBeanList(newBean);
             }
         }
-        data.close();
+        if (data != null) {
+            data.close();
+        }
         //Get all steps
         queryString = "select * from " + ROAST_STEPS_TABLE_NAME + " where " + ROAST_ID + " = " + roastID;
         data = db.rawQuery(queryString, null);
-        if (data != null){
+        if (data != null) {
             while (data.moveToNext()) {
                 String stepTime = data.getString(data.getColumnIndex(STEP_TIME));
                 int temp = data.getInt(data.getColumnIndex(TEMP));
@@ -470,7 +479,9 @@ public class DBOperator extends SQLiteOpenHelper {
                 roast.addToStepList(step);
             }
         }
-        data.close();
+        if (data != null) {
+            data.close();
+        }
         db.close();
         return roast;
     }
@@ -486,14 +497,16 @@ public class DBOperator extends SQLiteOpenHelper {
                 String brewMethod = data.getString(data.getColumnIndex(BREW_METHOD));
                 String grind = data.getString(data.getColumnIndex(GRIND));
                 String notes = data.getString(data.getColumnIndex(NOTES));
-                int metric = data.getInt(data.getColumnIndex(METRIC));
+                int coffeeMetric = data.getInt(data.getColumnIndex(COFFEE_METRIC));
+                int waterMetric = data.getInt(data.getColumnIndex(WATER_METRIC));
+
                 double coffeeUnits = data.getDouble(data.getColumnIndex(COFFEE_UNITS));
                 double waterUnits = data.getDouble(data.getColumnIndex(WATER_UNITS));
                 int brewTime = data.getInt(data.getColumnIndex(BREW_TIME));
                 int bloomTime = data.getInt(data.getColumnIndex(BLOOM_TIME));
                 String dateAdded = data.getString(data.getColumnIndex(DATE));
 
-                BrewRecipe br = new BrewRecipe(name, brewMethod, grind, notes, coffeeUnits, waterUnits, metric,
+                BrewRecipe br = new BrewRecipe(name, brewMethod, grind, notes, coffeeUnits, waterUnits, coffeeMetric, waterMetric,
                         brewTime, bloomTime);
                 br.setDateAdded(dateAdded);
 
@@ -507,11 +520,11 @@ public class DBOperator extends SQLiteOpenHelper {
         db.close();
         return recipes;
     }
-
+    //TODO Query the database instead
     public BrewRecipe getBrewRecipe(String name) {
         BrewRecipe br = new BrewRecipe();
         ArrayList<BrewRecipe> brArray = getBrewRecipes();
-        for (BrewRecipe recipe: brArray) {
+        for (BrewRecipe recipe : brArray) {
             if (recipe.getName().equalsIgnoreCase(name))
                 br = recipe;
         }

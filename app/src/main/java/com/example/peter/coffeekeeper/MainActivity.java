@@ -166,13 +166,15 @@ public class MainActivity extends AppCompatActivity implements BrewFragment.OnFr
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == AddRoast.GO_TO_ROASTS || resultCode == AddRoast.ROAST_DB_CHANGED) {
-            mViewPager.setCurrentItem(1);
-        }
         Fragment fragment = getSupportFragmentManager().getFragments().get(0);
         fragment.onActivityResult(requestCode, resultCode, data);
         Fragment fragment2 = getSupportFragmentManager().getFragments().get(1);
         fragment2.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == AddRoast.GO_TO_ROASTS || resultCode == AddRoast.ROAST_DB_CHANGED) {
+            mViewPager.setCurrentItem(1);
+            Log.i("pager", "setting to page " + 1);
+        }
+
     }
 
     @Override

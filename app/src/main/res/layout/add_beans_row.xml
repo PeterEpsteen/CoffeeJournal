@@ -5,31 +5,50 @@
     android:elevation="@dimen/cardview_default_elevation"
     app:cardCornerRadius="@dimen/cardview_default_radius"
     app:cardUseCompatPadding="true">
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="16dp"
-    android:id="@+id/bean_row_linear_layout"
-    >
-    <EditText
-        android:layout_width="0dp"
-        android:layout_height="56dp"
-        android:layout_weight="3"
-        android:textSize="14sp"
-        android:hint="Bean Name"
-        android:singleLine="true"
-        android:inputType="text"
-        android:id="@+id/bean_name_edit_text"
-        />
-    <EditText
-        android:layout_width="0dp"
-        android:layout_height="56dp"
-        android:layout_weight="2"
-        android:textSize="14sp"
-        android:inputType="number"
-        android:singleLine="true"
-        android:id="@+id/bean_weight_edit_text"
-        android:hint="Weight"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_delete_forever"
+            android:background="@color/backgroundDefaultWhite"
+            android:textColor="@color/common_google_signin_btn_text_light"
+            android:id="@+id/step_row_delete_button"
+            android:onClick="deleteBeanRow"
+            android:layout_gravity="end"/>
 
-</LinearLayout>
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="horizontal" android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp"
+            android:id="@+id/bean_row_linear_layout"
+            >
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="3"
+                android:textSize="14sp"
+                android:hint="Bean Name"
+                android:singleLine="true"
+                android:inputType="text"
+                android:id="@+id/bean_name_edit_text"
+                />
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="2"
+                android:textSize="14sp"
+                android:inputType="number"
+                android:singleLine="true"
+                android:id="@+id/bean_weight_edit_text"
+                android:hint="Weight"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
 </android.support.v7.widget.CardView>

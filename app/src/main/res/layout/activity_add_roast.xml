@@ -30,7 +30,14 @@
             <!--style="@style/TextAppearance.AppCompat.Display3"-->
             <!--android:layout_gravity="center"/>-->
 
-
+            <TextView
+                style="@style/TextAppearance.AppCompat.Headline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/backgroundDefaultWhite"
+                android:layout_marginLeft="48dp"
+                android:layout_marginTop="16dp"
+                android:text="Roast Log"/>
 
             <TextView
                 style="@style/TextAppearance.AppCompat.Title"
@@ -110,6 +117,54 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:layout_marginBottom="8dp"
+                android:text="Steps" />
+
+            <LinearLayout
+                android:id="@+id/steps_linear_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="right">
+                <Button
+                    android:id="@+id/quick_step_row_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:backgroundTint="@color/colorAccent"
+                    android:elevation="6dp"
+                    android:text="Quick Step"
+                    android:textColor="@color/common_google_signin_btn_text_dark" />
+                <Button
+                    android:id="@+id/add_step_row_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:backgroundTint="@color/colorAccent"
+                    android:elevation="6dp"
+                    android:text="New Step"
+                    android:textColor="@color/common_google_signin_btn_text_dark" />
+
+
+
+
+            </LinearLayout>
+
+
+
+            <TextView
+                style="@style/TextAppearance.AppCompat.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginBottom="8dp"
                 android:text="Beans" />
             <LinearLayout
                 android:id="@+id/beans_linear_layout"
@@ -128,34 +183,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:backgroundTint="@color/colorAccent"
-                android:text="New Row"
-                android:textColor="@color/common_google_signin_btn_text_dark" />
-
-            <TextView
-                style="@style/TextAppearance.AppCompat.Title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:layout_marginBottom="8dp"
-                android:text="Steps" />
-
-            <LinearLayout
-                android:id="@+id/steps_linear_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                >
-
-            </LinearLayout>
-
-            <Button
-                android:id="@+id/add_step_row_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:backgroundTint="@color/colorAccent"
-                android:elevation="6dp"
-                android:text="New Row"
+                android:text="New Bean"
                 android:textColor="@color/common_google_signin_btn_text_dark" />
 
 
@@ -201,7 +229,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
                 android:backgroundTint="@color/colorAccent"
               >
                 <!--<Button
@@ -230,7 +257,7 @@
                     android:layout_width="120dp"
                     android:layout_height="56dp"
                     android:backgroundTint="@color/colorAccent"
-                    android:text="Add Roast"
+                    android:text="Save Roast"
                     android:textColor="@color/common_google_signin_btn_text_dark" />
             </LinearLayout>
 

@@ -326,8 +326,8 @@ public class RoastActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle arrow click here
         if (item.getItemId() == android.R.id.home) {
-            setResult(AddRoast.GO_TO_ROASTS);
-            finish();
+            this.onBackPressed();
+            return true;
 
         }
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.peter.coffeekeeper"
-    android:versionCode="2"
+    android:versionCode="4"
     android:versionName="release">
 
     <!-- To access Google+ APIs: -->
@@ -32,7 +32,8 @@
         <activity
             android:name="com.example.peter.coffeekeeper.AddRoast"
             android:parentActivityName="com.example.peter.coffeekeeper.MainActivity"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"
+            />
         <activity
             android:name="com.example.peter.coffeekeeper.BrewRecipeActivity"
             android:label="Test"

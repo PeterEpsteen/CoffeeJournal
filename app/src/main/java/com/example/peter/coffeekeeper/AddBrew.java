@@ -26,10 +26,10 @@ public class AddBrew extends AppCompatActivity {
 
     BrewRecipe br;
     String name, brewMethod, grind, notes, editBrewName, editBrewDate;
-    int ratio, brewTime, bloomTime, metric, icon;
+    int ratio, brewTime, bloomTime, icon;
     DBOperator db;
     double waterUnits, coffeeUnits;
-    SwitchCompat metricEdit;
+    SwitchCompat coffeeMetricSwitch, waterMetricSwitch;
     TextView dynamicWaterUnitsTv, dynamicCoffeeUnitsTv;
     ScrollView sv;
     EditText nameEdit;
@@ -128,19 +128,27 @@ public class AddBrew extends AppCompatActivity {
 
          dynamicWaterUnitsTv = findViewById(R.id.dynamic_water_units_text_view);
         dynamicCoffeeUnitsTv = findViewById(R.id.dynamic_coffee_units_text_view);
-        metricEdit = findViewById(R.id.metric_edit);
-        metricEdit.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        coffeeMetricSwitch = findViewById(R.id.coffee_metric_switch);
+        waterMetricSwitch = findViewById(R.id.water_metric_switch);
+        coffeeMetricSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     dynamicCoffeeUnitsTv.setText("Oz");
-                    dynamicWaterUnitsTv.setText("Oz");
                 }
 
                 else {
-                    dynamicWaterUnitsTv.setText("G");
                     dynamicCoffeeUnitsTv.setText("G");
                 }
+            }
+        });
+        waterMetricSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b)
+                    dynamicWaterUnitsTv.setText("Oz");
+                else
+                    dynamicWaterUnitsTv.setText("G");
             }
         });
 
@@ -175,9 +183,11 @@ public class AddBrew extends AppCompatActivity {
                 notesEdit.setText(editBrew.getNotes());
                 coffeeEdit.setText(String.valueOf(editBrew.getCoffeeUnits()));
                 waterEdit.setText(String.valueOf(editBrew.getWaterUnits()));
-                if (!editBrew.isMetric()) {
-                    metricEdit.setChecked(true);
+                if (!editBrew.isCoffeeMetric()) {
+                    coffeeMetricSwitch.setChecked(true);
                 }
+                if (!editBrew.isWaterMetric())
+                    waterMetricSwitch.setChecked(true);
                 int brewTimeInt = editBrew.getBrewTime();
                 int mins = brewTimeInt / 60;
                 int secs = brewTimeInt % 60;
@@ -247,6 +257,7 @@ public class AddBrew extends AppCompatActivity {
 
         name = nameEdit.getText().toString();
 
+
         if(name.equals("") || name.isEmpty()) {
             //Request focus to text view and pop keyboard up
             sv.scrollTo(nameEdit.getLeft(),nameEdit.getTop());
@@ -263,7 +274,7 @@ public class AddBrew extends AppCompatActivity {
         }
 
         else if(db.getBrewNames().contains(name) && editBrewName == null) {
-            Toast myToast = Toast.makeText(this, "Brew name already exists. Please enter a unique name", Toast.LENGTH_LONG);
+            Toast myToast = Toast.makeText(this, "Brew name already exists. Please enter a unique name.", Toast.LENGTH_LONG);
             myToast.show();
         }
 
@@ -271,10 +282,9 @@ public class AddBrew extends AppCompatActivity {
             //Spinner selection is handled in onItemSelected above
             grind = grindEdit.getText().toString();
             notes = notesEdit.getText().toString();
-            if (metricEdit.isChecked())
-                metric = 0;
-            else
-                metric = 1;
+            int coffeeMetric = (coffeeMetricSwitch.isChecked()) ? 0 : 1;
+            int waterMetric = (waterMetricSwitch.isChecked()) ? 0 : 1;
+
             String coffeeUnitsString = coffeeEdit.getText().toString();
             String waterUnitsString = waterEdit.getText().toString();
             if(coffeeUnitsString.equals("")) {
@@ -344,7 +354,7 @@ public class AddBrew extends AppCompatActivity {
 
 
             //Create brewRecipe, open db and insert
-            br = new BrewRecipe(name, brewMethod, grind, notes, coffeeUnits, waterUnits, metric, brewTime, bloomTime);
+            br = new BrewRecipe(name, brewMethod, grind, notes, coffeeUnits, waterUnits, coffeeMetric, waterMetric, brewTime, bloomTime);
 
             Toast myToast = Toast.makeText(getApplicationContext(), "Error inserting or updating", duration);
 

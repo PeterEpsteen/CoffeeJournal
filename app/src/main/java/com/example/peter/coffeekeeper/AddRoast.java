@@ -1,11 +1,14 @@
 package com.example.peter.coffeekeeper;
 
+import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -36,9 +39,9 @@ import java.util.regex.Pattern;
 
 //TODO Refine validation and make sure there are no bugs. Seems stable for now.
 
-public class AddRoast extends AppCompatActivity implements View.OnClickListener {
+public class AddRoast extends AppCompatActivity implements View.OnClickListener, QuickStepDialogFragment.NoticeDialogListener, RoastNameDialogFragment.NoticeDialogListener, AddBeansDialogFragment.NoticeDialogListener, QuickStepTempaturesDialogFragment.NoticeDialogListener {
 
-    Button addButton, addStepButton, addBeansButton, resetButton;
+    Button addButton, addStepButton, addBeansButton, resetButton, quickStepButton;
     FloatingActionButton timerButton;
     Roast roast;
     String roastName, roastDate;
@@ -100,17 +103,22 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener 
         addStepButton = findViewById(R.id.add_step_row_button);
         addBeansButton = findViewById(R.id.add_bean_row_button);
         stepsContainer = findViewById(R.id.steps_linear_layout);
+        quickStepButton = findViewById(R.id.quick_step_row_button);
 
         beansContainer = findViewById(R.id.beans_linear_layout);
         resetButton = findViewById(R.id.reset_roast_button);
         if (editRoastName == null) {
-            addBeanRow();
-            addStepRow();
+            RoastStep step = new RoastStep("00:00", 0, "Start", 0);
+            addStepRow(step);
+            DialogFragment dialog = new RoastNameDialogFragment();
+            dialog.show(getFragmentManager(), "test");
+
         }
         addBeansButton.setOnClickListener(this);
         resetButton.setOnClickListener(this);
         addStepButton.setOnClickListener(this);
         addButton.setOnClickListener(this);
+        quickStepButton.setOnClickListener(this);
         collapsingToolbarLayout = findViewById(R.id.main_collapsing);
         collapsingToolbarLayout.setTitle("00m 00s");
         collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.TextAppearance_AppCompat_Display3);
@@ -118,7 +126,6 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener 
         collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.TextAppearance_AppCompat_Display1);
         collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.backgroundDefaultWhite));
 
-        //TODO edit roast
 
         mToolBar = findViewById(R.id.main_toolbar);
         setSupportActionBar(mToolBar);
@@ -204,6 +211,9 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener 
             case (R.id.add_bean_row_button):
                 addBeanRow();
                 break;
+            case (R.id.quick_step_row_button):
+                showQuickStep();
+                break;
             case (R.id.add_step_row_button):
                 addStepRow();
                 break;
@@ -213,6 +223,12 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener 
                 startActivity(intent);
                 break;
         }
+    }
+
+    private void showQuickStep() {
+        DialogFragment quickStepDialog = new QuickStepDialogFragment();
+        quickStepDialog.show(getFragmentManager(), "test");
+
     }
 
     private void addStepRow() {
@@ -246,6 +262,15 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener 
         cv.setVisibility(View.GONE);
     }
 
+    public void deleteBeanRow(View v) {
+        LinearLayout ll = (LinearLayout) v.getParent();
+        CardView cv = (CardView) ll.getParent();
+        ll = (LinearLayout) ll.findViewById(R.id.bean_row_linear_layout);
+        beanRowLinearLayoutList.remove(ll);
+        beansContainer.removeView(cv);
+        cv.setVisibility(View.GONE);
+    }
+
 
     private void addStepRow(RoastStep step) {
         String stepTime = step.getTime();
@@ -269,6 +294,72 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener 
         stepsRowLinearLayoutList.add(stepRowLinear);
         Log.i("Row", "Adding temp row...");
     }
+
+    @Override
+    public void onConfirmRoastName(DialogFragment dialog, View root) {
+        dialog.dismiss();
+        EditText roastNameDialogEditText = root.findViewById(R.id.roast_name_dialog_edit_text);
+        roastNameEdit.setText(roastNameDialogEditText.getText().toString());
+        DialogFragment beanDialog = new AddBeansDialogFragment();
+        beanDialog.show(getFragmentManager(), "test");
+    }
+
+
+    @Override
+    public void onConfirmBeans(DialogFragment dialogFragment, List<LinearLayout> beanLinearList) {
+        List<Bean> beans = new ArrayList<Bean>();
+
+        for(LinearLayout beanRow : beanLinearList) {
+            Bean newBean = new Bean();
+            EditText beanNameEdit = beanRow.findViewById(R.id.bean_name_edit_text);
+            EditText beanWeightEdit = beanRow.findViewById(R.id.bean_weight_edit_text);
+            int beanWeight = (beanWeightEdit.getText().toString().isEmpty()) ? 0 : Integer.parseInt(beanWeightEdit.getText().toString());
+            String beanName = (beanNameEdit.getText().toString().isEmpty()) ? "Unnamed" : beanNameEdit.getText().toString();
+            newBean.setBeanName(beanName);
+            newBean.setBeanWeight(beanWeight);
+            beans.add(newBean);
+        }
+        if (beans.size() != 0) {
+            for (Bean bean : beans) {
+                addBeanRow(bean);
+            }
+        }
+
+        // 1. Instantiate an AlertDialog.Builder with its constructor
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+// 2. Chain together various setter methods to set the dialog characteristics
+        builder.setMessage(R.string.roast_instructions).setTitle("Instructions").setPositiveButton("Got it", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        });
+
+
+// 3. Get the AlertDialog from create()
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    @Override
+    public void onConfirmStep(String comment) {
+        showQuickStepTempatures(comment);
+    }
+
+    public void showQuickStepTempatures(String comment) {
+        Bundle bundle = new Bundle();
+        bundle.putString("comment", comment);
+        DialogFragment quickStepTempatureDialog = new QuickStepTempaturesDialogFragment();
+        quickStepTempatureDialog.setArguments(bundle);
+        quickStepTempatureDialog.show(getFragmentManager(), "test");
+    }
+
+    @Override
+    public void onConfirmTempatures(RoastStep step) {
+        step.setTime(String.format("%02d:%02d", minutes, seconds));
+        addStepRow(step);
+    }
+
 
     private class mTextWatcher implements TextWatcher {
         private TextInputLayout timeTextInput;
@@ -433,8 +524,9 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener 
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        setResult(GO_TO_ROASTS);
         finish();
+        super.onBackPressed();
     }
 
     @Override
@@ -447,10 +539,10 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener 
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle arrow click here
         if (item.getItemId() == android.R.id.home) {
-            setResult(GO_TO_ROASTS);
-            finish();        }
-
-        return super.onOptionsItemSelected(item);
+            this.onBackPressed();
+            return true;
+        }
+        return false;
     }
 
 }

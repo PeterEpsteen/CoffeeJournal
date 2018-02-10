@@ -11,18 +11,19 @@ import java.util.Date;
 public class BrewRecipe implements Parcelable {
 
     String name, brewMethod, grind, notes, dateAdded;
-    int metric, brewTime, bloomTime, icon;
+    int coffeeMetric, waterMetric, brewTime, bloomTime, icon;
     double coffeeUnits, waterUnits;
 
     public BrewRecipe(){
     }
 
-    public BrewRecipe(String name, String brewMethod, String grind, String notes, double coffeeUnits, double waterUnits, int metric, int brewTime, int bloomTime) {
+    public BrewRecipe(String name, String brewMethod, String grind, String notes, double coffeeUnits, double waterUnits, int coffeeMetric, int waterMetric, int brewTime, int bloomTime) {
         this.name = name;
         this.brewMethod = brewMethod;
         this.grind = grind;
         this.notes = notes;
-        this.metric = metric;
+        this.coffeeMetric = coffeeMetric;
+        this.waterMetric = waterMetric;
         this.coffeeUnits = coffeeUnits;
         this.waterUnits = waterUnits;
         this.brewTime = brewTime;
@@ -41,7 +42,8 @@ public class BrewRecipe implements Parcelable {
         this.notes = in.readString();
         this.coffeeUnits = in.readDouble();
         this.waterUnits = in.readDouble();
-        this.metric = in.readInt();
+        this.coffeeMetric = in.readInt();
+        this.waterMetric = in.readInt();
         this.brewTime = in.readInt();
         this.bloomTime = in.readInt();
         this.dateAdded = in.readString();
@@ -72,7 +74,8 @@ public class BrewRecipe implements Parcelable {
         dest.writeString(brewMethod);
         dest.writeString(grind);
         dest.writeString(notes);
-        dest.writeInt(metric);
+        dest.writeInt(coffeeMetric);
+        dest.writeInt(waterMetric);
         dest.writeInt(brewTime);
         dest.writeInt(bloomTime);
         dest.writeInt(icon);
@@ -100,6 +103,14 @@ public class BrewRecipe implements Parcelable {
         return brewMethod;
     }
 
+    public int getCoffeeMetric() {
+        return coffeeMetric;
+    }
+
+    public int getWaterMetric() {
+        return waterMetric;
+    }
+
     public String getGrind(){
         return grind;
     }
@@ -108,15 +119,22 @@ public class BrewRecipe implements Parcelable {
         return notes;
     }
 
-    public boolean isMetric() {return metric == 1;}
+    public boolean isCoffeeMetric() {return coffeeMetric == 1;}
+
+    public boolean isWaterMetric() {return waterMetric == 1;}
 
     public double getCoffeeUnits() {return coffeeUnits;}
 
     public double getWaterUnits() {return waterUnits;
     }
 
-    public int getMetric() {
-        return metric;
+    public void setCoffeeMetric(int coffeeMetric) {
+        this.coffeeMetric = coffeeMetric;
+    }
+
+
+    public void setWaterMetric(int waterMetric) {
+        this.waterMetric = waterMetric;
     }
 
     public int getBrewTime() {
@@ -183,10 +201,6 @@ public class BrewRecipe implements Parcelable {
 
     public void setCoffeeUnits(double coffeeUnits) {
         this.coffeeUnits = coffeeUnits;
-    }
-
-    public void setMetric(int metric) {
-        this.metric = metric;
     }
 
     public void setWaterUnits(double waterUnits) {

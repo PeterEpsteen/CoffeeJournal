@@ -131,7 +131,10 @@ public class BrewAdapter extends RecyclerView.Adapter<BrewAdapter.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        return brewList.size();
+        if(brewList == null) {
+            brewList = dbOperator.getBrewRecipes();
+        }
+            return brewList.size();
     }
 
 }

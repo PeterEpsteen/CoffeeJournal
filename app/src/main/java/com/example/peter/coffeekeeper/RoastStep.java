@@ -16,6 +16,13 @@ public class RoastStep {
     final static int SECOND_CRACK_START = 5;
     final static int SECOND_CRACK_END = 6;
 
+    public RoastStep(){
+        this.comment = "";
+        this.temp = 0;
+        this.time = "";
+        this.beanTemp = 0;
+    }
+
     public RoastStep(String time, int temp, String comment, int beanTemp) {
         this.comment = comment;
         this.temp = temp;

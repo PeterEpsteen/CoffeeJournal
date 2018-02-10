@@ -208,23 +208,23 @@
                     android:layout_marginBottom="8dp"
                     android:gravity="end">
                     <TextView
-                        android:id="@+id/metric_tv"
+                        android:id="@+id/coffee_metric_tv"
                         style="@style/TextAppearance.AppCompat.Subhead"
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
-                        android:text="Units:" />
+                        android:text="Coffee Units:" />
 
 
                     <TextView
-                        android:id="@+id/grams_tv"
+                        android:id="@+id/coffee_grams_tv"
                         style="@style/TextAppearance.AppCompat.Subhead"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Grams" />
 
                     <android.support.v7.widget.SwitchCompat
-                        android:id="@+id/metric_edit"
+                        android:id="@+id/coffee_metric_switch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
@@ -233,13 +233,53 @@
                         android:textOn="1" />
 
                     <TextView
-                        android:id="@+id/ounces_tv"
+                        android:id="@+id/coffee_ounces_tv"
                         style="@style/TextAppearance.AppCompat.Subhead"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Ounces" />
 
                 </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="8dp"
+                    android:gravity="end">
+                    <TextView
+                        android:id="@+id/water_metric_tv"
+                        style="@style/TextAppearance.AppCompat.Subhead"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Water Units:" />
+
+
+                    <TextView
+                        android:id="@+id/water_grams_tv"
+                        style="@style/TextAppearance.AppCompat.Subhead"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Grams" />
+
+                    <android.support.v7.widget.SwitchCompat
+                        android:id="@+id/water_metric_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:padding="8dp"
+                        android:textOff="0"
+                        android:textOn="1" />
+
+                    <TextView
+                        android:id="@+id/water_ounces_tv"
+                        style="@style/TextAppearance.AppCompat.Subhead"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ounces" />
+
+                </LinearLayout>
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
