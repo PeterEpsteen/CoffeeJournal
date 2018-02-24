@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -13,14 +14,23 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.peter.coffeekeeper.Controllers.AddBrew;
+import com.example.peter.coffeekeeper.Controllers.MainActivity;
 import com.example.peter.coffeekeeper.Models.BrewRecipe;
 import com.example.peter.coffeekeeper.Controllers.BrewRecipeActivity;
 import com.example.peter.coffeekeeper.Database.DBOperator;
 import com.example.peter.coffeekeeper.R;
+import com.example.peter.coffeekeeper.RestClients.UserRestClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by peter on 11/5/17.
@@ -110,6 +120,10 @@ public class BrewAdapter extends RecyclerView.Adapter<BrewAdapter.ViewHolder> {
                             case R.id.menu_edit:
                                 editBrew(brewName, brewDate);
                                 return true;
+                            case R.id.menu_share:
+                                //sharebrew
+                                postBrew(brewList.get(holder.getAdapterPosition()));
+                                return true;
                             default:
                                 return false;
                         }
@@ -117,6 +131,36 @@ public class BrewAdapter extends RecyclerView.Adapter<BrewAdapter.ViewHolder> {
                 });
                 //displaying the popup
                 popup.show();
+            }
+        });
+    }
+
+    public void postBrew(BrewRecipe brew) {
+        SharedPreferences preferences = mContext.getSharedPreferences(MainActivity.PREFS_NAME, Context.MODE_PRIVATE);
+        String token = preferences.getString(MainActivity.PREFS_API_TOKEN, "none");
+        int id = preferences.getInt(MainActivity.PREFS_USER_ID, 0);
+        if (token.equals("none") || token.isEmpty() || id == 0) {
+            return;
+        }
+        UserRestClient.postBrew(brew, mContext, new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                try {
+                    Toast.makeText(mContext, response.get("message").toString(), Toast.LENGTH_LONG).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                try {
+                    Toast.makeText(mContext, errorResponse.get("message").toString(), Toast.LENGTH_LONG).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

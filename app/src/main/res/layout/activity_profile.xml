@@ -35,16 +35,6 @@
                     app:popupTheme="@style/AppTheme.PopupOverlay"
                     app:title="My Profile"
                     android:gravity="right">
-                    <Button
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:textColor="@color/backgroundColorBeige"
-                        app:layout_constraintRight_toRightOf="parent"
-                        android:id="@+id/sign_out_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        style="@style/Widget.AppCompat.Button.Borderless"
-                        android:="end"
-                        android:text="Sign Out"/>
 
                 </android.support.v7.widget.Toolbar>
             </android.support.design.widget.AppBarLayout>
@@ -52,15 +42,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/colorPrimary"
-                android:padding="24dp"
+                android:padding="32dp"
                 android:elevation="4dp">
+
+
                 <TextView
                     android:id="@+id/username_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     style="@style/TextAppearance.AppCompat.Headline"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:layout_marginTop="32dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
                     android:text="Username"
                     android:textColor="@color/backgroundDefaultWhite"/>
 

@@ -18,7 +18,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -46,7 +49,7 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
 
     //check if logged in, if so show profile, if not show login/signup activity
     private ActionBarDrawerToggle drawerToggle;
-    private Button signOutButton, uploadBrewButton;
+    private Button uploadBrewButton;
     private DrawerLayout drawerLayout;
     private Toolbar toolbar;
     private TextView usernameTextView, pointsTv;
@@ -62,7 +65,7 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         brewRecyclerView = findViewById(R.id.user_brews_recycler_view);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         brewRecyclerView.setLayoutManager(linearLayoutManager);
-        brewListAdapter = new UserBrewListAdapter(userBrews, this);
+        brewListAdapter = new UserBrewListAdapter(userBrews, this, this);
         brewRecyclerView.setNestedScrollingEnabled(false);
         brewRecyclerView.setAdapter(brewListAdapter);
         SharedPreferences prefs = getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
@@ -79,8 +82,14 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
 
     }
 
+    public void updateUserID() {
+        SharedPreferences prefs = getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
+        userID = prefs.getInt(MainActivity.PREFS_USER_ID, 0);
+    }
+
     private void initializeProfile(){
         toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         NavigationView nv = findViewById(R.id.nvView);
         nv.setNavigationItemSelectedListener(this);
         drawerLayout = findViewById(R.id.drawer_layout);
@@ -88,8 +97,6 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         drawerToggle.syncState();
         usernameTextView = findViewById(R.id.username_text_view);
         pointsTv = findViewById(R.id.points_text_view);
-        signOutButton = findViewById(R.id.sign_out_button);
-        signOutButton.setOnClickListener(this);
         uploadBrewButton = findViewById(R.id.upload_brew_button);
         uploadBrewButton.setOnClickListener(this);
         setUsernameTextView();
@@ -97,7 +104,7 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         populateRoasts();
     }
     private void populateBrews(){
-
+        updateUserID();
         RequestParams params = new RequestParams();
         UserRestClient.get(getApplication(), "brews/user/"+userID, params, new JsonHttpResponseHandler(){
             @Override
@@ -134,6 +141,16 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
 
 
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.profile_menu, menu);
+        return true;
+    }
+
+
+
     private void updateBrewList(){
         brewListAdapter.setBrews(userBrews);
     }
@@ -202,15 +219,15 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case android.R.id.home:
-//                drawerLayout.openDrawer(GravityCompat.START);
-//                return true;
-//        }
-
         if (drawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
+        switch (item.getItemId()) {
+            case R.id.action_signout:
+                signOut();
+                break;
+        }
+
         return super.onOptionsItemSelected(item);
 
     }
@@ -238,6 +255,14 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.nav_profile:
+                closeDrawer();
+                break;
+            case R.id.nav_my_recipes:
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                finish();
+                break;
             case R.id.nav_contact:
                 Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
                         "mailto","coffeekeeperbrewingandroasting@gmail.com", null));
@@ -276,15 +301,13 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         }
     }
     private void showHelpPopup() {
-
+        Intent intent = new Intent(this, HelpActivity.class);
+        startActivity(intent);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.sign_out_button:
-                signOut();
-                break;
             case R.id.upload_brew_button:
                 uploadBrew();
                 break;
@@ -299,5 +322,11 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
 
+    }
+
+
+    @Override
+    public void deleteBrew(BrewRecipe brew) {
+        Toast.makeText(this, "Deleting brew " + brew.getName(), Toast.LENGTH_LONG).show();
     }
 }

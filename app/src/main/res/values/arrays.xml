@@ -2,4 +2,7 @@
 <resources>
 
 
+    <string-array name="user_brew_list_options" >
+        <item>Delete</item>
+    </string-array>
 </resources>

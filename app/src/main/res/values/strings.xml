@@ -118,4 +118,8 @@
     <string name="pref_title_vibrate">Vibrate</string>
 
     <string name="v60_instructions"></string>
+    <string name="title_activity_discover">DiscoverActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>

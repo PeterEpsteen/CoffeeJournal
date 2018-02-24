@@ -118,7 +118,14 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         String username = usernameEdit.getText().toString();
         String password = passwordEdit.getText().toString();
         String confirm = confirmPasswordEdit.getText().toString();
-        if(!confirm.equals(password)) return;
+        if(username.isEmpty() || password.isEmpty()) {
+            Toast.makeText(getActivity(), "Please do not leave any input blank.", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if(!confirm.equals(password)){
+            Toast.makeText(getActivity(), "Passwords do not match. Please try again.", Toast.LENGTH_LONG).show();
+            return;
+        }
         RequestParams params = new RequestParams();
         params.put("username", username);
         params.put("password", password);
@@ -136,6 +143,10 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 try {
+                    if (errorResponse.get("message").toString().contains("duplicate")) {
+                        Toast.makeText(getActivity(), "Username already taken, please try again with a new name.", Toast.LENGTH_LONG).show();
+                    }
+                    else
                     Toast.makeText(getActivity(), errorResponse.get("message").toString(), Toast.LENGTH_LONG).show();
                 } catch (JSONException e) {
                     e.printStackTrace();

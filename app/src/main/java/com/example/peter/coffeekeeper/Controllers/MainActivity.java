@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements BrewFragment.OnFr
         tabLayout.setupWithViewPager(mViewPager);
 
         toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("My Recipes");
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);

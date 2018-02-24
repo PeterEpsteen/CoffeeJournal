@@ -21,17 +21,17 @@
             android:background="@color/backgroundDefaultWhite"
             android:orientation="horizontal"
             android:paddingTop="16dp"
-            android:paddingBottom="16dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
+            android:paddingBottom="8dp"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
             android:elevation="3dp"
             >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Brew Recipes"
-            style="@style/TextAppearance.AppCompat.Display1"
+            android:text="My Brews"
+            style="@style/TextAppearance.AppCompat.Large"
             android:textColor="@color/colorTextDark"
             android:id="@+id/pick_brew_tv"
             />
@@ -41,8 +41,8 @@
                 android:layout_height="0dp"/>
 
             <ImageButton
-                android:layout_width="56dp"
-                android:layout_height="56dp"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
                 android:padding="8dp"
                 android:id="@+id/add_brew_top_button"
                 android:scaleType="centerCrop"
@@ -53,8 +53,8 @@
 
 
             <ImageButton
-                android:layout_width="56dp"
-                android:layout_height="56dp"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
                 android:padding="8dp"
                 android:id="@+id/sort_button"
                 android:scaleType="centerCrop"

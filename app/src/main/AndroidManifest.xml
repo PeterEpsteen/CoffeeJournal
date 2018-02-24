@@ -45,13 +45,17 @@
             android:name=".Controllers.HelpActivity"
             android:parentActivityName=".Controllers.MainActivity"
             android:theme="@style/AppTheme" />
-        <activity android:name=".Controllers.DiscoverActivity" />
         <activity android:name=".Controllers.ProfileActivity" />
-        <activity android:name=".Controllers.RegisterActivity"></activity>
+        <activity android:name=".Controllers.RegisterActivity" />
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
+        <activity
+            android:name=".Controllers.DiscoverActivity"
+            android:label="@string/title_activity_discover"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>
