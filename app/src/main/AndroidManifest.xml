@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.example.peter.coffeekeeper.MainActivity"
+            android:name=".Controllers.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden">
@@ -26,25 +26,32 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.peter.coffeekeeper.AddBrew"
-            android:parentActivityName="com.example.peter.coffeekeeper.MainActivity"
+            android:name=".Controllers.AddBrew"
+            android:parentActivityName=".Controllers.MainActivity"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name="com.example.peter.coffeekeeper.AddRoast"
-            android:parentActivityName="com.example.peter.coffeekeeper.MainActivity"
-            android:windowSoftInputMode="adjustPan"
-            />
+            android:name=".Controllers.AddRoast"
+            android:parentActivityName=".Controllers.MainActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name="com.example.peter.coffeekeeper.BrewRecipeActivity"
+            android:name=".Controllers.BrewRecipeActivity"
             android:label="Test"
-            android:parentActivityName="com.example.peter.coffeekeeper.MainActivity"
+            android:parentActivityName=".Controllers.MainActivity"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-            android:name="com.example.peter.coffeekeeper.RoastActivity"
-            android:parentActivityName="com.example.peter.coffeekeeper.MainActivity" />
-        <activity android:name="com.example.peter.coffeekeeper.HelpActivity"
-            android:parentActivityName="com.example.peter.coffeekeeper.MainActivity"
-            android:theme="@style/AppTheme"/>
+            android:name=".Controllers.RoastActivity"
+            android:parentActivityName=".Controllers.MainActivity" />
+        <activity
+            android:name=".Controllers.HelpActivity"
+            android:parentActivityName=".Controllers.MainActivity"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".Controllers.DiscoverActivity" />
+        <activity android:name=".Controllers.ProfileActivity" />
+        <activity android:name=".Controllers.RegisterActivity"></activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

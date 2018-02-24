@@ -57,6 +57,7 @@ dependencies {
     compile 'com.mindorks:placeholderview:0.2.7'
     compile 'com.android.support:design:27.0.2'
     compile 'com.google.android.gms:play-services-ads:11.8.0'
+    compile 'com.loopj.android:android-async-http:1.4.9'
     compile('com.crashlytics.sdk.android:crashlytics:2.7.1@aar') {
         transitive = true
     }

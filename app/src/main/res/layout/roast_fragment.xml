@@ -5,7 +5,7 @@
         android:layout_height="match_parent"
         android:clipToPadding="false"
         android:background="@color/backgroundColorBeige"
-        tools:context="com.example.peter.coffeekeeper.RoastFragment">
+        tools:context="com.example.peter.coffeekeeper.Controllers.RoastFragment">
 
         <LinearLayout
             android:layout_width="match_parent"

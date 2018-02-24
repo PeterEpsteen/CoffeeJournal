@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="left"
+    android:id="@+id/drawer_layout">
+    
+    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/main_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        tools:context="com.example.peter.coffeekeeper.Controllers.MainActivity">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <android.support.design.widget.AppBarLayout
+                android:id="@+id/appbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/appbar_padding_top"
+                android:theme="@style/AppTheme.AppBarOverlay">
+
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:layout_weight="1"
+                    android:background="?attr/colorPrimary"
+                    app:layout_scrollFlags="scroll|enterAlways"
+                    app:popupTheme="@style/AppTheme.PopupOverlay"
+                    app:title="My Profile"
+                    android:gravity="right">
+                    <Button
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:textColor="@color/backgroundColorBeige"
+                        app:layout_constraintRight_toRightOf="parent"
+                        android:id="@+id/sign_out_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        style="@style/Widget.AppCompat.Button.Borderless"
+                        android:="end"
+                        android:text="Sign Out"/>
+
+                </android.support.v7.widget.Toolbar>
+            </android.support.design.widget.AppBarLayout>
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorPrimary"
+                android:padding="24dp"
+                android:elevation="4dp">
+                <TextView
+                    android:id="@+id/username_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextAppearance.AppCompat.Headline"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="32dp"
+                    android:text="Username"
+                    android:textColor="@color/backgroundDefaultWhite"/>
+
+            </android.support.constraint.ConstraintLayout>
+
+            <android.support.v4.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/stats_cardview"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="@dimen/cardview_default_radius"
+                        android:elevation="@dimen/cardview_default_elevation"
+                        app:cardUseCompatPadding="true"
+                        android:background="@color/cardview_light_background"
+                        android:layout_margin="16dp"
+                        >
+                        <android.support.constraint.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="8dp">
+                            <TextView
+                                android:id="@+id/brew_title_stats_text_view"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                style="@style/TextAppearance.AppCompat.Caption"
+                                app:layout_constraintLeft_toLeftOf="parent"
+                                android:layout_marginLeft="32dp"
+                                android:text="Brews"/>
+                            <TextView
+                                android:id="@+id/brew_count_stats_text_view"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                style="@style/TextAppearance.AppCompat.Large"
+                                app:layout_constraintTop_toBottomOf="@id/brew_title_stats_text_view"
+                                app:layout_constraintLeft_toLeftOf="@id/brew_title_stats_text_view"
+                                app:layout_constraintRight_toRightOf="@id/brew_title_stats_text_view"
+                                android:text="0"/>
+                            <TextView
+                                android:id="@+id/points_subtext"
+                                app:layout_constraintLeft_toLeftOf="parent"
+                                app:layout_constraintRight_toRightOf="parent"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                style="@style/TextAppearance.AppCompat.Caption"
+                                android:text="Points"/>
+                            <TextView
+                                android:id="@+id/points_text_view"
+                                app:layout_constraintTop_toBottomOf="@id/points_subtext"
+                                app:layout_constraintRight_toRightOf="parent"
+                                app:layout_constraintLeft_toLeftOf="parent"
+                                android:layout_marginLeft="8px"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                style="@style/TextAppearance.AppCompat.Large"
+                                android:text="20"/>
+                            <TextView
+                                android:id="@+id/comments_title_stats_text_view"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                style="@style/TextAppearance.AppCompat.Caption"
+                                app:layout_constraintRight_toRightOf="parent"
+                                android:layout_marginLeft="32dp"
+                                android:text="Comments"/>
+                            <TextView
+                                android:id="@+id/comments_count_stats_text_view"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                style="@style/TextAppearance.AppCompat.Large"
+                                app:layout_constraintTop_toBottomOf="@id/comments_title_stats_text_view"
+                                app:layout_constraintLeft_toLeftOf="@id/comments_title_stats_text_view"
+                                app:layout_constraintRight_toRightOf="@id/comments_title_stats_text_view"
+                                android:text="0"/>
+
+                        </android.support.constraint.ConstraintLayout>
+
+                    </android.support.v7.widget.CardView>
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/brew_cardview"
+                        app:layout_constraintTop_toBottomOf="@id/stats_cardview"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="@dimen/cardview_default_radius"
+                        android:elevation="@dimen/cardview_default_elevation"
+                        app:cardUseCompatPadding="true"
+                        android:background="@color/cardview_light_background"
+                        android:layout_margin="16dp"
+                        >
+                        <android.support.constraint.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="16dp">
+                            <TextView
+                                android:id="@+id/brews_text_view"
+                                android:layout_width="wrap_content"
+                                app:layout_constraintLeft_toLeftOf="parent"
+                                app:layout_constraintBottom_toBottomOf="@id/upload_brew_button"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="8dp"
+                                style="@style/TextAppearance.AppCompat.Large"
+                                android:text="Brews"/>
+
+                            <android.support.v7.widget.RecyclerView
+                                android:layout_marginTop="8dp"
+                                android:id="@+id/user_brews_recycler_view"
+                                app:layout_constraintTop_toBottomOf="@id/brews_text_view"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"/>
+                            <Button
+                                android:id="@+id/upload_brew_button"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintRight_toRightOf="parent"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
+                                android:padding="0dp"
+                                android:gravity="end"
+                                android:textAlignment="center"
+                                android:text="Upload"/>
+
+
+
+                        </android.support.constraint.ConstraintLayout>
+
+
+                    </android.support.v7.widget.CardView>
+
+                </android.support.constraint.ConstraintLayout>
+            </android.support.v4.widget.NestedScrollView>
+
+
+
+        </LinearLayout>
+
+
+
+
+    </android.support.design.widget.CoordinatorLayout>
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nvView"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@android:color/white"
+        app:menu="@menu/drawer_view"
+        app:headerLayout="@layout/nav_header"
+        />
+</android.support.v4.widget.DrawerLayout>
