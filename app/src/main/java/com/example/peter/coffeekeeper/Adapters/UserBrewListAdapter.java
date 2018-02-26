@@ -11,15 +11,24 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.peter.coffeekeeper.Models.BrewRecipe;
 import com.example.peter.coffeekeeper.R;
+import com.example.peter.coffeekeeper.RestClients.UserRestClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+
+import cz.msebera.android.httpclient.Header;
 
 /**
  * Created by root on 2/22/18.
@@ -70,7 +79,10 @@ public class UserBrewListAdapter extends RecyclerView.Adapter<UserBrewListAdapte
             }
 
         });
+
     }
+
+
 
     @Override
     public int getItemCount() {

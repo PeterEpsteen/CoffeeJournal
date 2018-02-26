@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
@@ -99,11 +100,11 @@ public class DiscoverActivity extends AppCompatActivity
                     JSONArray jsonBrewsArray = response.getJSONArray("data");
                     ArrayList<BrewRecipe> brewList = new ArrayList<>();
                     for(int i = 0; i < jsonBrewsArray.length(); i++) {
-                        JSONObject brewJson = jsonBrewsArray.getJSONObject(i);
                         BrewRecipe recipe = new BrewRecipe();
-                        recipe.setName(brewJson.getString("brew_name"));
-                        recipe.setUserName(brewJson.getString("username"));
-                        brewList.add(recipe);
+                        JSONObject brewJson = jsonBrewsArray.getJSONObject(i);
+                         recipe = UserRestClient.toBrewRecipe(brewJson);
+                         recipe.setUserName(brewJson.getString("username"));
+                         brewList.add(recipe);
                     }
                     brews = new ArrayList<>(brewList);
                     updateBrewList();
@@ -166,6 +167,9 @@ public class DiscoverActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         switch (item.getItemId()) {
             case R.id.nav_profile:
+                Intent intent1 = new Intent(this, ProfileActivity.class);
+                startActivity(intent1);
+                finish();
                 break;
             case R.id.nav_my_recipes:
                 Intent intent = new Intent(this, MainActivity.class);

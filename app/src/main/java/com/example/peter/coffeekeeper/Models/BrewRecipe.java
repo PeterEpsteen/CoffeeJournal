@@ -5,6 +5,9 @@ import android.os.Parcelable;
 
 import com.example.peter.coffeekeeper.R;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -14,7 +17,7 @@ import java.util.Date;
 public class BrewRecipe implements Parcelable, Serializable {
 
     String name, brewMethod, grind, notes, dateAdded, userName;
-    int coffeeMetric, waterMetric, brewTime, bloomTime, icon, comments, points;
+    int coffeeMetric, waterMetric, brewTime, bloomTime, icon, comments, points, brewID;
     double coffeeUnits, waterUnits;
 
     public BrewRecipe(){
@@ -53,6 +56,7 @@ public class BrewRecipe implements Parcelable, Serializable {
         this.icon = getIcon();
     }
 
+
     public static final Creator<BrewRecipe> CREATOR = new Creator<BrewRecipe>() {
         @Override
         public BrewRecipe createFromParcel(Parcel in) {
@@ -85,6 +89,14 @@ public class BrewRecipe implements Parcelable, Serializable {
         dest.writeDouble(coffeeUnits);
         dest.writeDouble(waterUnits);
         dest.writeString(dateAdded);
+    }
+
+    public int getBrewID() {
+        return brewID;
+    }
+
+    public void setBrewID(int brewID) {
+        this.brewID = brewID;
     }
 
     public String getUserName() {

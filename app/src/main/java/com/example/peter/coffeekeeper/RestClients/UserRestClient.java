@@ -46,7 +46,12 @@ public class UserRestClient {
     public static void post(String url, RequestParams params, AsyncHttpResponseHandler responseHandler){
         client.post(getAbsoluteUrl(url), params, responseHandler);
     }
-    public static void put(String url, RequestParams params, AsyncHttpResponseHandler responseHandler){
+    public static void put(Context context, String url, RequestParams params, AsyncHttpResponseHandler responseHandler){
+        SharedPreferences sharedPrefs = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
+        Log.wtf("token", sharedPrefs.getString("token", ""));
+        if(sharedPrefs.contains("token") && sharedPrefs.getString("token", "").length() > 4){
+            client.addHeader("x-access-token", sharedPrefs.getString("token", ""));
+        }
         client.put(getAbsoluteUrl(url), params, responseHandler);
     }
     public static void delete(Context context, String url, RequestParams params, AsyncHttpResponseHandler responseHandler){
@@ -101,6 +106,7 @@ public class UserRestClient {
         recipe.setGrind(brewJson.getString("grind"));
         recipe.setBrewTime(brewJson.getInt("brew_time"));
         recipe.setBloomTime(brewJson.getInt("bloom_time"));
+        recipe.setBrewID(brewJson.getInt("brew_id"));
         return recipe;
     }
 }

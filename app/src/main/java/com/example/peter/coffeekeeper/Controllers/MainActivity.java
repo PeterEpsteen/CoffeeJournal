@@ -56,13 +56,13 @@ public class MainActivity extends AppCompatActivity implements BrewFragment.OnFr
 
     DBOperator mDBOperator;
     String test;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         try {
             super.onCreate(savedInstanceState);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
@@ -108,16 +108,13 @@ public class MainActivity extends AppCompatActivity implements BrewFragment.OnFr
                 if (current == 0) {
                     Intent intent = new Intent(v.getContext(), AddBrew.class);
                     startActivityForResult(intent, 1);
-                }
-
-                else if (current == 1) {
+                } else if (current == 1) {
                     Intent intent = new Intent(v.getContext(), AddRoast.class);
                     startActivityForResult(intent, 1);
 
                 }
             }
         });
-
 
 
     }
@@ -128,8 +125,8 @@ public class MainActivity extends AppCompatActivity implements BrewFragment.OnFr
             finish();
     }
 
-    private boolean closeDrawer(){
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)){
+    private boolean closeDrawer() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(Gravity.LEFT);
             return true;
         }
@@ -139,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements BrewFragment.OnFr
     private ActionBarDrawerToggle setupDrawerToggle() {
         // NOTE: Make sure you pass in a valid toolbar reference.  ActionBarDrawToggle() does not require it
         // and will not render the hamburger icon without it.
-        return new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open,  R.string.drawer_close);
+        return new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
     }
 
     @Override
@@ -155,10 +152,10 @@ public class MainActivity extends AppCompatActivity implements BrewFragment.OnFr
         drawerToggle.onConfigurationChanged(newConfig);
     }
 
-    private void setupViewPager(ViewPager viewPager){
+    private void setupViewPager(ViewPager viewPager) {
         SectionsPageAdapter adapter = new SectionsPageAdapter(getSupportFragmentManager());
         adapter.addFragment(new BrewFragment(), "Brew");
-        adapter.addFragment(new RoastFragment(), "Roast" );
+        adapter.addFragment(new RoastFragment(), "Roast");
         viewPager.setAdapter(adapter);
     }
 
@@ -207,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements BrewFragment.OnFr
         switch (item.getItemId()) {
             case R.id.nav_contact:
                 Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                        "mailto","coffeekeeperbrewingandroasting@gmail.com", null));
+                        "mailto", "coffeekeeperbrewingandroasting@gmail.com", null));
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Feedback for Coffee Keeper");
                 startActivity(Intent.createChooser(emailIntent, "Send email..."));
                 break;
@@ -227,10 +224,14 @@ public class MainActivity extends AppCompatActivity implements BrewFragment.OnFr
         }
         return true;
     }
-    private void launchDiscover(){
 
+    private void launchDiscover() {
+        Intent intent = new Intent(this, DiscoverActivity.class);
+        startActivity(intent);
+        finish();
     }
-    private void launchProfile(){
+
+    private void launchProfile() {
         Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
         finish();
@@ -249,49 +250,5 @@ public class MainActivity extends AppCompatActivity implements BrewFragment.OnFr
     private void showHelpPopup() {
         Intent intent = new Intent(this, HelpActivity.class);
         startActivity(intent);
-//        closeDrawer();
-//        AlertDialog.Builder builder;
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            builder = new AlertDialog.Builder(this, android.R.style.Theme_DeviceDefault_Light_Dialog);
-//        } else {
-//            builder = new AlertDialog.Builder(this);
-//        }
-//        builder.setTitle("Help")
-//                .setMessage("Coffee Keeper is an app to keep track of custom brew recipes and roast profiles. \n \nBrewing:\nThe brew page allow users to create custom brew recipes, or view popular recipes that come with the app. Tap the plus button to get started on a custom brew. Here you will add details about a brew. The most necessary components are the water and coffee, as this determines the coffee to water ratio used when viewing the recipe. After filling out the details, select the brew on the home page to see a visualization of the recipe. Here you can quickly change the amount of water or coffee desired, and the ratio and units will stay consistent to the recipe. Also, pressing start will trigger a timer that will guide through a brew's bloom and total brew time.\n\nRoasting:\nOn the roast tab, tap the plus button to create a new entry to track a coffee roast. Pressing the play icon will start a timer, and any steps added to the entry will auto-fill with the current time. Enter the beans used. Then, enter vital steps of your roast, along with tempatures. These steps and tempatures will be used to create a roast profile graph. After filling out the roast notes, you can view the roast which will show all the details, plus a visualized roast graph tracking bean tempature and roaster tempature.\nOther:\nPlease contact me with any questions, desires, or bugs and I promise I will address your concerns as quickly as possible. Thanks for using Coffee Keeper!")
-//                .setNegativeButton("Got it", new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        // do nothing
-//                    }
-//                })
-//                .show();
-//        LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-//        View v = inflater.inflate(R.layout.help_popup_layout, null);
-//        popupWindow = new PopupWindow(
-//                v,
-//                ViewGroup.LayoutParams.WRAP_CONTENT,
-//                ViewGroup.LayoutParams.WRAP_CONTENT
-//        );
-//        if (Build.VERSION.SDK_INT>=21){
-//            popupWindow.setElevation(5.0f);
-//        }
-//        Button close = v.findViewById(R.id.button_close_popup);
-//        close.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                popupWindow.dismiss();
-//            }
-//        });
-//        popupWindow.showAtLocation(drawerLayout, Gravity.CENTER, 0, 0);
     }
 }
-
-/** Just did:
-        Can add, delete brews
-    TODO:
-        Set up recipe page
-
-    Bugs:
-        Moka pot image doesnt load
-
-
-**/
