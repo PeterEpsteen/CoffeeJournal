@@ -17,8 +17,8 @@ android {
         applicationId "com.coffeekeeperbrewingroasting"
         minSdkVersion 17
         targetSdkVersion 27
-        versionCode 4
-        versionName "1.03"
+        versionCode 5
+        versionName "1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
 

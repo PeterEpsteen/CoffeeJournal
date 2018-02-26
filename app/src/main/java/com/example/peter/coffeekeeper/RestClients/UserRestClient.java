@@ -49,7 +49,11 @@ public class UserRestClient {
     public static void put(String url, RequestParams params, AsyncHttpResponseHandler responseHandler){
         client.put(getAbsoluteUrl(url), params, responseHandler);
     }
-    public static void delete(String url, RequestParams params, AsyncHttpResponseHandler responseHandler){
+    public static void delete(Context context, String url, RequestParams params, AsyncHttpResponseHandler responseHandler){
+        SharedPreferences sharedPrefs = context.getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
+        if(sharedPrefs.contains("token") && sharedPrefs.getString("token", "").length() > 6){
+            client.addHeader("x-access-token", sharedPrefs.getString("token", ""));
+        }
         client.delete(getAbsoluteUrl(url), params, responseHandler);
     }
 

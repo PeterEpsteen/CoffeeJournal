@@ -20,6 +20,6 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header_discover"
-        app:menu="@menu/activity_discover_drawer" />
+        app:menu="@menu/drawer_view" />
 
 </android.support.v4.widget.DrawerLayout>

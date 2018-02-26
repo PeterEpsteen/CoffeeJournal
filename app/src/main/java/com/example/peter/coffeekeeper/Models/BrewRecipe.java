@@ -13,7 +13,7 @@ import java.util.Date;
  */
 public class BrewRecipe implements Parcelable, Serializable {
 
-    String name, brewMethod, grind, notes, dateAdded;
+    String name, brewMethod, grind, notes, dateAdded, userName;
     int coffeeMetric, waterMetric, brewTime, bloomTime, icon, comments, points;
     double coffeeUnits, waterUnits;
 
@@ -85,6 +85,14 @@ public class BrewRecipe implements Parcelable, Serializable {
         dest.writeDouble(coffeeUnits);
         dest.writeDouble(waterUnits);
         dest.writeString(dateAdded);
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getDateAdded() {

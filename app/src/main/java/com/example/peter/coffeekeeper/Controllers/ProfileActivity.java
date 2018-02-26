@@ -1,6 +1,7 @@
 package com.example.peter.coffeekeeper.Controllers;
 
 import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -24,6 +25,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -45,7 +47,7 @@ import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 
-public class ProfileActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, UploadBrewAdapter.UploadBrewInterface, UserBrewListAdapter.UserBrewListListener {
+public class ProfileActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, DialogInterface.OnDismissListener, View.OnClickListener, UploadBrewAdapter.UploadBrewInterface, UserBrewListAdapter.UserBrewListListener {
 
     //check if logged in, if so show profile, if not show login/signup activity
     private ActionBarDrawerToggle drawerToggle;
@@ -57,6 +59,7 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
     private RecyclerView brewRecyclerView;
     private ArrayList<BrewRecipe> userBrews;
     private UserBrewListAdapter brewListAdapter;
+    private String token;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,7 +73,7 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
         brewRecyclerView.setAdapter(brewListAdapter);
         SharedPreferences prefs = getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
         userID = prefs.getInt(MainActivity.PREFS_USER_ID, 0);
-        String token = prefs.getString(MainActivity.PREFS_API_TOKEN, "none");
+        token = prefs.getString(MainActivity.PREFS_API_TOKEN, "none");
         if(userID == 0 || token.equals("none")) {
             Intent intent = new Intent(this, RegisterActivity.class);
             startActivityForResult(intent, 0);
@@ -85,6 +88,7 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
     public void updateUserID() {
         SharedPreferences prefs = getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
         userID = prefs.getInt(MainActivity.PREFS_USER_ID, 0);
+        token = prefs.getString(MainActivity.PREFS_API_TOKEN, "none");
     }
 
     private void initializeProfile(){
@@ -106,30 +110,34 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
     private void populateBrews(){
         updateUserID();
         RequestParams params = new RequestParams();
+        final ArrayList<BrewRecipe> userBrewsBackend = new ArrayList<>();
         UserRestClient.get(getApplication(), "brews/user/"+userID, params, new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 super.onSuccess(statusCode, headers, response);
-                for(int i = 0; i < response.length(); i++) {
+
                     try {
-                        userBrews.add(UserRestClient.toBrewRecipe(response.getJSONObject(i)));
-                        Log.d("JSON", response.getJSONObject(i).toString());
-                    } catch (JSONException e) {
+                        for (int i = 0; i < response.length(); i++) {
+                            userBrewsBackend.add(UserRestClient.toBrewRecipe(response.getJSONObject(i)));
+                            Log.d("JSON", response.getJSONObject(i).toString());
+                        }
+                        userBrews = new ArrayList<>(userBrewsBackend);
+                        updateBrewList();
+                    }
+                    catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
-
-            }
 
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
                 try {
-                    Log.d("Response", UserRestClient.toBrewRecipe(response.getJSONArray("data").getJSONObject(1)).getName());
                     JSONArray array = response.getJSONArray("data");
                     for(int i = 0; i < array.length(); i++) {
-                        userBrews.add(UserRestClient.toBrewRecipe(array.getJSONObject(i)));
+                        userBrewsBackend.add(UserRestClient.toBrewRecipe(array.getJSONObject(i)));
                     }
+                    userBrews = new ArrayList<>(userBrewsBackend);
                     updateBrewList();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -137,9 +145,6 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
 
             }
         });
-
-
-
     }
 
     @Override
@@ -185,8 +190,9 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
 
     private void setUsernameTextView(){
         SharedPreferences prefs = getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
-        int userID = prefs.getInt(MainActivity.PREFS_USER_ID, 0);
+        userID = prefs.getInt(MainActivity.PREFS_USER_ID, 0);
         int points = prefs.getInt(MainActivity.PREFS_USER_POINTS, 0);
+        token = prefs.getString(MainActivity.PREFS_API_TOKEN, "none");
         String username = prefs.getString(MainActivity.PREFS_USERNAME, "none");
         if(username.equals("none") || !prefs.contains(MainActivity.PREFS_USER_POINTS)){
             Intent intent = new Intent(this, RegisterActivity.class);
@@ -289,6 +295,9 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
     }
 
     private void launchDiscover() {
+        Intent intent = new Intent(this, DiscoverActivity.class);
+        startActivity(intent);
+        finish();
 
     }
     private void launchMarket() {
@@ -327,6 +336,33 @@ public class ProfileActivity extends AppCompatActivity implements NavigationView
 
     @Override
     public void deleteBrew(BrewRecipe brew) {
-        Toast.makeText(this, "Deleting brew " + brew.getName(), Toast.LENGTH_LONG).show();
+        RequestParams params = new RequestParams();
+        UserRestClient.delete(getApplicationContext(),"brews/"+userID+"/"+brew.getName(), params, new JsonHttpResponseHandler() {
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                try {
+                    Toast.makeText(getApplicationContext(), errorResponse.get("message").toString(), Toast.LENGTH_LONG).show();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                try {
+                    Toast.makeText(getApplicationContext(), response.get("message").toString(), Toast.LENGTH_LONG).show();
+                }
+                catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        populateBrews();
     }
 }

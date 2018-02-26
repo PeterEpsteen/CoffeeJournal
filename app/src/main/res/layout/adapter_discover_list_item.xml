@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:elevation="@dimen/cardview_default_elevation"
+    app:cardCornerRadius="@dimen/cardview_default_radius"
+    android:id="@+id/container"
+    app:cardUseCompatPadding="true">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/main_container"
+            xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp">
+            <TextView
+                android:id="@+id/recipe_title_textview"
+                android:layout_width="0dp"
+                app:layout_constraintRight_toLeftOf="@id/points_count"
+                android:layout_height="wrap_content"
+                style="@style/TextAppearance.AppCompat.Body2"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="Brew Title"/>
+            <TextView
+                app:layout_constraintTop_toBottomOf="@id/recipe_title_textview"
+                android:id="@+id/username_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/TextAppearance.AppCompat.Caption"
+                android:text="Creator: "/>
+            <TextView
+                android:id="@+id/username_text_view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="username"
+                style="@style/TextAppearance.AppCompat.Body1"
+                app:layout_constraintLeft_toRightOf="@id/username_label"
+                app:layout_constraintBaseline_toBaselineOf="@id/username_label"
+                />
+
+            <TextView
+                app:layout_constraintTop_toBottomOf="@id/username_text_view"
+                android:id="@+id/comments_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                style="@style/TextAppearance.AppCompat.Caption"/>
+            <TextView
+                app:layout_constraintLeft_toRightOf="@id/comments_count"
+                app:layout_constraintBaseline_toBaselineOf="@id/comments_count"
+                android:id="@+id/comments_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" Comments"
+                style="@style/TextAppearance.AppCompat.Caption"/>
+            <TextView
+                app:layout_constraintRight_toLeftOf="@id/points_label"
+                app:layout_constraintBaseline_toBaselineOf="@id/points_label"
+                android:id="@+id/points_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                style="@style/TextAppearance.AppCompat.Caption"/>
+            <TextView
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                android:id="@+id/points_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" Points"
+                style="@style/TextAppearance.AppCompat.Caption"/>
+        </android.support.constraint.ConstraintLayout>
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/dropdown_container"
+            android:visibility="gone"
+            xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp">
+            <Button
+                android:id="@+id/download_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:text="Download"/>
+            <Button
+                app:layout_constraintRight_toLeftOf="@id/like_button"
+                android:id="@+id/comments_button"
+                app:layout_constraintLeft_toRightOf="@id/download_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                app:layout_constraintBaseline_toBaselineOf="@id/download_button"
+                android:text="Comments"/>
+            <Button
+                android:id="@+id/like_button"
+                android:textColor="@color/colorAccent"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                android:text="Like"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintRight_toRightOf="parent"/>
+
+        </android.support.constraint.ConstraintLayout>
+
+
+    </LinearLayout>
+
+
+
+    </android.support.v7.widget.CardView>

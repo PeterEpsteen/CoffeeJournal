@@ -76,6 +76,15 @@ public class UploadBrewDialogFragment extends DialogFragment implements UploadBr
     }
 
     @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
+        final Activity activity = getActivity();
+        if(activity instanceof DialogInterface.OnDismissListener) {
+            ((DialogInterface.OnDismissListener)activity).onDismiss(dialog);
+        }
+    }
+
+    @Override
     public void upload(BrewRecipe brew) {
         Toast.makeText(getActivity().getApplicationContext(), "Uploading brew: "+ brew.getName(), Toast.LENGTH_LONG).show();
         int userID = getActivity().getSharedPreferences(MainActivity.PREFS_NAME, Context.MODE_PRIVATE).getInt(MainActivity.PREFS_USER_ID, 0);
@@ -99,6 +108,10 @@ public class UploadBrewDialogFragment extends DialogFragment implements UploadBr
                 public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                     super.onFailure(statusCode, headers, throwable, errorResponse);
                     try {
+                        if(errorResponse.get("message").toString().contains("duplicate")) {
+                            Toast.makeText(getActivity(), "You already uploaded a brew with this name.", Toast.LENGTH_LONG).show();
+                        }
+                        else
                         Toast.makeText(getActivity(), errorResponse.get("message").toString(), Toast.LENGTH_LONG).show();
                     } catch (JSONException e) {
                         e.printStackTrace();
