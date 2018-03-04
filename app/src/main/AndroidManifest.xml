@@ -55,7 +55,16 @@
         <activity
             android:name=".Controllers.DiscoverActivity"
             android:label="@string/title_activity_discover"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".Controllers.BrewDetailsActivity"
+            android:label="@string/title_activity_brew_details"
+            android:parentActivityName=".Controllers.DiscoverActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.peter.coffeekeeper.Controllers.DiscoverActivity" />
+        </activity>
     </application>
 
 </manifest>

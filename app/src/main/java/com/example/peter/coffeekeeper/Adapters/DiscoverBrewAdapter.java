@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,14 +75,13 @@ public class DiscoverBrewAdapter extends RecyclerView.Adapter<DiscoverBrewAdapte
         holder.likeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                likeBrew(brew);
-                holder.pointsCountTv.setText(String.valueOf(Integer.parseInt(holder.pointsCountTv.getText().toString())+1));
+                likeBrew(brew, holder.pointsCountTv);
             }
         });
 //
     }
 
-    private void likeBrew(BrewRecipe brew) {
+    private void likeBrew(BrewRecipe brew, final TextView pointsTv) {
         SharedPreferences preferences = mContext.getSharedPreferences(MainActivity.PREFS_NAME, Context.MODE_PRIVATE);
         int userID = preferences.getInt(MainActivity.PREFS_USER_ID, 0);
         RequestParams params = new RequestParams();
@@ -89,10 +89,9 @@ public class DiscoverBrewAdapter extends RecyclerView.Adapter<DiscoverBrewAdapte
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
-                try {
-                    Toast.makeText(mContext, response.get("message").toString(), Toast.LENGTH_LONG).show();
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                if(statusCode == 200) {
+                    Toast.makeText(mContext, "Thanks!", Toast.LENGTH_LONG).show();
+                    pointsTv.setText(String.valueOf(Integer.parseInt(pointsTv.getText().toString()) + 1));
                 }
             }
 
@@ -100,7 +99,8 @@ public class DiscoverBrewAdapter extends RecyclerView.Adapter<DiscoverBrewAdapte
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
                 try {
-                    Toast.makeText(mContext, errorResponse.get("message").toString(), Toast.LENGTH_LONG).show();
+                    Log.e("Like", errorResponse.get("message").toString());
+                    Toast.makeText(mContext, "You already liked this recipe.", Toast.LENGTH_LONG).show();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

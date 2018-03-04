@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.peter.coffeekeeper.Controllers.BrewDetailsActivity"
+    tools:showIn="@layout/app_bar_brew_details">
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/brew_details_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/backgroundDefaultWhite"
+        android:padding="16dp">
+        <TextView
+            android:id="@+id/likes_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" Likes"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+        <TextView
+            android:id="@+id/likes_text_view"
+            app:layout_constraintRight_toLeftOf="@id/likes_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            style="@style/TextAppearance.AppCompat.Body1"/>
+        <TextView
+            android:id="@+id/brew_title_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.AppCompat.Large"
+            android:text="Brew Name"/>
+        <TextView
+            android:layout_marginTop="8dp"
+            android:id="@+id/username_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.AppCompat.Caption"
+            android:text="Username"
+            app:layout_constraintTop_toBottomOf="@id/brew_title_text_view"/>
+        <!--Method-->
+        <TextView
+            android:layout_marginTop="8dp"
+            android:id="@+id/method_label"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/username_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintHorizontal_weight="1"
+            android:text="Method:"/>
+        <TextView
+            android:id="@+id/brew_method_text_view"
+            app:layout_constraintLeft_toRightOf="@id/bloom_label"
+            style="@style/TextAppearance.AppCompat.Body1"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_width="0dp"
+            app:layout_constraintBaseline_toBaselineOf="@id/method_label"
+            android:layout_height="wrap_content"
+            app:layout_constraintHorizontal_weight="1"
+            android:text="Pour Over"/>
+        <!--Bloom Time-->
+        <TextView
+            android:id="@+id/bloom_label"
+            android:layout_marginTop="8dp"
+            android:paddingRight="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/method_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintHorizontal_weight="1"
+            android:text="Bloom Time:"/>
+        <TextView
+            android:id="@+id/bloom_time_text_view"
+            app:layout_constraintLeft_toRightOf="@id/bloom_label"
+            app:layout_constraintBaseline_toBaselineOf="@id/bloom_label"
+            style="@style/TextAppearance.AppCompat.Body1"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintHorizontal_weight="1"
+            android:text="1m 20s"/>
+        <!--Brew Time-->
+
+        <TextView
+            android:id="@+id/brew_time_label"
+            android:layout_marginTop="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/bloom_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintHorizontal_weight="1"
+            android:text="Brew Time:"/>
+        <TextView
+            android:id="@+id/brew_time_text_view"
+            app:layout_constraintLeft_toRightOf="@id/bloom_label"
+            app:layout_constraintBaseline_toBaselineOf="@id/brew_time_label"
+            style="@style/TextAppearance.AppCompat.Body1"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintHorizontal_weight="1"
+            android:text="1m 20s"/>
+        <!--Coffee Weight-->
+
+        <TextView
+            android:id="@+id/coffee_units_label"
+            android:layout_marginTop="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/brew_time_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintHorizontal_weight="1"
+            android:text="Coffee: "/>
+        <TextView
+            android:id="@+id/coffee_units_text_view"
+            app:layout_constraintLeft_toRightOf="@id/bloom_label"
+            app:layout_constraintBaseline_toBaselineOf="@id/coffee_units_label"
+            style="@style/TextAppearance.AppCompat.Body1"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintHorizontal_weight="1"
+            android:text="100 grams"/>
+
+        <!--Water Weight-->
+
+        <TextView
+            android:id="@+id/water_units_label"
+            android:layout_marginTop="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/coffee_units_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintHorizontal_weight="1"
+            android:text="Water: "/>
+        <TextView
+            android:id="@+id/water_units_text_view"
+            app:layout_constraintLeft_toRightOf="@id/bloom_label"
+            app:layout_constraintBaseline_toBaselineOf="@id/water_units_label"
+            style="@style/TextAppearance.AppCompat.Body1"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintHorizontal_weight="1"
+            android:text="1000 grams"/>
+        <!--Notes/Directions-->
+
+        <TextView
+            android:id="@+id/notes_label"
+            android:layout_marginTop="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/water_units_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Directions: "/>
+        <TextView
+            android:id="@+id/notes_text_view"
+            app:layout_constraintLeft_toRightOf="@id/bloom_label"
+            app:layout_constraintBaseline_toBaselineOf="@id/notes_label"
+            style="@style/TextAppearance.AppCompat.Body1"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintHorizontal_weight="1"
+            android:text="Blah Blah Blah Blah Blah Blah Blah
+Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah Blah "/>
+
+        <!--bottom options-->
+        <View
+            android:layout_marginTop="8dp"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            app:layout_constraintTop_toBottomOf="@id/notes_text_view"
+            android:background="@color/dividerColor"/>
+        <Button
+            android:id="@+id/like_button"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/notes_text_view"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:textColor="@color/colorAccent"
+            android:text="Like"/>
+        <Button
+            android:id="@+id/comment_button"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/notes_text_view"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:text="Comment"/>
+        <Button
+            android:id="@+id/download_button"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@id/notes_text_view"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:text="Download"/>
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.v7.widget.RecyclerView
+        app:layout_constraintTop_toBottomOf="@id/brew_details_container"
+        android:id="@+id/brew_comments_rv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</android.support.constraint.ConstraintLayout>
