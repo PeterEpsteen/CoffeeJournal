@@ -216,15 +216,17 @@ public class DBOperator extends SQLiteOpenHelper {
         //THIS WILL BE EXECUTED WHEN YOU UPDATED VERSION OF DATABASE_VERSION
         //YOUR DROP AND CREATE QUERIES
         onCreate(db);
-        String renameBrewTable = "ALTER TABLE " + BREW_TABLE_NAME + " RENAME TO og_brew_table";
-        db.execSQL(renameBrewTable);
-        String correctBrewTableColumns = "create table " + BREW_TABLE_NAME + " ( " + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + NAME + " TEXT, " + BREW_METHOD + " TEXT, " + WATER_UNITS + " REAL, " + COFFEE_UNITS + " REAL, " + COFFEE_METRIC + " INTEGER, " + WATER_METRIC + " INTEGER, " + NOTES + " TEXT, " + DATE + " TEXT, " + GRIND + " TEXT, " + BLOOM_TIME + " INTEGER, " + BREW_TIME + " INTEGER, " + TEMP + " INTEGER)";
-        db.execSQL(correctBrewTableColumns);
-        String insertOg = "INSERT INTO " + BREW_TABLE_NAME + " (" + ID + ", " + NAME + ", " + BREW_METHOD + ", "+ WATER_UNITS + ", "+ COFFEE_UNITS + ", "+ COFFEE_METRIC + ", "+ NOTES + ", "+ DATE + ", " + GRIND + ", "+ BLOOM_TIME + ", "+ BREW_TIME + ", "+ TEMP + ") SELECT " + ID + ", " + NAME + ", " + BREW_METHOD + ", "+ WATER_UNITS + ", "+ COFFEE_UNITS + ", "+ METRIC + ", "+ NOTES + ", "+ DATE + ", " + GRIND + ", "+ BLOOM_TIME + ", "+ BREW_TIME + ", "+ TEMP + " FROM og_brew_table";
-        db.execSQL(insertOg);
-        db.execSQL("DROP TABLE og_brew_table");
-        String updateBrew = "UPDATE " + BREW_TABLE_NAME + " SET " + WATER_METRIC+" = " + COFFEE_METRIC + " WHERE " + WATER_METRIC + " IS NULL";
-        db.execSQL(updateBrew);
+        if(newVersion == 20) {
+            String renameBrewTable = "ALTER TABLE " + BREW_TABLE_NAME + " RENAME TO og_brew_table";
+            db.execSQL(renameBrewTable);
+            String correctBrewTableColumns = "create table " + BREW_TABLE_NAME + " ( " + ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + NAME + " TEXT, " + BREW_METHOD + " TEXT, " + WATER_UNITS + " REAL, " + COFFEE_UNITS + " REAL, " + COFFEE_METRIC + " INTEGER, " + WATER_METRIC + " INTEGER, " + NOTES + " TEXT, " + DATE + " TEXT, " + GRIND + " TEXT, " + BLOOM_TIME + " INTEGER, " + BREW_TIME + " INTEGER, " + TEMP + " INTEGER)";
+            db.execSQL(correctBrewTableColumns);
+            String insertOg = "INSERT INTO " + BREW_TABLE_NAME + " (" + ID + ", " + NAME + ", " + BREW_METHOD + ", " + WATER_UNITS + ", " + COFFEE_UNITS + ", " + COFFEE_METRIC + ", " + NOTES + ", " + DATE + ", " + GRIND + ", " + BLOOM_TIME + ", " + BREW_TIME + ", " + TEMP + ") SELECT " + ID + ", " + NAME + ", " + BREW_METHOD + ", " + WATER_UNITS + ", " + COFFEE_UNITS + ", " + METRIC + ", " + NOTES + ", " + DATE + ", " + GRIND + ", " + BLOOM_TIME + ", " + BREW_TIME + ", " + TEMP + " FROM og_brew_table";
+            db.execSQL(insertOg);
+            db.execSQL("DROP TABLE og_brew_table");
+            String updateBrew = "UPDATE " + BREW_TABLE_NAME + " SET " + WATER_METRIC + " = " + COFFEE_METRIC + " WHERE " + WATER_METRIC + " IS NULL";
+            db.execSQL(updateBrew);
+        }
     }
 
 

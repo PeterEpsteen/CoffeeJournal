@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -29,14 +30,19 @@ import android.view.View;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
+import com.android.billingclient.api.BillingClient;
 import com.example.peter.coffeekeeper.Database.DBOperator;
 import com.example.peter.coffeekeeper.R;
 import com.example.peter.coffeekeeper.SectionsPageAdapter;
+import com.example.peter.coffeekeeper.util.BillingManager;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 
-public class MainActivity extends AppCompatActivity implements BrewFragment.OnFragmentInteractionListener, RoastFragment.OnFragmentInteractionListener, NavigationView.OnNavigationItemSelectedListener {
+import java.util.List;
+
+public class MainActivity extends AppCompatActivity implements BrewFragment.OnFragmentInteractionListener,
+        RoastFragment.OnFragmentInteractionListener, NavigationView.OnNavigationItemSelectedListener, UpgradeDialogFragment.PurchaseListener, BillingManager.BillingUpdatesListener {
 
     public static final String PREFS_NAME = "prefs";
     public static final String PREFS_PRO_PURCHASED = "isProPurchased";
@@ -44,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements BrewFragment.OnFr
     public static final String PREFS_API_TOKEN = "token";
     public static final String PREFS_USER_POINTS = "userPoints";
     public static final String PREFS_USERNAME = "username";
+    public static final String SKU = "coffee_keeper_pro_version_2";
 
     private SectionsPageAdapter mSectionsPageAdapter;
     private ViewPager mViewPager;
@@ -53,9 +60,15 @@ public class MainActivity extends AppCompatActivity implements BrewFragment.OnFr
     private ActionBarDrawerToggle drawerToggle;
     private AdView adView;
     private PopupWindow popupWindow;
+    private boolean isPremium;
+    BillingManager mBillingManager;
+    String purchaseToken;
+
 
     DBOperator mDBOperator;
     String test;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,15 +80,15 @@ public class MainActivity extends AppCompatActivity implements BrewFragment.OnFr
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }
+        mBillingManager = new BillingManager(this, this);
+
 
         setContentView(R.layout.activity_main);
-        MobileAds.initialize(this, "ca-app-pub-4742169084911884~8092065487");
 
 
         mDBOperator = new DBOperator(this);
-        adView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
+
+
 
         mSectionsPageAdapter = new SectionsPageAdapter(getSupportFragmentManager());
         mViewPager = findViewById(R.id.container);
@@ -123,6 +136,12 @@ public class MainActivity extends AppCompatActivity implements BrewFragment.OnFr
     public void onBackPressed() {
         if (!closeDrawer())
             finish();
+    }
+
+    private void checkPurchased() {
+        mBillingManager.queryPurchases();
+
+
     }
 
     private boolean closeDrawer() {
@@ -173,6 +192,8 @@ public class MainActivity extends AppCompatActivity implements BrewFragment.OnFr
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d("Billing", "onActivityResult(" + requestCode + "," + resultCode + "," + data);
         Fragment fragment = getSupportFragmentManager().getFragments().get(0);
         fragment.onActivityResult(requestCode, resultCode, data);
         Fragment fragment2 = getSupportFragmentManager().getFragments().get(1);
@@ -202,6 +223,9 @@ public class MainActivity extends AppCompatActivity implements BrewFragment.OnFr
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.nav_my_recipes:
+                closeDrawer();
+                break;
             case R.id.nav_contact:
                 Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
                         "mailto", "coffeekeeperbrewingandroasting@gmail.com", null));
@@ -209,7 +233,10 @@ public class MainActivity extends AppCompatActivity implements BrewFragment.OnFr
                 startActivity(Intent.createChooser(emailIntent, "Send email..."));
                 break;
             case R.id.nav_profile:
-                launchProfile();
+                consumePurchase();
+                break;
+            case R.id.nav_upgrade:
+                purchaseUpgrade();
                 break;
             case R.id.nav_discover:
                 launchDiscover();
@@ -231,6 +258,12 @@ public class MainActivity extends AppCompatActivity implements BrewFragment.OnFr
         finish();
     }
 
+    private void purchaseUpgrade() {
+        DialogFragment purchaseFragment = new UpgradeDialogFragment();
+        purchaseFragment.show(getSupportFragmentManager(), "Purchase");
+
+    }
+
     private void launchProfile() {
         Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
@@ -250,5 +283,67 @@ public class MainActivity extends AppCompatActivity implements BrewFragment.OnFr
     private void showHelpPopup() {
         Intent intent = new Intent(this, HelpActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        mBillingManager.destroy();
+    }
+
+    @Override
+    public void onConfirmPurchase() {
+        mBillingManager.initiatePurchaseFlow(SKU, BillingClient.SkuType.INAPP);
+    }
+    private void consumePurchase() {
+        mBillingManager.queryPurchases();
+        mBillingManager.consumeAsync(purchaseToken);
+    }
+
+
+
+
+    //Billing manager
+    @Override
+    public void onBillingClientSetupFinished() {
+        Log.d("Billing", "Setup finished");
+    }
+
+    @Override
+    public void onConsumeFinished(String token, int result) {
+        Log.d("Billing", "Consumed: " + token);
+        Intent intent = getIntent();
+        finish();
+        startActivity(intent);
+    }
+
+    @Override
+    public void onPurchasesUpdated(List<com.android.billingclient.api.Purchase> purchases) {
+        Log.d("Billing", "Purchases: " + purchases.toString());
+        boolean purchased = false;
+        adView = findViewById(R.id.adView);
+
+
+        for(com.android.billingclient.api.Purchase p : purchases) {
+            if(p.getSku().equals(SKU)) {
+                Log.d("Billing", "Purchased...");
+                purchaseToken = p.getPurchaseToken();
+                isPremium = true;
+            }
+        }
+        if(isPremium && adView.getVisibility() == View.VISIBLE) {
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
+        }
+
+        if (!isPremium) {
+            Log.d("Billing", "Not purchased...");
+            adView.setVisibility(View.VISIBLE);
+            MobileAds.initialize(this, "ca-app-pub-4742169084911884~8092065487");
+            AdRequest adRequest = new AdRequest.Builder().build();
+            adView.loadAd(adRequest);
+        }
     }
 }

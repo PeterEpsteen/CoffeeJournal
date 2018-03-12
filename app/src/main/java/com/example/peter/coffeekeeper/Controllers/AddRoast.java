@@ -26,11 +26,13 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 import android.support.v7.widget.Toolbar;
 
+import com.android.billingclient.api.Purchase;
 import com.example.peter.coffeekeeper.Database.DBOperator;
 import com.example.peter.coffeekeeper.Models.Bean;
 import com.example.peter.coffeekeeper.Models.Roast;
 import com.example.peter.coffeekeeper.Models.RoastStep;
 import com.example.peter.coffeekeeper.R;
+import com.example.peter.coffeekeeper.util.BillingManager;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
@@ -44,7 +46,7 @@ import java.util.regex.Pattern;
 
 //TODO Refine validation and make sure there are no bugs. Seems stable for now.
 
-public class AddRoast extends AppCompatActivity implements View.OnClickListener, QuickStepDialogFragment.NoticeDialogListener, RoastNameDialogFragment.NoticeDialogListener, AddBeansDialogFragment.NoticeDialogListener, QuickStepTempaturesDialogFragment.NoticeDialogListener {
+public class AddRoast extends AppCompatActivity implements View.OnClickListener, QuickStepDialogFragment.NoticeDialogListener, RoastNameDialogFragment.NoticeDialogListener, AddBeansDialogFragment.NoticeDialogListener, QuickStepTempaturesDialogFragment.NoticeDialogListener, BillingManager.BillingUpdatesListener {
 
     Button addButton, addStepButton, addBeansButton, resetButton, quickStepButton;
     FloatingActionButton timerButton;
@@ -67,6 +69,7 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener,
             = Pattern.compile("^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$");
     public static final int ROAST_DB_CHANGED = 2;
     public static final int GO_TO_ROASTS = 3;
+    BillingManager billingManager;
 
     //runs without a timer by reposting this handler at the end of the runnable
     Handler timerHandler = new Handler();
@@ -94,13 +97,8 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener,
         editRoastName = intent.getStringExtra("Name");
         editRoastDate = intent.getStringExtra("Date");
         db = new DBOperator(this);
-
-//
-        adView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
-
-
+        billingManager = new BillingManager(this, this);
+        checkPremium();
         beanRowLinearLayoutList = new ArrayList<LinearLayout>();
         stepsRowLinearLayoutList = new ArrayList<LinearLayout>();
         addButton = findViewById(R.id.add_roast_button);
@@ -183,6 +181,19 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener,
             }
         }
 
+    }
+
+    public void checkPremium() {
+        adView = findViewById(R.id.adView);
+
+
+        billingManager.queryPurchases();
+    }
+
+    @Override
+    protected void onDestroy() {
+        billingManager.destroy();
+        super.onDestroy();
     }
 
     public boolean validateInput() {
@@ -363,6 +374,40 @@ public class AddRoast extends AppCompatActivity implements View.OnClickListener,
     public void onConfirmTempatures(RoastStep step) {
         step.setTime(String.format("%02d:%02d", minutes, seconds));
         addStepRow(step);
+    }
+
+    @Override
+    public void onBillingClientSetupFinished() {
+
+    }
+
+    @Override
+    public void onConsumeFinished(String token, int result) {
+
+    }
+
+    @Override
+    public void onPurchasesUpdated(List<Purchase> purchases) {
+
+        boolean isPremium = false;
+        for(com.android.billingclient.api.Purchase p : purchases) {
+            if(p.getSku().equals(MainActivity.SKU)) {
+                Log.d("Billing", "Purchased...");
+                isPremium = true;
+            }
+        }
+        if(isPremium && adView.getVisibility() == View.VISIBLE) {
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
+        }
+
+        if (!isPremium) {
+            adView.setVisibility(View.VISIBLE);
+            AdRequest adRequest = new AdRequest.Builder().build();
+            adView.loadAd(adRequest);
+        }
+
     }
 
 

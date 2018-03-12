@@ -6,7 +6,6 @@ buildscript {
         maven {
             url 'https://maven.fabric.io/public'
 
-            // Alternative URL is 'https://dl.google.com/dl/android/maven2/'
         }
         google()
         jcenter()

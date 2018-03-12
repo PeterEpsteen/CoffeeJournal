@@ -100,7 +100,7 @@
 
                     <EditText
                         android:id="@+id/roast_name_edit"
-                        style="@style/Base.V12.Widget.AppCompat.EditText"
+                        style="@style/Widget.AppCompat.EditText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Name"
@@ -274,7 +274,9 @@
         android:layout_height="wrap_content"
         ads:adSize="SMART_BANNER"
         android:layout_gravity="bottom|center"
-        ads:adUnitId="ca-app-pub-4742169084911884/8149218886"/>
+        ads:adUnitId="ca-app-pub-4742169084911884/8149218886"
+        android:visibility="gone"
+        />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/timer_floating_button"

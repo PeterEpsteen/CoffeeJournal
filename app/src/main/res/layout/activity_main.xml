@@ -68,6 +68,7 @@
 
     <com.google.android.gms.ads.AdView
         xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:visibility="gone"
         android:id="@+id/adView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -95,7 +96,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:background="@android:color/white"
-        app:menu="@menu/drawer_view"
+        app:menu="@menu/drawer_view_basic"
         app:headerLayout="@layout/nav_header"
         />
 </android.support.v4.widget.DrawerLayout>

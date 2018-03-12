@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
@@ -17,14 +18,19 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.android.billingclient.api.Purchase;
 import com.example.peter.coffeekeeper.Database.DBOperator;
 import com.example.peter.coffeekeeper.Models.BrewRecipe;
 import com.example.peter.coffeekeeper.R;
 import com.example.peter.coffeekeeper.SectionsPageAdapter;
+import com.example.peter.coffeekeeper.util.BillingManager;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 
-public class BrewRecipeActivity extends AppCompatActivity implements BrewRecipeFragment.SendBrew {
+import java.util.List;
+
+public class BrewRecipeActivity extends AppCompatActivity implements BrewRecipeFragment.SendBrew, BillingManager.BillingUpdatesListener {
 
     private BrewRecipe br;
     DBOperator db;
@@ -40,6 +46,7 @@ public class BrewRecipeActivity extends AppCompatActivity implements BrewRecipeF
     LinearLayout bottomSheet;
     BottomSheetBehavior bottomSheetBehavior;
     ImageView imageView;
+    BillingManager billingManager;
     AdView adView;
 
     private SectionsPageAdapter mSectionsPageAdapter;
@@ -68,6 +75,10 @@ public class BrewRecipeActivity extends AppCompatActivity implements BrewRecipeF
                     .commit();
             isNotesShowing = false;
         }
+
+        billingManager = new BillingManager(this, this);
+
+
         imageView = findViewById(R.id.notes_drop_icon);
         bottomSheet = findViewById(R.id.bottom_sheet);
         // init the bottom sheet behavior
@@ -135,11 +146,15 @@ public class BrewRecipeActivity extends AppCompatActivity implements BrewRecipeF
         notesTv.setText(br.getNotes());
         titleTv.setText(name);
         grindTv.setText(br.getGrind());
+        checkPremium();
 
-        adView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
 //
+    }
+
+    @Override
+    protected void onDestroy() {
+        billingManager.destroy();
+        super.onDestroy();
     }
 
     @Override
@@ -174,5 +189,46 @@ public class BrewRecipeActivity extends AppCompatActivity implements BrewRecipeF
 //        bn.setTitle(brew.getName());
 //        bn.setNotes(notes);
 //        bn.setGrind(grind);
+    }
+
+    public void checkPremium() {
+        adView = findViewById(R.id.adView);
+
+        billingManager.queryPurchases();
+    }
+
+    @Override
+    public void onBillingClientSetupFinished() {
+
+    }
+
+    @Override
+    public void onConsumeFinished(String token, int result) {
+
+    }
+
+    @Override
+    public void onPurchasesUpdated(List<Purchase> purchases) {
+
+        boolean isPremium = false;
+        for(com.android.billingclient.api.Purchase p : purchases) {
+            if(p.getSku().equals(MainActivity.SKU)) {
+                Log.d("Billing", "Purchased...");
+                isPremium = true;
+            }
+        }
+        if(isPremium && adView.getVisibility() == View.VISIBLE) {
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
+        }
+
+        if (!isPremium) {
+            Log.d("Billing", "Not premium...");
+            adView.setVisibility(View.VISIBLE);
+            AdRequest adRequest = new AdRequest.Builder().build();
+            adView.loadAd(adRequest);
+        }
+
     }
 }

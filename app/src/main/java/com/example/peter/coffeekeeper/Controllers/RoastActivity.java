@@ -1,6 +1,7 @@
 package com.example.peter.coffeekeeper.Controllers;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.AppBarLayout;
@@ -17,11 +18,13 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.android.billingclient.api.Purchase;
 import com.example.peter.coffeekeeper.Database.DBOperator;
 import com.example.peter.coffeekeeper.Models.Bean;
 import com.example.peter.coffeekeeper.Models.Roast;
 import com.example.peter.coffeekeeper.Models.RoastStep;
 import com.example.peter.coffeekeeper.R;
+import com.example.peter.coffeekeeper.util.BillingManager;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.jjoe64.graphview.DefaultLabelFormatter;
@@ -37,7 +40,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class RoastActivity extends AppCompatActivity {
+public class RoastActivity extends AppCompatActivity implements BillingManager.BillingUpdatesListener {
 
     String brewName, brewDate;
     DBOperator db;
@@ -49,6 +52,7 @@ public class RoastActivity extends AppCompatActivity {
     PopupWindow popupWindow;
     ConstraintLayout layoutOfPopup;
     TextView datapointTv;
+    BillingManager billingManager;
     private AdView adView;
     float lastTouchedX, lastTouchedY;
     final static int ROAST_PAGE_RESULT = 5;
@@ -67,9 +71,9 @@ public class RoastActivity extends AppCompatActivity {
         brewName = getIntent().getExtras().getString("Name");
         brewDate = getIntent().getExtras().getString("Date");
 
-        adView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
+        billingManager = new BillingManager(this, this);
+        checkPremium();
+
 
 
         collapsingToolbarLayout = findViewById(R.id.main_collapsing);
@@ -328,6 +332,18 @@ public class RoastActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        billingManager.destroy();
+        super.onDestroy();
+    }
+
+    public void checkPremium() {
+        adView = findViewById(R.id.adView);
+
+        billingManager.queryPurchases();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // handle arrow click here
         if (item.getItemId() == android.R.id.home) {
@@ -339,4 +355,37 @@ public class RoastActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBillingClientSetupFinished() {
+
+    }
+
+    @Override
+    public void onConsumeFinished(String token, int result) {
+
+    }
+
+    @Override
+    public void onPurchasesUpdated(List<Purchase> purchases) {
+
+        boolean isPremium = false;
+        for(com.android.billingclient.api.Purchase p : purchases) {
+            if(p.getSku().equals(MainActivity.SKU)) {
+                Log.d("Billing", "Purchased...");
+                isPremium = true;
+            }
+        }
+        if(isPremium && adView.getVisibility() == View.VISIBLE) {
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
+        }
+
+        if (!isPremium) {
+            adView.setVisibility(View.VISIBLE);
+            AdRequest adRequest = new AdRequest.Builder().build();
+            adView.loadAd(adRequest);
+        }
+
+    }
 }
